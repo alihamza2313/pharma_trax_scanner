@@ -1,6 +1,8 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pharma_trax_scanner/screens/home_screen.dart';
+import 'package:pharma_trax_scanner/screens/splash_screen.dart';
 
 void main() {
   runApp(DevicePreview(
@@ -27,40 +29,9 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            home: HomeScreen(),
+            home: HomePage(),
           );
         });
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      body: SafeArea(child: Row(
-        children: [
-          Container(
-            color: Colors.red,
-            width: MediaQuery.of(context).size.width*0.5.w,
-               height: MediaQuery.of(context).size.height.h,
-
-          ),
-          Container(
-            color: Colors.blue,
-            width: MediaQuery.of(context).size.width*0.5.w,
-               height: MediaQuery.of(context).size.height.h,
-
-          ),
-        ],
-      )),
-    );
-  }
-}
