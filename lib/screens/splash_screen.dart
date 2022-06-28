@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({Key? key}) : super(key: key);
@@ -15,10 +15,10 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     return Scaffold(
       
       body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/images/dna.png'))
+        decoration: const BoxDecoration(
+          image:  DecorationImage(image: AssetImage('assets/images/dna.png'))
         ),
-        height: MediaQuery.of(context).size.height.h,width: MediaQuery.of(context).size.width.h,),
+        height: MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,),
 
     );
     
