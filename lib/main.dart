@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:pharma_trax_scanner/screens/home_screen.dart';
