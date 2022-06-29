@@ -113,7 +113,7 @@ class AppDrawer extends StatelessWidget {
           title: const Text("Line Level Hardware"),
           onTap: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => LineLevelHardware()));
+                .pushReplacementNamed(LineLevelHardware.routeName);
           },
         ),
         ListTile(
@@ -128,7 +128,7 @@ class AppDrawer extends StatelessWidget {
           title: const Text("Line Equipment"),
           onTap: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => Line_equipment()));
+                .pushReplacementNamed(Line_equipment.routeName);
           },
         ),
         ListTile(
@@ -142,8 +142,7 @@ class AppDrawer extends StatelessWidget {
           ),
           title: const Text("How it Works"),
           onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => How_it_works()));
+            Navigator.of(context).pushReplacementNamed(How_it_works.routeName);
             print('How_it_works');
           },
         ),
