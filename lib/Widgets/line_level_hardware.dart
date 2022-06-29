@@ -9,7 +9,6 @@ import 'package:url_launcher/url_launcher.dart';
 class LineLevelHardware extends StatelessWidget {
   const LineLevelHardware({Key? key}) : super(key: key);
 
-  final link = "https://www.pharmatrax.pk/pharma-trax-pro-line";
   static const htmldata = """ 
 
   
@@ -50,7 +49,6 @@ Pharma Trax Pro Line</a>
                 print(url);
                 var filePath = Uri.parse(url);
 //final Uri uri = Uri.file(filePath);
-
                 await launchUrl(filePath);
                 return true;
               },
