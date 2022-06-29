@@ -1,14 +1,16 @@
-import 'dart:developer';
-
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/material.dart';
+// import 'package:flutter/src/foundation/key.dart';
+// import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:pharma_trax_scanner/Widgets/app_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/material.dart';
 
 class LineLevelHardware extends StatelessWidget {
   const LineLevelHardware({Key? key}) : super(key: key);
 
+  static const routeName = '/line_level_hardware';
+
+  final link = "https://www.pharmatrax.pk/pharma-trax-pro-line";
   static const htmldata = """ 
 
   
@@ -36,9 +38,10 @@ Pharma Trax Pro Line</a>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        drawer: const AppDrawer(),
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("Line Level HardWare"),
+          title: const Text("Line Level HardWare"),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -48,7 +51,6 @@ Pharma Trax Pro Line</a>
               onTapUrl: (url) async {
                 print(url);
                 var filePath = Uri.parse(url);
-//final Uri uri = Uri.file(filePath);
                 await launchUrl(filePath);
                 return true;
               },
