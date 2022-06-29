@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pharma_trax_scanner/Widgets/How_it_works.dart';
 import 'package:pharma_trax_scanner/Widgets/about_pharma.dart';
-import 'package:pharma_trax_scanner/Widgets/line_equipment.dart';
-import 'package:pharma_trax_scanner/Widgets/line_level_hardware.dart';
+//  import 'package:pharma_trax_scanner/screens/line_equipment.dart';
+import '../Widgets/line_level_hardware.dart';
 
 import '../utils/colors.dart';
 
@@ -117,6 +116,10 @@ class AppDrawer extends StatelessWidget {
           },
         ),
         ListTile(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: ((context) => const LineLevelHardware())));
+          },
           leading: SizedBox(
             height: 25,
             width: 25,
@@ -157,9 +160,13 @@ class AppDrawer extends StatelessWidget {
           ),
           title: const Text("About Pharma Trax"),
           onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => About_pharma()));
-            print('About');
+             Navigator.of(context).pop();
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: ((context) => const About_pharma()),
+              ),
+            );
+           
           },
         ),
       ]),

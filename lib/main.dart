@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:pharma_trax_scanner/screens/home_screen.dart';
 import 'package:pharma_trax_scanner/Widgets/line_level_hardware.dart';
 import 'package:pharma_trax_scanner/Widgets/How_it_works.dart';
 import 'package:pharma_trax_scanner/Widgets/line_equipment.dart';
 
+
 void main() {
+
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
