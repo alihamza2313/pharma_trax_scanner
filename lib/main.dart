@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:pharma_trax_scanner/screens/home_screen.dart';
 import 'package:pharma_trax_scanner/screens/line_equipment.dart';
 
-void main() {
-  runApp(
-    const MyApp(),
-  );
+
+void main()  {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  runApp( const MyApp(),
+    );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,7 +27,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const HomePage(),
       routes: {
-        LineEquipment.routeName:(context) =>const LineEquipment()
+        // LineEquipment.routeName:(context) =>const LineEquipment()
       },
       
     );

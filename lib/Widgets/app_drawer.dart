@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pharma_trax_scanner/screens/line_equipment.dart';
+// import 'package:pharma_trax_scanner/screens/line_equipment.dart';
 
 import '../utils/colors.dart';
 
@@ -110,9 +110,9 @@ class AppDrawer extends StatelessWidget {
           title: const Text("Line Level Hardware"),
         ),
         ListTile(
-          onTap: (){
-            Navigator.of(context).pushNamed(LineEquipment.routeName);
-          },
+          // onTap: (){
+          //   Navigator.of(context).pushNamed(LineEquipment.routeName);
+          // },
           leading: SizedBox(
             height: 25,
             width: 25,

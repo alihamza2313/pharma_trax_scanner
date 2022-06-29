@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pharma_trax_scanner/screens/barcode_scanner.dart';
+import 'package:pharma_trax_scanner/screens/data_matrix_scanner.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
 
 import '../Widgets/app_drawer.dart';
@@ -21,7 +23,7 @@ class _HomePageState extends State<HomePage> {
       drawer: const AppDrawer(),
       drawerEnableOpenDragGesture: false,
       floatingActionButton: FloatingActionButton(
-        mini: true,
+     
         onPressed: () {},
         child: const Icon(
           Icons.share,
@@ -37,192 +39,226 @@ class _HomePageState extends State<HomePage> {
         ),
         title: const Text("Pharma Trax Scanner"),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          decoration: const BoxDecoration(
-              image:
-                  DecorationImage(image: AssetImage('assets/images/dna.png'))),
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Column(children: [
-            Expanded(
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+      body: Container(
+       padding: const EdgeInsets.symmetric(horizontal: 15),
+        decoration: const BoxDecoration(
+            image:  DecorationImage(image: AssetImage('assets/images/dna.png'))),
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+      
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+         
+          children: [
+        Expanded(
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column
+              
+              (
+                
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+
+                 
+               
+               Column(
+      
+                
+                children: [
+                 Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Image.asset('assets/images/pharmatrax.png'),
+                      ),
+                      Text(
+                        "Pakistan's first Track and Trace Serialization Solution Complete End to End Turnkey Solution Market Leader in Track and Trace Solutions",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                          color: textColor,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                        ),
+                      ),
+               ],),
+            
+            
+            
+            const SizedBox(height: 30,),
+            
+            
                       Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Image.asset('assets/images/pharmatrax.png'),
+                    children: [
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BarCodeScanner()));
+                        },
+                        child: Container(
+                                        color: Colors.blue,
+                                        width: MediaQuery.of(context).size.width*0.8,
+                                        
+                                        child: Row(children: [
+                                        
+                         Container(
+                                padding: const EdgeInsets.all(10),
+                                height: 60,
+                                width: 60,
+                                color: blueColor2,
+                                child: Image.asset('assets/images/code_128.png'),
+                              ),
+                              Expanded(
+                                child: Text(
+                                "SCAN GS1 128 BARCODE",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                                ),
+                              ),
+                                        
+                        
+                                        ],),
+                                        
+                                        ),
+                      ),
+                
+                 const SizedBox(height: 20,),
+                    
+                
+                GestureDetector(
+                  onTap: (){
+
+
+       Navigator.of(context).push(MaterialPageRoute(builder: (_)=>DataMatrixSacnner()));
+
+                  },
+                  child: Container(
+                  color: Colors.blue,
+                  width: MediaQuery.of(context).size.width*0.8,
+                  
+                  child: Row(children: [
+                  
+                     Container(
+                            padding: const EdgeInsets.all(10),
+                            height: 60,
+                            width: 60,
+                            color: blueColor2,
+                            child: Image.asset('assets/images/data_matrix.png'),
                           ),
-                          Text(
-                            "Pakistan's first Track and Trace Serialization Solution Complete End to End Turnkey Solution Market Leader in Track and Trace Solutions",
+                          Expanded(
+                            child: Text(
+                            "SCAN GS1 DATA MATRIX",
                             textAlign: TextAlign.center,
                             style: GoogleFonts.inter(
-                              color: textColor,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                  fontSize: 18,
                             ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            color: Colors.blue,
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  height: 60,
-                                  width: 60,
-                                  color: blueColor2,
-                                  child:
-                                      Image.asset('assets/images/code_128.png'),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    "SCAN GS1 128 BARCODE",
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            color: Colors.blue,
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  height: 60,
-                                  width: 60,
-                                  color: blueColor2,
-                                  child: Image.asset(
-                                      'assets/images/data_matrix.png'),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    "SCAN GS1 DATA MATRIX",
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      ),
-                    ],
+                          )
+                  
+                    
+                  ],),
+                  
                   ),
                 ),
-              ),
+                 const SizedBox(height: 20,),
+                    ],
+                  ),
+                  
+              ],),
             ),
-            Container(
-              // height: 140.h,
-              padding: const EdgeInsets.symmetric(vertical: 10),
-
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "PHARMA TRAX",
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w500,
-                      color: textColor,
-                      fontSize: 16,
+          ),
+        ),
+                       
+          Container(
+      
+            // height: 140.h,
+            padding: const EdgeInsets.symmetric(vertical: 10),
+      
+            child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "PHARMA TRAX",
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w500,
+                        color: textColor,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Contact us:",
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w500,
-                            color: textColor,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: Text(
-                            "CONTACT@PHARMATRAX.PK",
+                    const SizedBox(height: 5,),
+            
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+          
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Contact us:",
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.w500,
-                              color: blueColor1,
+                              color: textColor,
                               fontSize: 16,
-                              decoration: TextDecoration.underline,
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 5,),
+                          Expanded(
+                            child: Text(
+                              "CONTACT@PHARMATRAX.PK",
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                color: blueColor1,
+                                fontSize: 16,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Text(
-                    "WWW.PHARMATRAX.PK",
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w500,
-                      color: blueColor1,
-                      fontSize: 16,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                  Text(
-                    "WWW.ZAUQ.COM",
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w500,
-                      color: blueColor1,
-                      fontSize: 16,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 100, vertical: 5),
-                      // height: 120,
-                      // width: 120,
-                      child: Image.asset('assets/images/zauq.png')),
-                ],
-              ),
-            ),
-          ]),
-        ),
+                    Text(
+                              "WWW.PHARMATRAX.PK",
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                color: blueColor1,
+                                fontSize: 16,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                             Text(
+                              "WWW.ZAUQ.COM",
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                color: blueColor1,
+                                fontSize: 16,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+            
+        
+            
+                    const SizedBox(height: 10,),
+            
+            
+            
+                   
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 100,vertical: 5),
+                        // height: 120,
+                        // width: 120,
+                        child: Image.asset('assets/images/zauq.png')),
+                     
+                  ],
+                ),
+          ),
+            
+        ]),
+        
       ),
     );
   }
