@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   # flutter_screenutil: ^5.5.3+2
   # device_preview: ^0.7.1
+  qr_mobile_vision: ^3.0.1
   google_fonts: ^3.0.1
   flutter_widget_from_html: ^0.8.5
   url_launcher: ^6.1.4
