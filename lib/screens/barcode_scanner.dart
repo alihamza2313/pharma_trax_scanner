@@ -81,7 +81,7 @@ dispose(){
                             width: 300.0,
                             height: 150.0,
                             child: QrCamera(
-                              formats: [BarcodeFormats.CODE_128],
+                              formats: const [BarcodeFormats.CODE_128],
                               onError: (context, error) => Text(
                                 error.toString(),
                                 style: const TextStyle(color: Colors.red),

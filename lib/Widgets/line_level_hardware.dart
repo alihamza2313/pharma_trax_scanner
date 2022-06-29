@@ -53,7 +53,7 @@ Pharma Trax Pro Line</a>
               htmldata,
               
               onTapUrl: (url) async {
-                print(url);
+                // print(url);
                 var filePath = Uri.parse(url);
                //final Uri uri = Uri.file(filePath);
 

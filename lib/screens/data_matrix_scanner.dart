@@ -53,7 +53,7 @@ class _DataMatrixSacnnerState extends State<DataMatrixSacnner> {
         automaticallyImplyLeading: false,
         leading: IconButton(onPressed: (){
              Navigator.pop(context);
-        }, icon: Icon(Icons.arrow_back,color: Colors.white,)),
+        }, icon: const Icon(Icons.arrow_back,color: Colors.white,)),
           elevation: 0,
          // backgroundColor: greenColor,
           centerTitle: true,
@@ -112,7 +112,7 @@ class _DataMatrixSacnnerState extends State<DataMatrixSacnner> {
                           ),
                         ),
                     )
-                    : Center()),
+                    : const Center()),
           
           ],
         ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pharma_trax_scanner/screens/home_screen.dart';
 import 'package:pharma_trax_scanner/Widgets/line_level_hardware.dart';
-import 'package:pharma_trax_scanner/Widgets/How_it_works.dart';
+import 'package:pharma_trax_scanner/Widgets/how_it_works.dart';
 import 'package:pharma_trax_scanner/Widgets/line_equipment.dart';
 
 
@@ -30,9 +30,9 @@ class MyApp extends StatelessWidget {
         ),
         home: const HomePage(),
         routes: {
-          LineLevelHardware.routeName: (ctx) => LineLevelHardware(),
-          Line_equipment.routeName: (ctx) => Line_equipment(),
-          How_it_works.routeName: (ctx) => How_it_works(),
+          LineLevelHardware.routeName: (ctx) => const LineLevelHardware(),
+          Line_equipment.routeName: (ctx) => const Line_equipment(),
+          How_it_works.routeName: (ctx) => const How_it_works(),
         });
   }
 }
