@@ -1,8 +1,9 @@
-import 'dart:developer';
+
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class QRCodeResultScreen extends StatefulWidget {
 
   String? qrCode;
@@ -33,7 +34,7 @@ int count=0;
 
   String? ch = widget.qrCode.toString();
      // print(' ASCII value of ${_scanBarcode}');
- print(' ASCII value of ${ch[0]} is ${ch.codeUnitAt(0)}');
+//  print(' ASCII value of ${ch[0]} is ${ch.codeUnitAt(0)}');
  
 
 //  String? getvalue =  ch.codeUnitAt(0).toString();
@@ -105,9 +106,9 @@ int count=0;
             PopupMenuButton<int>(
           onSelected: (item) => handleClick(item),
           itemBuilder: (context) => [
-            PopupMenuItem<int>(value: 0, child: Text('Copy to Clipboard')),
-            PopupMenuItem<int>(value: 1, child: Text('Share Result')),
-               PopupMenuItem<int>(value: 0, child: Text('Share Screenshot')),
+            const PopupMenuItem<int>(value: 0, child: Text('Copy to Clipboard')),
+            const PopupMenuItem<int>(value: 1, child: Text('Share Result')),
+               const PopupMenuItem<int>(value: 0, child: Text('Share Screenshot')),
           ],
         ),
           ],
@@ -119,7 +120,7 @@ int count=0;
         Container(
           
           width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
           color: Colors.grey,
           child: Column(children: [
             Text('${widget.typeText}',style: GoogleFonts.roboto(
@@ -128,8 +129,8 @@ int count=0;
               fontWeight: FontWeight.bold
               
             ),),
-            SizedBox(height: 8,),
-            Text("${result1}",style: GoogleFonts.roboto(
+            const SizedBox(height: 8,),
+            Text(result1,style: GoogleFonts.roboto(
               color: Colors.black.withOpacity(0.5),
               fontSize: 18,
               fontWeight: FontWeight.w300
