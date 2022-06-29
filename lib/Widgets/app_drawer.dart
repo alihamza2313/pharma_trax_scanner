@@ -110,6 +110,10 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           title: const Text("Line Level Hardware"),
+          onTap: () {
+            Navigator.of(context)
+                .pushReplacementNamed(LineLevelHardware.routeName);
+          },
         ),
         ListTile(
           onTap: () {
@@ -125,6 +129,10 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           title: const Text("Line Equipment"),
+          onTap: () {
+            Navigator.of(context)
+                .pushReplacementNamed(Line_equipment.routeName);
+          },
         ),
         ListTile(
           leading: SizedBox(
@@ -136,6 +144,10 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           title: const Text("How it Works"),
+          onTap: () {
+            Navigator.of(context).pushReplacementNamed(How_it_works.routeName);
+            print('How_it_works');
+          },
         ),
         ListTile(
           leading: SizedBox(
