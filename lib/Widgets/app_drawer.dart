@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pharma_trax_scanner/Widgets/How_it_works.dart';
+import 'package:pharma_trax_scanner/Widgets/about_pharma.dart';
+import 'package:pharma_trax_scanner/Widgets/line_equipment.dart';
+import 'package:pharma_trax_scanner/Widgets/line_level_hardware.dart';
 
 import '../utils/colors.dart';
 
@@ -107,6 +111,10 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           title: const Text("Line Level Hardware"),
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => LineLevelHardware()));
+          },
         ),
         ListTile(
           leading: SizedBox(
@@ -118,6 +126,10 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           title: const Text("Line Equipment"),
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => Line_equipment()));
+          },
         ),
         ListTile(
           leading: SizedBox(
@@ -129,6 +141,11 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           title: const Text("How it Works"),
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => How_it_works()));
+            print('How_it_works');
+          },
         ),
         ListTile(
           leading: SizedBox(
@@ -140,6 +157,11 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           title: const Text("About Pharma Trax"),
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => About_pharma()));
+            print('About');
+          },
         ),
       ]),
     );
