@@ -1,7 +1,9 @@
-import 'dart:developer';
 
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
+// import 'package:flutter/src/foundation/key.dart';
+// import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
 
@@ -38,12 +40,22 @@ Pharma Trax Pro Line</a>
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("Line Level HardWare"),
+          title:const Text("Line Level HardWare"),
         ),
-        body: SingleChildScrollView(
+         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(bottom: 20),
-            
+            child: HtmlWidget(
+              htmldata,
+              
+              onTapUrl: (url) async {
+                print(url);
+                var filePath = Uri.parse(url);
+               //final Uri uri = Uri.file(filePath);
+
+                await launchUrl(filePath);
+                return true;
+              },
             ),
           ),
         ));
