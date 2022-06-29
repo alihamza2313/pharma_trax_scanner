@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pharma_trax_scanner/screens/home_screen.dart';
+import 'package:pharma_trax_scanner/screens/line_equipment.dart';
 
 void main() {
   runApp(
@@ -20,6 +21,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const HomePage(),
+      routes: {
+        LineEquipment.routeName:(context) =>const LineEquipment()
+      },
+      
     );
   }
 }
