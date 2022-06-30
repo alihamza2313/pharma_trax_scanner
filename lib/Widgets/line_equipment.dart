@@ -3,6 +3,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:pharma_trax_scanner/Widgets/app_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// ignore: camel_case_types
 class Line_equipment extends StatelessWidget {
   const Line_equipment({Key? key}) : super(key: key);
 
@@ -25,7 +26,7 @@ Pharma Trax Modules</a> </font></p>
         drawer: const AppDrawer(),
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("Line Equipment"),
+          title: const Text("Line Equipment"),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -33,7 +34,7 @@ Pharma Trax Modules</a> </font></p>
             child: HtmlWidget(
               htmldata,
               onTapUrl: (url) async {
-                print(url);
+                // print(url);
                 var filePath = Uri.parse(url);
 //final Uri uri = Uri.file(filePath);
 

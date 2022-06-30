@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pharma_trax_scanner/Widgets/about_pharma.dart';
-//  import 'package:pharma_trax_scanner/screens/line_equipment.dart';
+import "../Widgets/about_pharma.dart";
+import '../Widgets/line_equipment.dart';
+import 'how_it_works.dart';
 import '../Widgets/line_level_hardware.dart';
 
 import '../utils/colors.dart';
@@ -113,6 +115,7 @@ class AppDrawer extends StatelessWidget {
           ),
           title: const Text("Line Level Hardware"),
           onTap: () {
+            Navigator.of(context).pop();
             Navigator.of(context)
                 .pushReplacementNamed(LineLevelHardware.routeName);
           },
@@ -128,6 +131,7 @@ class AppDrawer extends StatelessWidget {
           ),
           title: const Text("Line Equipment"),
           onTap: () {
+            Navigator.of(context).pop();
             Navigator.of(context)
                 .pushReplacementNamed(Line_equipment.routeName);
           },
@@ -143,8 +147,9 @@ class AppDrawer extends StatelessWidget {
           ),
           title: const Text("How it Works"),
           onTap: () {
+            Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed(How_it_works.routeName);
-            print('How_it_works');
+            // print('How_it_works');
           },
         ),
         ListTile(
@@ -159,11 +164,15 @@ class AppDrawer extends StatelessWidget {
           title: const Text("About Pharma Trax"),
           onTap: () {
             Navigator.of(context).pop();
+<<<<<<< HEAD
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: ((context) => const About_pharma()),
               ),
             );
+=======
+            Navigator.of(context).pushNamed(About_pharma.routeName);
+>>>>>>> origin/main
           },
         ),
       ]),

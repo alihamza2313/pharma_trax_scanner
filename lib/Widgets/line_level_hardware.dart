@@ -49,7 +49,7 @@ Pharma Trax Pro Line</a>
             child: HtmlWidget(
               htmldata,
               onTapUrl: (url) async {
-                print(url);
+                // print(url);
                 var filePath = Uri.parse(url);
                 await launchUrl(filePath);
                 return true;

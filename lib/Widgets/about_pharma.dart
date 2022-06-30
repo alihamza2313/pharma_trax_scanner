@@ -5,6 +5,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 
 
+// ignore: camel_case_types
 class About_pharma extends StatelessWidget {
   const About_pharma({Key? key}) : super(key: key);
   // final link="https://www.pharmatrax.pk/pharma-trax-cloud/";
@@ -49,7 +50,7 @@ Pharma Trax Modules</a> </font></p>
             child: HtmlWidget(
               htmlData,
               onTapUrl: (url) async {
-                print(url);
+                // print(url);
                 var filePath = Uri.parse(url);
                //final Uri uri = Uri.file(filePath);
 
