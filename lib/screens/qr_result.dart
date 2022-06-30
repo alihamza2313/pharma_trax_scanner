@@ -25,6 +25,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
     }
   }
 
+
   List<Map<String, dynamic>> map = [
     {'identifer': "00", 'title': "SSCC", 'length': 18},
     {'identifer': "01", 'title': "GTIN", 'length': 14},
@@ -709,6 +710,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 const PopupMenuItem<int>(value: 0, child: const Text('Share Screenshot')),
               ],
             ),
+
+          
           ],
         ),
         body: Column(
