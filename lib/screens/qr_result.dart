@@ -1,5 +1,3 @@
-
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -24,7 +22,6 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
         break;
     }
   }
-
 
   List<Map<String, dynamic>> map = [
     {'identifer': "00", 'title': "SSCC", 'length': 18},
@@ -605,39 +602,30 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
     String? getFirstthreeIndex = newStringafterSpecialCharcter.substring(0, 3);
     String? getFirstfourIndex = newStringafterSpecialCharcter.substring(0, 4);
 
-
-
     for (var fetchmap in map) {
       if (fetchmap["identifer"] == "$getFirsttwoIndex") {
         // log(fetchmap["identifer"]);
 
         String? getLengthafterCode = newStringafterSpecialCharcter.substring(
             2, newStringafterSpecialCharcter.length);
-       // log(getLengthafterCode);
+        // log(getLengthafterCode);
         // if (fetchmap.containsKey("length")) {
-          getLength = fetchmap["length"] ?? fetchmap["maximumLength"] ;
-          String? getFirstVIIStringg =
-              getLengthafterCode.substring(0, getLength);
+        getLength = fetchmap["length"] ?? fetchmap["maximumLength"];
+        String? getFirstVIIStringg = getLengthafterCode.substring(0, getLength);
 
-          String? afterAlldataNewstringg = getLengthafterCode.substring(
-              2 + getLength!, getLengthafterCode.length);
+        String? afterAlldataNewstringg = getLengthafterCode.substring(
+            2 + getLength!, getLengthafterCode.length);
 
-          log(getFirstVIIStringg);
-          log(afterAlldataNewstringg);
- resultMap.add({
-            'identifer': fetchmap["identifer"],
-            'title': fetchmap["title"],
-            'value': getFirstVIIStringg
-          });
-         
-     
-            
-              checkStringValidateData(afterAlldataNewstringg);
-       
+        log(getFirstVIIStringg);
+        log(afterAlldataNewstringg);
+        resultMap.add({
+          'identifer': fetchmap["identifer"],
+          'title': fetchmap["title"],
+          'value': getFirstVIIStringg
+        });
 
-        
-          
-          
+        checkStringValidateData(afterAlldataNewstringg);
+
         // } else {
         //   getMinimumLength = fetchmap["minimumLength"];
         //   getMaximumLength = fetchmap["maximumLength"];
@@ -656,27 +644,20 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
         //     'value': getFirstVIIStringg
         //   });
 
-        
         //    setState(() {
         //       checkStringValidateData(afterAlldataNewstring);
         //    });
-        
+
         // }
 
-      
       } else if (fetchmap["identifer"] == "$getFirstthreeIndex") {
         log(fetchmap["identifer"]);
-
-        
       } else if (fetchmap["identifer"] == "$getFirstfourIndex") {
         log(fetchmap["identifer"]);
-
-      
       } else {
         log("inValid AII");
       }
     }
-   
   }
 
   @override
@@ -705,13 +686,41 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
             PopupMenuButton<int>(
               onSelected: (item) => handleClick(item),
               itemBuilder: (context) => [
-                const PopupMenuItem<int>(value: 0, child: const Text('Copy to Clipboard')),
-                const PopupMenuItem<int>(value: 1, child: const Text('Share Result')),
-                const PopupMenuItem<int>(value: 0, child: const Text('Share Screenshot')),
+                PopupMenuItem<int>(value: 0, child: Text('Copy to Clipboard')),
+                PopupMenuItem<int>(value: 1, child: Text('Share Result')),
+                PopupMenuItem<int>(value: 0, child: Text('Share Screenshot')),
               ],
             ),
-
-          
+          ],
+        ),
+        body: Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              color: Colors.grey,
+              child: Column(
+                children: [
+                  Text(
+                    '${widget.typeText}',
+                    style: GoogleFonts.roboto(
+                        color: Colors.black.withOpacity(0.5),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    "${widget.qrCode}",
+                    style: GoogleFonts.roboto(
+                        color: Colors.black.withOpacity(0.5),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w300),
+                  )
+                ],
+              ),
+            ),
           ],
         ),
         body: Column(
@@ -733,7 +742,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                     height: 8,
                   ),
                   Text(
-                    "${widget.qrCode}",
+                    result1,
                     style: GoogleFonts.roboto(
                         color: Colors.black.withOpacity(0.5),
                         fontSize: 18,
