@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: const HomePage(),
+        //this is routes
         routes: {
           LineLevelHardware.routeName: (ctx) => const LineLevelHardware(),
           Line_equipment.routeName: (ctx) => const Line_equipment(),
