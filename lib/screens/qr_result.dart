@@ -1,8 +1,9 @@
-import 'dart:developer';
+
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class QRCodeResultScreen extends StatefulWidget {
   String? qrCode;
   String? typeText;
@@ -21,6 +22,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
         break;
     }
   }
+
 
   List<Map<String, dynamic>> map = [
     {'identifer': "00", 'title': "SSCC", 'length': 18},
@@ -699,6 +701,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 icon: Image.asset("assets/images/back.png")),
             // IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_sharp,color: Colors.white,))
             PopupMenuButton<int>(
+
               onSelected: (item) => handleClick(item),
               itemBuilder: (context) => [
                 PopupMenuItem<int>(value: 0, child: Text('Copy to Clipboard')),
@@ -706,6 +709,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 PopupMenuItem<int>(value: 0, child: Text('Share Screenshot')),
               ],
             ),
+
+          
           ],
         ),
         body: Column(
@@ -737,6 +742,38 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               ),
             ),
           ],
-        ));
+
+        ),
+        
+
+      body: Column(children: [
+
+        Container(
+          
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+          color: Colors.grey,
+          child: Column(children: [
+            Text('${widget.typeText}',style: GoogleFonts.roboto(
+              color: Colors.black.withOpacity(0.5),
+              fontSize: 24,
+              fontWeight: FontWeight.bold
+              
+            ),),
+            const SizedBox(height: 8,),
+            Text(result1,style: GoogleFonts.roboto(
+              color: Colors.black.withOpacity(0.5),
+              fontSize: 18,
+              fontWeight: FontWeight.w300
+              
+            ),)
+          ],),
+          
+        ),
+
+      ],)
+
+    );
+
   }
 }
