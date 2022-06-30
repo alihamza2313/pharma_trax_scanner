@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       GestureDetector(
                         onTap: (){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (_)=>BarCodeScanner()));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (_)=>const BarCodeScanner()));
                         },
                         child: Container(
                                         color: Colors.blue,
@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: (){
 
 
-       Navigator.of(context).push(MaterialPageRoute(builder: (_)=>DataMatrixSacnner()));
+       Navigator.of(context).push(MaterialPageRoute(builder: (_)=>const DataMatrixSacnner()));
 
                   },
                   child: Container(

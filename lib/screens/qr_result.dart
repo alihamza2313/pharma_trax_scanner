@@ -1,8 +1,11 @@
+
+
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class QRCodeResultScreen extends StatefulWidget {
   String? qrCode;
   String? typeText;
@@ -701,9 +704,9 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
             PopupMenuButton<int>(
               onSelected: (item) => handleClick(item),
               itemBuilder: (context) => [
-                PopupMenuItem<int>(value: 0, child: Text('Copy to Clipboard')),
-                PopupMenuItem<int>(value: 1, child: Text('Share Result')),
-                PopupMenuItem<int>(value: 0, child: Text('Share Screenshot')),
+                const PopupMenuItem<int>(value: 0, child: const Text('Copy to Clipboard')),
+                const PopupMenuItem<int>(value: 1, child: const Text('Share Result')),
+                const PopupMenuItem<int>(value: 0, child: const Text('Share Screenshot')),
               ],
             ),
           ],
@@ -712,7 +715,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               color: Colors.grey,
               child: Column(
                 children: [
@@ -723,7 +726,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                         fontSize: 24,
                         fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(

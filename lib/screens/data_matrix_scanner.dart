@@ -1,6 +1,4 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -8,7 +6,6 @@ import 'package:pharma_trax_scanner/screens/qr_result.dart';
 
 import 'package:qr_mobile_vision/qr_camera.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:qr_mobile_vision/qr_mobile_vision.dart';
 
 
@@ -50,7 +47,7 @@ class _DataMatrixSacnnerState extends State<DataMatrixSacnner> {
         automaticallyImplyLeading: false,
         leading: IconButton(onPressed: (){
              Navigator.pop(context);
-        }, icon: Icon(Icons.arrow_back,color: Colors.white,)),
+        }, icon: const Icon(Icons.arrow_back,color: Colors.white,)),
           elevation: 0,
          // backgroundColor: greenColor,
           centerTitle: true,
@@ -109,7 +106,7 @@ class _DataMatrixSacnnerState extends State<DataMatrixSacnner> {
                           ),
                         ),
                     )
-                    : Center()),
+                    : const Center()),
           
           ],
         ),
