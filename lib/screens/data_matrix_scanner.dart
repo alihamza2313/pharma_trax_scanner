@@ -24,12 +24,6 @@ class DataMatrixSacnner extends StatefulWidget {
 
 class _DataMatrixSacnnerState extends State<DataMatrixSacnner> {
 
-
-//
-  
-
- 
-
    
   bool isLoadingCheck = false;
    String? qr;
