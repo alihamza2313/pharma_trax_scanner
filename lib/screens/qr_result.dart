@@ -1,7 +1,8 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pharma_trax_scanner/utils/colors.dart';
+
 
 // ignore: must_be_immutable
 class QRCodeResultScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class QRCodeResultScreen extends StatefulWidget {
 }
 
 class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
+<<<<<<< HEAD
   void handleClick(int item) {
     switch (item) {
       case 0:
@@ -22,6 +24,9 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
         break;
     }
   }
+=======
+ 
+>>>>>>> origin/alihamza
 
   List<Map<String, dynamic>> map = [
     {'identifer': "00", 'title': "SSCC", 'length': 18},
@@ -571,37 +576,39 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
   List<Map<String, dynamic>> resultMap = [];
 
   String? getSpecialCharacter;
-  int? getLength;
-  int? getMinimumLength;
-  int? getMaximumLength;
-  String? afterAlldataNewstring;
+    String? afterAlldataNewstringg;
+    String? getSpecialcharcatershape;
+
+    String? replaceAllspecialcharacter;
 
   @override
   void initState() {
     String? getqrcoderesult = widget.qrCode.toString();
+
+    replaceAllspecialcharacter=getqrcoderesult.replaceAll(RegExp('[^A-Za-z0-9]'), 'NFC');
     log(getqrcoderesult);
+    getSpecialcharcatershape =getqrcoderesult[0];
 
     getSpecialCharacter = getqrcoderesult.codeUnitAt(0).toString();
-    log(getSpecialCharacter.toString());
-    String? newStringafterSpecialCharcter =
-        getqrcoderesult.substring(1, getqrcoderesult.length);
-
+    
     if (getSpecialCharacter == "29") {
-      checkStringValidateData(newStringafterSpecialCharcter);
+     CheckValueForTest( widget.qrCode.toString());
     } else {
       log("inValid Data Matrix");
     }
 
     log(resultMap.toString());
 
+
     super.initState();
   }
 
-  checkStringValidateData(String newStringafterSpecialCharcter) {
-    String? getFirsttwoIndex = newStringafterSpecialCharcter.substring(0, 2);
-    String? getFirstthreeIndex = newStringafterSpecialCharcter.substring(0, 3);
-    String? getFirstfourIndex = newStringafterSpecialCharcter.substring(0, 4);
+  CheckValueForTest(String? newStringafterSpecialCharcter) {
+    if (newStringafterSpecialCharcter!.codeUnitAt(0).toString() == "29") {
+      String? newStringDeleteFirstIndex = newStringafterSpecialCharcter
+          .substring(1, newStringafterSpecialCharcter.length);
 
+<<<<<<< HEAD
     for (var fetchmap in map) {
       if (fetchmap["identifer"] == "$getFirsttwoIndex") {
         // log(fetchmap["identifer"]);
@@ -656,13 +663,429 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
         log(fetchmap["identifer"]);
       } else {
         log("inValid AII");
+=======
+      log(newStringDeleteFirstIndex.toString());
+      String? getFirsttwoIndex = newStringDeleteFirstIndex.substring(0, 2);
+      String? getFirstthreeIndex = newStringDeleteFirstIndex.substring(0, 3);
+      String? getFirstfourIndex = newStringDeleteFirstIndex.substring(0, 4);
+
+      for (var key in map) {
+        if (key['identifer'] == getFirsttwoIndex) {
+// delete First 2 Character match Map Key Value
+
+          String? getLengthafterCode = newStringDeleteFirstIndex.substring(
+              2, newStringDeleteFirstIndex.length);
+          log(getLengthafterCode);
+
+// get Length of Map key Value so that get number of string which define map
+
+          int? getLength = key["length"] ?? key["maximumLength"];
+          log(getLength.toString());
+
+          // get Length of String and Save Other Map toi display
+
+          if (getLength! > getLengthafterCode.length) {
+            log(getLengthafterCode);
+
+            String? getFirstVIIStringg = getLengthafterCode;
+
+            if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
+              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+
+              log(getIndex.toString());
+
+              getFirstVIIStringg = getLengthafterCode.substring(0, getIndex);
+              log(getFirstVIIStringg);
+
+              afterAlldataNewstringg = getLengthafterCode.substring(
+                  getIndex, getLengthafterCode.length);
+
+                   resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            } else {
+              afterAlldataNewstringg = getLengthafterCode;
+
+              log(getFirstVIIStringg);
+              log(afterAlldataNewstringg!);
+
+               resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            }
+          } else {
+            String? getFirstVIIStringg =
+                getLengthafterCode.substring(0, getLength);
+
+            if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
+              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+
+              log(getIndex.toString());
+
+              getFirstVIIStringg = getLengthafterCode.substring(0, getIndex);
+              log(getFirstVIIStringg);
+
+              afterAlldataNewstringg = getLengthafterCode.substring(
+                  getIndex, getLengthafterCode.length);
+ resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            } else {
+              afterAlldataNewstringg = getLengthafterCode.substring(
+                  getLength, getLengthafterCode.length);
+
+              log(getFirstVIIStringg);
+              log(afterAlldataNewstringg!);
+
+               resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+
+
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            }
+          }
+        } else if (key['identifer'] == getFirstthreeIndex) {
+          String? getLengthafterCode = newStringDeleteFirstIndex.substring(
+              3, newStringDeleteFirstIndex.length);
+          log(getLengthafterCode);
+
+// get Length of Map key Value so that get number of string which define map
+
+          int? getLength = key["length"] ?? key["maximumLength"];
+          log(getLength.toString());
+
+          // get Length of String and Save Other Map toi display
+
+          if (getLength! > getLengthafterCode.length) {
+            log(getLengthafterCode);
+
+            String? getFirstVIIStringg = getLengthafterCode;
+
+            if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
+              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+
+              log(getIndex.toString());
+
+              getFirstVIIStringg = getLengthafterCode.substring(0, getIndex);
+              log(getFirstVIIStringg);
+
+              afterAlldataNewstringg = getLengthafterCode.substring(
+                  getIndex, getLengthafterCode.length);
+
+                   resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            } else {
+              afterAlldataNewstringg = getLengthafterCode;
+
+              log(getFirstVIIStringg);
+              log(afterAlldataNewstringg!);
+
+               resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            }
+          } else {
+            String? getFirstVIIStringg =
+                getLengthafterCode.substring(0, getLength);
+
+            if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
+              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+
+              log(getIndex.toString());
+
+              getFirstVIIStringg = getLengthafterCode.substring(0, getIndex);
+              log(getFirstVIIStringg);
+
+              afterAlldataNewstringg = getLengthafterCode.substring(
+                  getIndex, getLengthafterCode.length);
+ resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            } else {
+              afterAlldataNewstringg = getLengthafterCode.substring(
+                  getLength, getLengthafterCode.length);
+
+              log(getFirstVIIStringg);
+              log(afterAlldataNewstringg!);
+
+               resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+
+
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            }
+          }
+        } else if (key['identifer'] == getFirstfourIndex) {
+
+
+
+
+
+            String? getLengthafterCode = newStringDeleteFirstIndex.substring(
+              4, newStringDeleteFirstIndex.length);
+          log(getLengthafterCode);
+
+// get Length of Map key Value so that get number of string which define map
+
+          int? getLength = key["length"] ?? key["maximumLength"];
+          log(getLength.toString());
+
+          // get Length of String and Save Other Map toi display
+
+          if (getLength! > getLengthafterCode.length) {
+            log(getLengthafterCode);
+
+            String? getFirstVIIStringg = getLengthafterCode;
+
+            if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
+              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+
+              log(getIndex.toString());
+
+              getFirstVIIStringg = getLengthafterCode.substring(0, getIndex);
+              log(getFirstVIIStringg);
+
+              afterAlldataNewstringg = getLengthafterCode.substring(
+                  getIndex, getLengthafterCode.length);
+
+                   resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            } else {
+              afterAlldataNewstringg = getLengthafterCode;
+
+              log(getFirstVIIStringg);
+              log(afterAlldataNewstringg!);
+
+               resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            }
+          } else {
+            String? getFirstVIIStringg =
+                getLengthafterCode.substring(0, getLength);
+
+            if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
+              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+
+              log(getIndex.toString());
+
+              getFirstVIIStringg = getLengthafterCode.substring(0, getIndex);
+              log(getFirstVIIStringg);
+
+              afterAlldataNewstringg = getLengthafterCode.substring(
+                  getIndex, getLengthafterCode.length);
+ resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            } else {
+              afterAlldataNewstringg = getLengthafterCode.substring(
+                  getLength, getLengthafterCode.length);
+
+              log(getFirstVIIStringg);
+              log(afterAlldataNewstringg!);
+
+               resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+
+
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            }
+          }
+        }
+      }
+    } else {
+      log(newStringafterSpecialCharcter.toString());
+      String? getFirsttwoIndex = newStringafterSpecialCharcter.substring(0, 2);
+      String? getFirstthreeIndex =
+          newStringafterSpecialCharcter.substring(0, 3);
+      String? getFirstfourIndex = newStringafterSpecialCharcter.substring(0, 4);
+
+      for (var key in map) {
+        if (key['identifer'] == getFirsttwoIndex) {
+          String? getLengthafterCode = newStringafterSpecialCharcter.substring(
+              2, newStringafterSpecialCharcter.length);
+          log(getLengthafterCode);
+          // if (fetchmap.containsKey("length")) {
+          int? getLength = key["length"] ?? key["maximumLength"];
+          log(getLength.toString());
+
+          if (getLength! > getLengthafterCode.length) {
+            log(getLengthafterCode);
+
+            String? getFirstVIIStringg = getLengthafterCode;
+
+            if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
+              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+
+              log(getIndex.toString());
+
+              getFirstVIIStringg = getLengthafterCode.substring(0, getIndex);
+              log(getFirstVIIStringg);
+
+              afterAlldataNewstringg = getLengthafterCode.substring(
+                  getIndex, getLengthafterCode.length);
+
+                   resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            } else {
+              afterAlldataNewstringg = getLengthafterCode;
+
+              log(getFirstVIIStringg);
+              log(afterAlldataNewstringg!);
+
+               resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            }
+          } else {
+            String? getFirstVIIStringg =
+                getLengthafterCode.substring(0, getLength);
+
+            if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
+              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+
+              log(getIndex.toString());
+
+              getFirstVIIStringg = getLengthafterCode.substring(0, getIndex);
+              log(getFirstVIIStringg);
+
+              afterAlldataNewstringg = getLengthafterCode.substring(
+                  getIndex, getLengthafterCode.length);
+ resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            } else {
+              afterAlldataNewstringg = getLengthafterCode.substring(
+                  getLength, getLengthafterCode.length);
+
+              log(getFirstVIIStringg);
+              log(afterAlldataNewstringg!);
+ resultMap.add({
+            'identifer': key["identifer"],
+            'title': key["title"],
+            'value': getFirstVIIStringg
+          });
+              setState(() {
+                CheckValueForTest(afterAlldataNewstringg);
+              });
+            }
+          }
+        } else if (key['identifer'] == getFirstthreeIndex) {
+        
+        } else if (key['identifer'] == getFirstfourIndex) {
+          log(key['identifer']);
+        }
+>>>>>>> origin/alihamza
       }
     }
   }
 
+
+
+
+
+
+   void handleClick(int item) {
+    switch (item) {
+      case 0:
+        break;
+      case 1:
+        break;
+        case 2:
+        
+              
+        break;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        
         appBar: AppBar(
           automaticallyImplyLeading: false,
           // leading: IconButton(onPressed: (){
@@ -686,6 +1109,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
             PopupMenuButton<int>(
               onSelected: (item) => handleClick(item),
               itemBuilder: (context) => [
+<<<<<<< HEAD
                 PopupMenuItem<int>(value: 0, child: Text('Copy to Clipboard')),
                 PopupMenuItem<int>(value: 1, child: Text('Share Result')),
                 PopupMenuItem<int>(value: 0, child: Text('Share Screenshot')),
@@ -721,6 +1145,15 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 ],
               ),
             ),
+=======
+                const PopupMenuItem<int>(value: 0, child: const Text('Copy to Clipboard')),
+                const PopupMenuItem<int>(value: 1, child: const Text('Share Result')),
+                const PopupMenuItem<int>(value: 2, child: const Text('Share Screenshot')),
+              ],
+            ),
+    
+          
+>>>>>>> origin/alihamza
           ],
         ),
         body: Column(
@@ -750,6 +1183,55 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                   )
                 ],
               ),
+            ),
+            SizedBox(height: 20,),
+        
+            Container(
+        
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+              
+                children: [
+        
+                Text("SCANNED INFORMATIO",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,  color: Colors.black.withOpacity(0.5),),),
+                   SizedBox(height: 20,),
+               
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                     for(int i=0 ; i <resultMap.length ;i++ )
+                    Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                      child: Row
+                      
+                    (
+                      crossAxisAlignment: CrossAxisAlignment.start,
+               
+                      children: [
+                        Expanded(
+                          
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text('${resultMap[i]['title']}',style: TextStyle(fontWeight: FontWeight.bold,color: blueColor1),),
+                               Text('(${resultMap[i]['identifer']}): ',style: TextStyle(fontWeight: FontWeight.bold,color: blueColor1)),
+                          ],
+                        )),
+                     
+                     
+                          SizedBox(width: 5,),
+                                 Expanded(
+                                  flex: 2,
+                                  child: Text('${resultMap[i]['value']}',textAlign: TextAlign.start,)),
+                                   SizedBox(height: 5,),
+                      ],),
+                    
+                    ),
+                  ],
+                ),
+        
+              ],),
             ),
           ],
         ));
