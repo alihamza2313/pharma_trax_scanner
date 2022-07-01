@@ -23,26 +23,27 @@ Pharma Trax Modules</a> </font></p>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const AppDrawer(),
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text("Line Equipment"),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: HtmlWidget(
-              htmldata,
-              onTapUrl: (url) async {
-                // print(url);
-                var filePath = Uri.parse(url);
+      drawer: const AppDrawer(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text("Line Equipment"),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: HtmlWidget(
+            htmldata,
+            onTapUrl: (url) async {
+              // print(url);
+              var filePath = Uri.parse(url);
 //final Uri uri = Uri.file(filePath);
 
-                await launchUrl(filePath);
-                return true;
-              },
-            ),
+              await launchUrl(filePath);
+              return true;
+            },
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

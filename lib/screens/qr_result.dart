@@ -1,5 +1,3 @@
-
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -24,7 +22,6 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
         break;
     }
   }
-
 
   List<Map<String, dynamic>> map = [
     {'identifer': "00", 'title': "SSCC", 'length': 18},
@@ -605,39 +602,32 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
     String? getFirstthreeIndex = newStringafterSpecialCharcter.substring(0, 3);
     String? getFirstfourIndex = newStringafterSpecialCharcter.substring(0, 4);
 
-
-
     for (var fetchmap in map) {
       if (fetchmap["identifer"] == "$getFirsttwoIndex") {
         // log(fetchmap["identifer"]);
 
         String? getLengthafterCode = newStringafterSpecialCharcter.substring(
             2, newStringafterSpecialCharcter.length);
-       // log(getLengthafterCode);
+        // log(getLengthafterCode);
         // if (fetchmap.containsKey("length")) {
-          getLength = fetchmap["length"] ?? fetchmap["maximumLength"] ;
-          String? getFirstVIIStringg =
-              getLengthafterCode.substring(0, getLength);
+        getLength = fetchmap["length"] ?? fetchmap["maximumLength"];
+        String? getFirstVIIStringg = getLengthafterCode.substring(0, getLength);
 
-          String? afterAlldataNewstringg = getLengthafterCode.substring(
-              2 + getLength!, getLengthafterCode.length);
+        String? afterAlldataNewstringg = getLengthafterCode.substring(
+            2 + getLength!, getLengthafterCode.length);
 
-          log(getFirstVIIStringg);
-          log(afterAlldataNewstringg);
- resultMap.add({
+        log(getFirstVIIStringg);
+        log(afterAlldataNewstringg);
+        resultMap.add(
+          {
             'identifer': fetchmap["identifer"],
             'title': fetchmap["title"],
             'value': getFirstVIIStringg
-          });
-         
-     
-            
-              checkStringValidateData(afterAlldataNewstringg);
-       
+          },
+        );
 
-        
-          
-          
+        checkStringValidateData(afterAlldataNewstringg);
+
         // } else {
         //   getMinimumLength = fetchmap["minimumLength"];
         //   getMaximumLength = fetchmap["maximumLength"];
@@ -656,93 +646,87 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
         //     'value': getFirstVIIStringg
         //   });
 
-        
         //    setState(() {
         //       checkStringValidateData(afterAlldataNewstring);
         //    });
-        
+
         // }
 
-      
       } else if (fetchmap["identifer"] == "$getFirstthreeIndex") {
         log(fetchmap["identifer"]);
-
-        
       } else if (fetchmap["identifer"] == "$getFirstfourIndex") {
         log(fetchmap["identifer"]);
-
-      
       } else {
         log("inValid AII");
       }
     }
-   
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          // leading: IconButton(onPressed: (){
-          //    Navigator.pop(context);
-          // }, icon: Icon(Icons.arrow_back,color: Colors.white,)),
-          elevation: 0,
-          // backgroundColor: greenColor,
-          centerTitle: false,
-          title: Text(
-            "Scan Result",
-            style:
-                GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 16.0),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        // leading: IconButton(onPressed: (){
+        //    Navigator.pop(context);
+        // }, icon: Icon(Icons.arrow_back,color: Colors.white,)),
+        elevation: 0,
+        // backgroundColor: greenColor,
+        centerTitle: false,
+        title: Text(
+          "Scan Result",
+          style: GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 16.0),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Image.asset("assets/images/back.png")),
+          // IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_sharp,color: Colors.white,))
+          PopupMenuButton<int>(
+            onSelected: (item) => handleClick(item),
+            itemBuilder: (context) => [
+              const PopupMenuItem<int>(
+                  value: 0, child: const Text('Copy to Clipboard')),
+              const PopupMenuItem<int>(
+                  value: 1, child: const Text('Share Result')),
+              const PopupMenuItem<int>(
+                  value: 0, child: const Text('Share Screenshot')),
+            ],
           ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Image.asset("assets/images/back.png")),
-            // IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_sharp,color: Colors.white,))
-            PopupMenuButton<int>(
-              onSelected: (item) => handleClick(item),
-              itemBuilder: (context) => [
-                const PopupMenuItem<int>(value: 0, child: const Text('Copy to Clipboard')),
-                const PopupMenuItem<int>(value: 1, child: const Text('Share Result')),
-                const PopupMenuItem<int>(value: 0, child: const Text('Share Screenshot')),
+        ],
+      ),
+      body: Column(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            color: Colors.grey,
+            child: Column(
+              children: [
+                Text(
+                  '${widget.typeText}',
+                  style: GoogleFonts.roboto(
+                      color: Colors.black.withOpacity(0.5),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  "${widget.qrCode}",
+                  style: GoogleFonts.roboto(
+                      color: Colors.black.withOpacity(0.5),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w300),
+                )
               ],
             ),
-
-          
-          ],
-        ),
-        body: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              color: Colors.grey,
-              child: Column(
-                children: [
-                  Text(
-                    '${widget.typeText}',
-                    style: GoogleFonts.roboto(
-                        color: Colors.black.withOpacity(0.5),
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    "${widget.qrCode}",
-                    style: GoogleFonts.roboto(
-                        color: Colors.black.withOpacity(0.5),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w300),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

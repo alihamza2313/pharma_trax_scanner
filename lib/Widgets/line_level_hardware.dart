@@ -1,12 +1,9 @@
-
-
 // import 'package:flutter/src/foundation/key.dart';
 // import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:pharma_trax_scanner/Widgets/app_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
-
 
 class LineLevelHardware extends StatelessWidget {
   const LineLevelHardware({Key? key}) : super(key: key);
@@ -41,27 +38,27 @@ Pharma Trax Pro Line</a>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const AppDrawer(),
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title:const Text("Line Level HardWare"),
-        ),
-         body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: HtmlWidget(
-              htmldata,
-              
-              onTapUrl: (url) async {
-                // print(url);
-                var filePath = Uri.parse(url);
-               //final Uri uri = Uri.file(filePath);
+      drawer: const AppDrawer(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text("Line Level HardWare"),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: HtmlWidget(
+            htmldata,
+            onTapUrl: (url) async {
+              // print(url);
+              var filePath = Uri.parse(url);
+              //final Uri uri = Uri.file(filePath);
 
-                await launchUrl(filePath);
-                return true;
-              },
-            ),
+              await launchUrl(filePath);
+              return true;
+            },
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

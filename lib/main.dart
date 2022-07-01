@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pharma_trax_scanner/Widgets/about_pharma.dart';
 import 'package:pharma_trax_scanner/screens/home_screen.dart';
 import 'package:pharma_trax_scanner/Widgets/line_level_hardware.dart';
 import 'package:pharma_trax_scanner/Widgets/how_it_works.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
           LineLevelHardware.routeName: (ctx) => const LineLevelHardware(),
           Line_equipment.routeName: (ctx) => const Line_equipment(),
           How_it_works.routeName: (ctx) => const How_it_works(),
+          About_pharma.routeName:(context) => const About_pharma()
         });
   }
 }

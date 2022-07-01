@@ -25,26 +25,27 @@ for more detailed functions like internal logistics, sales or distribution appli
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const AppDrawer(),
-        // ignore: prefer_const_constructors
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text("How it Works"),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: HtmlWidget(
-              htmldata,
-              onTapUrl: (url) async {
-                // print(url);
-                var filePath = Uri.parse(url);
-                //final Uri uri = Uri.file(filePath);
-                 await launchUrl(filePath);
-                return true;
-              },
-            ),
+      drawer: const AppDrawer(),
+      // ignore: prefer_const_constructors
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text("How it Works"),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: HtmlWidget(
+            htmldata,
+            onTapUrl: (url) async {
+              // print(url);
+              var filePath = Uri.parse(url);
+              //final Uri uri = Uri.file(filePath);
+              await launchUrl(filePath);
+              return true;
+            },
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

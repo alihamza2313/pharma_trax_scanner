@@ -4,7 +4,6 @@ import "../Widgets/about_pharma.dart";
 import '../Widgets/line_equipment.dart';
 import 'how_it_works.dart';
 import '../Widgets/line_level_hardware.dart';
-
 import '../utils/colors.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -17,42 +16,43 @@ class AppDrawer extends StatelessWidget {
         SizedBox(
           // height: 150,
           child: DrawerHeader(
-              decoration: const BoxDecoration(color: blueColor1),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: blueColor2,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    padding: const EdgeInsets.all(5),
-                    height: 50,
-                    width: 50,
-                    child: Image.asset("assets/images/splash_logo.png"),
+            decoration: const BoxDecoration(color: blueColor1),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: blueColor2,
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Title(
-                      color: Colors.white,
-                      child: const Text(
-                        "PHARMA TRAX",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Title(
-                      color: Colors.white,
-                      child: Text("ali@gmail.com",
-                          style: TextStyle(
-                              color: Colors.white.withOpacity(0.6),
-                              fontWeight: FontWeight.normal,
-                              fontSize: 12)))
-                ],
-              )),
+                  padding: const EdgeInsets.all(5),
+                  height: 50,
+                  width: 50,
+                  child: Image.asset("assets/images/splash_logo.png"),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Title(
+                    color: Colors.white,
+                    child: const Text(
+                      "PHARMA TRAX",
+                      style: TextStyle(color: Colors.white),
+                    )),
+                const SizedBox(
+                  height: 5,
+                ),
+                Title(
+                    color: Colors.white,
+                    child: Text("ali@gmail.com",
+                        style: TextStyle(
+                            color: Colors.white.withOpacity(0.6),
+                            fontWeight: FontWeight.normal,
+                            fontSize: 12)))
+              ],
+            ),
+          ),
         ),
         ListTile(
           leading: SizedBox(

@@ -11,6 +11,7 @@ class GS1ParseEngine
         buildAiiMap();
     }
 
+    // ignore: non_constant_identifier_names
     static void AddAI(String identifier, String title, int length)
     {
         aiiMap={"identifier":identifier,'AII': AII(title, '', length, length, false)};
