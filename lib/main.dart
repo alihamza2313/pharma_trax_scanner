@@ -4,10 +4,9 @@ import 'package:pharma_trax_scanner/screens/home_screen.dart';
 import 'package:pharma_trax_scanner/Widgets/line_level_hardware.dart';
 import 'package:pharma_trax_scanner/Widgets/how_it_works.dart';
 import 'package:pharma_trax_scanner/Widgets/line_equipment.dart';
-
+import 'package:pharma_trax_scanner/screens/scan_history.dart';
 
 void main() {
-
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
@@ -31,6 +30,8 @@ class MyApp extends StatelessWidget {
         home: const HomePage(),
         //this is routes
         routes: {
+          HomePage.routeName: (ctx) => const HomePage(),
+          ScanHistory.routeName: (ctx) => const ScanHistory(),
           LineLevelHardware.routeName: (ctx) => const LineLevelHardware(),
           Line_equipment.routeName: (ctx) => const Line_equipment(),
           How_it_works.routeName: (ctx) => const How_it_works(),

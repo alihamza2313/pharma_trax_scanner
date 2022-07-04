@@ -1,22 +1,24 @@
 import 'dart:developer';
+import 'package:intl/intl.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pharma_trax_scanner/Widgets/db_helper.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
-
 
 // ignore: must_be_immutable
 class QRCodeResultScreen extends StatefulWidget {
   String? qrCode;
   String? typeText;
-  QRCodeResultScreen(this.qrCode, this.typeText, {Key? key}) : super(key: key);
+  bool? isScanFile;
+  QRCodeResultScreen(this.qrCode, this.typeText, this.isScanFile, {Key? key})
+      : super(key: key);
 
   @override
   State<QRCodeResultScreen> createState() => _QRCodeResultScreenState();
 }
 
 class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
- 
-
   List<Map<String, dynamic>> map = [
     {'identifer': "00", 'title': "SSCC", 'length': 18},
     {'identifer': "01", 'title': "GTIN", 'length': 14},
@@ -565,31 +567,49 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
   List<Map<String, dynamic>> resultMap = [];
 
   String? getSpecialCharacter;
-    String? afterAlldataNewstringg;
-    String? getSpecialcharcatershape;
+  String? afterAlldataNewstringg;
+  String? getSpecialcharcatershape;
 
-    String? replaceAllspecialcharacter;
+  String? replaceAllspecialcharacter;
 
   @override
   void initState() {
+    if (widget.isScanFile!) {
+      insertScanData(widget.qrCode.toString(), widget.typeText.toString());
+    }
     String? getqrcoderesult = widget.qrCode.toString();
 
-    replaceAllspecialcharacter=getqrcoderesult.replaceAll(RegExp('[^A-Za-z0-9]'), 'NFC');
+    replaceAllspecialcharacter =
+        getqrcoderesult.replaceAll(RegExp('[^A-Za-z0-9]'), 'NFC');
     log(getqrcoderesult);
-    getSpecialcharcatershape =getqrcoderesult[0];
+    getSpecialcharcatershape = getqrcoderesult[0];
 
     getSpecialCharacter = getqrcoderesult.codeUnitAt(0).toString();
-    
+
     if (getSpecialCharacter == "29") {
-     CheckValueForTest( widget.qrCode.toString());
+      CheckValueForTest(widget.qrCode.toString());
     } else {
       log("inValid Data Matrix");
     }
 
     log(resultMap.toString());
 
-
     super.initState();
+  }
+
+  final dbhelper = DataBaseHelper.instance;
+
+  void insertScanData(String qrData, String qrType) async {
+    Map<String, dynamic> row = {
+      DataBaseHelper.table2ColumnId: qrData.substring(1, qrData.length),
+      DataBaseHelper.table2ColumnBarcodeType: qrType,
+      DataBaseHelper.table2ColumnDate:
+          DateFormat('dd:MM:yy').add_jm().format(DateTime.now()).toString()
+    };
+    final id = await dbhelper.insertTable2(row);
+    print("----------------------------");
+    print(id);
+    print("----------------------------");
   }
 
   CheckValueForTest(String? newStringafterSpecialCharcter) {
@@ -623,7 +643,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
             String? getFirstVIIStringg = getLengthafterCode;
 
             if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
-              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+              int? getIndex =
+                  getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
 
               log(getIndex.toString());
 
@@ -633,11 +654,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               afterAlldataNewstringg = getLengthafterCode.substring(
                   getIndex, getLengthafterCode.length);
 
-                   resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
 
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
@@ -648,11 +669,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               log(getFirstVIIStringg);
               log(afterAlldataNewstringg!);
 
-               resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
               });
@@ -662,7 +683,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 getLengthafterCode.substring(0, getLength);
 
             if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
-              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+              int? getIndex =
+                  getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
 
               log(getIndex.toString());
 
@@ -671,11 +693,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
               afterAlldataNewstringg = getLengthafterCode.substring(
                   getIndex, getLengthafterCode.length);
- resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
               });
@@ -686,12 +708,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               log(getFirstVIIStringg);
               log(afterAlldataNewstringg!);
 
-               resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
-
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
 
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
@@ -716,7 +737,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
             String? getFirstVIIStringg = getLengthafterCode;
 
             if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
-              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+              int? getIndex =
+                  getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
 
               log(getIndex.toString());
 
@@ -726,11 +748,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               afterAlldataNewstringg = getLengthafterCode.substring(
                   getIndex, getLengthafterCode.length);
 
-                   resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
 
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
@@ -741,11 +763,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               log(getFirstVIIStringg);
               log(afterAlldataNewstringg!);
 
-               resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
               });
@@ -755,7 +777,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 getLengthafterCode.substring(0, getLength);
 
             if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
-              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+              int? getIndex =
+                  getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
 
               log(getIndex.toString());
 
@@ -764,11 +787,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
               afterAlldataNewstringg = getLengthafterCode.substring(
                   getIndex, getLengthafterCode.length);
- resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
               });
@@ -779,12 +802,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               log(getFirstVIIStringg);
               log(afterAlldataNewstringg!);
 
-               resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
-
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
 
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
@@ -792,12 +814,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
             }
           }
         } else if (key['identifer'] == getFirstfourIndex) {
-
-
-
-
-
-            String? getLengthafterCode = newStringDeleteFirstIndex.substring(
+          String? getLengthafterCode = newStringDeleteFirstIndex.substring(
               4, newStringDeleteFirstIndex.length);
           log(getLengthafterCode);
 
@@ -814,7 +831,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
             String? getFirstVIIStringg = getLengthafterCode;
 
             if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
-              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+              int? getIndex =
+                  getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
 
               log(getIndex.toString());
 
@@ -824,11 +842,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               afterAlldataNewstringg = getLengthafterCode.substring(
                   getIndex, getLengthafterCode.length);
 
-                   resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
 
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
@@ -839,11 +857,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               log(getFirstVIIStringg);
               log(afterAlldataNewstringg!);
 
-               resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
               });
@@ -853,7 +871,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 getLengthafterCode.substring(0, getLength);
 
             if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
-              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+              int? getIndex =
+                  getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
 
               log(getIndex.toString());
 
@@ -862,11 +881,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
               afterAlldataNewstringg = getLengthafterCode.substring(
                   getIndex, getLengthafterCode.length);
- resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
               });
@@ -877,12 +896,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               log(getFirstVIIStringg);
               log(afterAlldataNewstringg!);
 
-               resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
-
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
 
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
@@ -913,7 +931,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
             String? getFirstVIIStringg = getLengthafterCode;
 
             if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
-              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+              int? getIndex =
+                  getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
 
               log(getIndex.toString());
 
@@ -923,11 +942,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               afterAlldataNewstringg = getLengthafterCode.substring(
                   getIndex, getLengthafterCode.length);
 
-                   resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
 
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
@@ -938,11 +957,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               log(getFirstVIIStringg);
               log(afterAlldataNewstringg!);
 
-               resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
 
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
@@ -953,7 +972,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 getLengthafterCode.substring(0, getLength);
 
             if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
-              int? getIndex = getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
+              int? getIndex =
+                  getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
 
               log(getIndex.toString());
 
@@ -962,11 +982,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
               afterAlldataNewstringg = getLengthafterCode.substring(
                   getIndex, getLengthafterCode.length);
- resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
               });
@@ -976,18 +996,17 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
               log(getFirstVIIStringg);
               log(afterAlldataNewstringg!);
- resultMap.add({
-            'identifer': key["identifer"],
-            'title': key["title"],
-            'value': getFirstVIIStringg
-          });
+              resultMap.add({
+                'identifer': key["identifer"],
+                'title': key["title"],
+                'value': getFirstVIIStringg
+              });
               setState(() {
                 CheckValueForTest(afterAlldataNewstringg);
               });
             }
           }
         } else if (key['identifer'] == getFirstthreeIndex) {
-        
         } else if (key['identifer'] == getFirstfourIndex) {
           log(key['identifer']);
         }
@@ -995,29 +1014,20 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
     }
   }
 
-
-
-
-
-
-   void handleClick(int item) {
+  void handleClick(int item) {
     switch (item) {
       case 0:
         break;
       case 1:
         break;
-        case 2:
-        
-              
+      case 2:
         break;
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        
         appBar: AppBar(
           automaticallyImplyLeading: false,
           // leading: IconButton(onPressed: (){
@@ -1041,13 +1051,14 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
             PopupMenuButton<int>(
               onSelected: (item) => handleClick(item),
               itemBuilder: (context) => [
-                const PopupMenuItem<int>(value: 0, child: const Text('Copy to Clipboard')),
-                const PopupMenuItem<int>(value: 1, child: const Text('Share Result')),
-                const PopupMenuItem<int>(value: 2, child: const Text('Share Screenshot')),
+                const PopupMenuItem<int>(
+                    value: 0, child: const Text('Copy to Clipboard')),
+                const PopupMenuItem<int>(
+                    value: 1, child: const Text('Share Result')),
+                const PopupMenuItem<int>(
+                    value: 2, child: const Text('Share Screenshot')),
               ],
             ),
-    
-          
           ],
         ),
         body: Column(
@@ -1078,54 +1089,70 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 20,),
-        
+            SizedBox(
+              height: 20,
+            ),
             Container(
-        
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-              
                 children: [
-        
-                Text("SCANNED INFORMATIO",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,  color: Colors.black.withOpacity(0.5),),),
-                   SizedBox(height: 20,),
-               
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                     for(int i=0 ; i <resultMap.length ;i++ )
-                    Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-                      child: Row
-                      
-                    (
-                      crossAxisAlignment: CrossAxisAlignment.start,
-               
-                      children: [
-                        Expanded(
-                          
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text('${resultMap[i]['title']}',style: TextStyle(fontWeight: FontWeight.bold,color: blueColor1),),
-                               Text('(${resultMap[i]['identifer']}): ',style: TextStyle(fontWeight: FontWeight.bold,color: blueColor1)),
-                          ],
-                        )),
-                     
-                     
-                          SizedBox(width: 5,),
-                                 Expanded(
-                                  flex: 2,
-                                  child: Text('${resultMap[i]['value']}',textAlign: TextAlign.start,)),
-                                   SizedBox(height: 5,),
-                      ],),
-                    
+                  Text(
+                    "SCANNED INFORMATIO",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black.withOpacity(0.5),
                     ),
-                  ],
-                ),
-        
-              ],),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (int i = 0; i < resultMap.length; i++)
+                        Container(
+                          alignment: Alignment.center,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${resultMap[i]['title']}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: blueColor1),
+                                  ),
+                                  Text('(${resultMap[i]['identifer']}): ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: blueColor1)),
+                                ],
+                              )),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    '${resultMap[i]['value']}',
+                                    textAlign: TextAlign.start,
+                                  )),
+                              SizedBox(
+                                height: 5,
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ));

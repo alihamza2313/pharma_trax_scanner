@@ -41,7 +41,10 @@ dependencies:
   url_launcher: ^6.1.4
   flutter_widget_from_html: ^0.8.5
   qr_mobile_vision: ^3.0.1 
- 
+  sqflite: ^2.0.2+1
+  path_provider: ^2.0.10
+  path: ^1.8.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
