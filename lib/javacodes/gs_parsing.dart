@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+
 import 'package:pharma_trax_scanner/javacodes/aii_model.dart';
 class GS1ParseEngine
 {
