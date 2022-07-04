@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -8,55 +7,48 @@ import 'package:qr_mobile_vision/qr_camera.dart';
 
 import 'package:qr_mobile_vision/qr_mobile_vision.dart';
 
-
 class DataMatrixSacnner extends StatefulWidget {
-
-
-
-  const DataMatrixSacnner(  {Key? key}) : super(key: key);
+  const DataMatrixSacnner({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _DataMatrixSacnnerState();
 }
 
 class _DataMatrixSacnnerState extends State<DataMatrixSacnner> {
-
-   
   bool isLoadingCheck = false;
-   String? qr;
+  String? qr;
   bool camState = false;
 
   @override
   initState() {
     setState(() {
-      camState=true;
+      camState = true;
     });
-     
+
     super.initState();
   }
-
-
-
- 
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        leading: IconButton(onPressed: (){
-             Navigator.pop(context);
-        }, icon: const Icon(Icons.arrow_back,color: Colors.white,)),
-          elevation: 0,
-         // backgroundColor: greenColor,
-          centerTitle: true,
-          title: Text(
-             "Scan Qr Code",
-            style:
-                GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 16.0),
-          ),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
+        elevation: 0,
+        // backgroundColor: greenColor,
+        centerTitle: true,
+        title: Text(
+          "Scan Qr Code",
+          style: GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 16.0),
         ),
+      ),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,13 +57,12 @@ class _DataMatrixSacnnerState extends State<DataMatrixSacnner> {
             Expanded(
                 child: camState
                     ? Container(
-                      color: Colors.black,
-                      child: Center(
+                        color: Colors.black,
+                        child: Center(
                           child: SizedBox(
                             width: 300.0,
                             height: 300.0,
                             child: QrCamera(
-                              
                               formats: const [BarcodeFormats.DATA_MATRIX],
                               onError: (context, error) => Text(
                                 error.toString(),
@@ -81,17 +72,16 @@ class _DataMatrixSacnnerState extends State<DataMatrixSacnner> {
                                 setState(() {
                                   qr = code;
                                   setState(() {
-                                    camState=false;
+                                    camState = false;
                                   });
-                                   //SaveRegistration(qr);
-
-
+                                  //SaveRegistration(qr);
                                 });
-                                   Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => QRCodeResultScreen(qr,'DATA MATRIX (GS1)'),
-                    ));
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => QRCodeResultScreen(
+                                          qr, 'DATA MATRIX (GS1)', true),
+                                    ));
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -105,13 +95,11 @@ class _DataMatrixSacnnerState extends State<DataMatrixSacnner> {
                             ),
                           ),
                         ),
-                    )
+                      )
                     : const Center()),
-          
           ],
         ),
       ),
-    
     );
   }
 }
