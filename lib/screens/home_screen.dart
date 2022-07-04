@@ -12,6 +12,8 @@ import '../Widgets/app_drawer.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
+  static const routeName = '/home_screen';
+
   @override
   State<HomePage> createState() => _HomePageState();
 }

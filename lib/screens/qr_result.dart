@@ -10,12 +10,20 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:pharma_trax_scanner/Widgets/db_helper.dart';
+import 'package:pharma_trax_scanner/utils/colors.dart';
 
 // ignore: must_be_immutable
 class QRCodeResultScreen extends StatefulWidget {
   String? qrCode;
   String? typeText;
-  QRCodeResultScreen(this.qrCode, this.typeText, {Key? key}) : super(key: key);
+  bool? isScanFile;
+  QRCodeResultScreen(this.qrCode, this.typeText, this.isScanFile, {Key? key})
+      : super(key: key);
 
   @override
   State<QRCodeResultScreen> createState() => _QRCodeResultScreenState();
@@ -577,6 +585,9 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
   @override
   void initState() {
+    if (widget.isScanFile!) {
+      insertScanData(widget.qrCode.toString(), widget.typeText.toString());
+    }
     String? getqrcoderesult = widget.qrCode.toString();
 
     replaceAllspecialcharacter =
@@ -595,6 +606,21 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
     log(resultMap.toString());
 
     super.initState();
+  }
+
+  final dbhelper = DataBaseHelper.instance;
+
+  void insertScanData(String qrData, String qrType) async {
+    Map<String, dynamic> row = {
+      DataBaseHelper.table2ColumnId: qrData.substring(1, qrData.length),
+      DataBaseHelper.table2ColumnBarcodeType: qrType,
+      DataBaseHelper.table2ColumnDate:
+          DateFormat('dd:MM:yy').add_jm().format(DateTime.now()).toString()
+    };
+    final id = await dbhelper.insertTable2(row);
+    print("----------------------------");
+    print(id);
+    print("----------------------------");
   }
 
   CheckValueForTest(String? newStringafterSpecialCharcter) {

@@ -19,14 +19,13 @@ class _BarCodeScannerState extends State<BarCodeScanner> {
 
   @override
   initState() {
+    //     WidgetsFlutterBinding.ensureInitialized();
+    // SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight]);
 
-  //     WidgetsFlutterBinding.ensureInitialized();
-  // SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight]);
-
-     SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
-  ]);
+    ]);
 
     setState(() {
       camState = true;
@@ -36,15 +35,15 @@ class _BarCodeScannerState extends State<BarCodeScanner> {
   }
 
   @override
-dispose(){
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeRight,
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  super.dispose();
-}
+  dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ dispose(){
         automaticallyImplyLeading: false,
         leading: IconButton(
             onPressed: () {
-                Navigator.pop(context);
+              Navigator.pop(context);
             },
             icon: const Icon(
               Icons.arrow_back,
@@ -97,8 +96,8 @@ dispose(){
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          QRCodeResultScreen(qr,'BAR CODE (128)'),
+                                      builder: (context) => QRCodeResultScreen(
+                                          qr, 'BAR CODE (128)', true),
                                     ));
                               },
                               child: Container(

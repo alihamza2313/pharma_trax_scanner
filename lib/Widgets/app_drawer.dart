@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pharma_trax_scanner/Widgets/about_pharma.dart';
+import 'package:pharma_trax_scanner/screens/home_screen.dart';
+import 'package:pharma_trax_scanner/screens/scan_history.dart';
 import "../Widgets/about_pharma.dart";
 import '../Widgets/line_equipment.dart';
 import 'how_it_works.dart';
@@ -64,6 +66,10 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           title: const Text("Scan GS1 Barcode"),
+          onTap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+          },
         ),
         ListTile(
           leading: SizedBox(
@@ -75,6 +81,10 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           title: const Text("Scan History"),
+          onTap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed(ScanHistory.routeName);
+          },
         ),
         ListTile(
           leading: SizedBox(
