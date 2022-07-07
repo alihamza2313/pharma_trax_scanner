@@ -11,11 +11,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pharma_trax_scanner/Widgets/db_helper.dart';
-import 'package:pharma_trax_scanner/utils/colors.dart';
 
 // ignore: must_be_immutable
 class QRCodeResultScreen extends StatefulWidget {

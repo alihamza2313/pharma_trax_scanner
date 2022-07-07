@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pharma_trax_scanner/screens/barcode_scanner.dart';
 import 'package:pharma_trax_scanner/screens/data_matrix_scanner.dart';
