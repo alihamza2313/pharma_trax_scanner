@@ -108,7 +108,7 @@ class _SigninpageState extends State<Signinpage> {
           Uri.parse('http://api.pharmasync.pk/api/gtin'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer ${token}',
+            'Authorization': 'Bearer $token',
           },
         );
 
