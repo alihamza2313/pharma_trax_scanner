@@ -38,24 +38,27 @@ Pharma Trax Pro Line</a>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const AppDrawer(),
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text("Line Level HardWare"),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: HtmlWidget(
-              htmldata,
-              onTapUrl: (url) async {
-                // print(url);
-                var filePath = Uri.parse(url);
-                await launchUrl(filePath);
-                return true;
-              },
-            ),
+      drawer: const AppDrawer(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text("Line Level HardWare"),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: HtmlWidget(
+            htmldata,
+            onTapUrl: (url) async {
+              // print(url);
+              var filePath = Uri.parse(url);
+              //final Uri uri = Uri.file(filePath);
+
+              await launchUrl(filePath);
+              return true;
+            },
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

@@ -3,14 +3,12 @@ import 'package:pharma_trax_scanner/Widgets/app_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
-
-
 // ignore: camel_case_types
 class About_pharma extends StatelessWidget {
   const About_pharma({Key? key}) : super(key: key);
   // final link="https://www.pharmatrax.pk/pharma-trax-cloud/";
-  static const routeName="/About-pharma";
-  static const htmlData="""
+  static const routeName = "/About-pharma";
+  static const htmlData = """
 <img src="asset:assets/images/about_pharma_trax.png" alt="web-img2" >
 <h3> <u>ABOUT PHARMA TRAX</u></h3> <br /><p>Pharma Trax is a project of <strong>Zauq Group</strong> which has significant presence in Pakistan and Middle East through its subsidiaries and cater to innovative solutions for Oil and Gas, FMCG, Pharmaceutical, Food, Dairy, Garments and Textile industries.</p> <br /><p>Pharma Trax team is backed by decades of experience in Variable Data Printing, Industrial automation, RFID and System integration.</p> <br /><p>We, at Pharma Trax have integrated Variable data printing, RFID, Vision systems, Scanners, Cameras, Mobile computing and Cloud platforms with an aim to develop a dynamic solution that covers all steps of manufacturing and supply chain.</p> <br /><p>Our solutions are modular and customizable and can address problems like recall management, product uniqueness, genuine product assurance, sales territory management, sales campaigns, product usage tracking.</p> <br /><p>For more details, please visit: <font color="#4A90CC"> <a href="https://www.pharmatrax.pk/about-us/">Pharma Trax</a> </font></p>
    
@@ -37,35 +35,32 @@ Pharma Trax Modules</a> </font></p>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:const Text("About Pharma Trax"),
+        title: const Text("About Pharma Trax"),
       ),
-      drawer:const AppDrawer(),
+      drawer: const AppDrawer(),
       body: SingleChildScrollView(
-        child: Stack(children:[
+        child: Stack(children: [
           Image.asset("assets/images/dna.png"),
           Column(
             children: [
               Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: HtmlWidget(
-              htmlData,
-              onTapUrl: (url) async {
-                // print(url);
-                var filePath = Uri.parse(url);
-               //final Uri uri = Uri.file(filePath);
+                padding: const EdgeInsets.only(bottom: 20),
+                child: HtmlWidget(
+                  htmlData,
+                  onTapUrl: (url) async {
+                    // print(url);
+                    var filePath = Uri.parse(url);
+                    //final Uri uri = Uri.file(filePath);
 
-                await launchUrl(filePath);
-                return true;
-              },
-            ),
-          ),
+                    await launchUrl(filePath);
+                    return true;
+                  },
+                ),
+              ),
             ],
-
           )
-          ]
-        ),
+        ]),
       ),
-
     );
   }
 }

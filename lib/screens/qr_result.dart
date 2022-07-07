@@ -1,13 +1,25 @@
 import 'dart:developer';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:clipboard/clipboard.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
+import 'package:pharma_trax_scanner/Widgets/db_helper.dart';
 
 // ignore: must_be_immutable
 class QRCodeResultScreen extends StatefulWidget {
   String? qrCode;
   String? typeText;
-  QRCodeResultScreen(this.qrCode, this.typeText, {Key? key}) : super(key: key);
+  bool? isScanFile;
+  QRCodeResultScreen(this.qrCode, this.typeText, this.isScanFile, {Key? key})
+      : super(key: key);
 
   @override
   State<QRCodeResultScreen> createState() => _QRCodeResultScreenState();
@@ -569,6 +581,9 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
   @override
   void initState() {
+    if (widget.isScanFile!) {
+      insertScanData(widget.qrCode.toString(), widget.typeText.toString());
+    }
     String? getqrcoderesult = widget.qrCode.toString();
 
     replaceAllspecialcharacter =
@@ -587,6 +602,21 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
     log(resultMap.toString());
 
     super.initState();
+  }
+
+  final dbhelper = DataBaseHelper.instance;
+
+  void insertScanData(String qrData, String qrType) async {
+    Map<String, dynamic> row = {
+      DataBaseHelper.table2ColumnId: qrData.substring(1, qrData.length),
+      DataBaseHelper.table2ColumnBarcodeType: qrType,
+      DataBaseHelper.table2ColumnDate:
+          DateFormat('dd:MM:yy').add_jm().format(DateTime.now()).toString()
+    };
+    final id = await dbhelper.insertTable2(row);
+    print("----------------------------");
+    print(id);
+    print("----------------------------");
   }
 
   CheckValueForTest(String? newStringafterSpecialCharcter) {
@@ -1002,136 +1032,218 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
     }
   }
 
+  final _screenShotController = ScreenshotController();
+  Future shareScreenshot(Uint8List bytes) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final image = File("${directory.path}/flutter.png"); //for share ScreenShot
+    image.writeAsBytesSync(bytes);
+    await Share.shareFiles([image.path]);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          // leading: IconButton(onPressed: (){
-          //    Navigator.pop(context);
-          // }, icon: Icon(Icons.arrow_back,color: Colors.white,)),
-          elevation: 0,
-          // backgroundColor: greenColor,
-          centerTitle: false,
-          title: Text(
-            "Scan Result",
-            style:
-                GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 16.0),
+    return Screenshot(
+      controller: _screenShotController,
+      child: SafeArea(
+        child: Scaffold(
+          floatingActionButton: SpeedDial(
+            childMargin:
+                const EdgeInsets.symmetric(vertical: 22, horizontal: 5),
+            // icon: Icons.add,
+            animatedIcon: AnimatedIcons.menu_close,
+            backgroundColor: Theme.of(context).primaryColor,
+
+            children: [
+              SpeedDialChild(
+                  child: const ImageIcon(AssetImage("assets/images/copy.png")),
+                  label: "Copy Result",
+                  labelStyle: const TextStyle(color: Colors.white),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  labelBackgroundColor: Colors.black,
+                  onTap: () async {
+                    await FlutterClipboard.copy(replaceAllspecialcharacter!);
+                    Fluttertoast.showToast(
+                        msg: "Result Copied!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        timeInSecForIosWeb: 2,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.black);
+                  }),
+              SpeedDialChild(
+                  child: const ImageIcon(AssetImage("assets/images/share.png")),
+                  label: "Share Result",
+                  labelStyle: const TextStyle(color: Colors.white),
+                  labelBackgroundColor: Colors.black,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  onTap: () async {
+                    await Share.share(replaceAllspecialcharacter!);
+                  }),
+              SpeedDialChild(
+                  child: const ImageIcon(
+                      AssetImage("assets/images/screenshot.png")),
+                  label: "Share ScreenShot",
+                  labelStyle: const TextStyle(color: Colors.white),
+                  labelBackgroundColor: Colors.black,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  onTap: () async {
+                    final shareShotImage =
+                        await _screenShotController.capture();
+                    shareScreenshot(shareShotImage!);
+                  }),
+            ],
           ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Image.asset("assets/images/back.png")),
-            // IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_sharp,color: Colors.white,))
-            PopupMenuButton<int>(
-              onSelected: (item) => handleClick(item),
-              itemBuilder: (context) => [
-                const PopupMenuItem<int>(
-                    value: 0, child: const Text('Copy to Clipboard')),
-                const PopupMenuItem<int>(
-                    value: 1, child: const Text('Share Result')),
-                const PopupMenuItem<int>(
-                    value: 2, child: const Text('Share Screenshot')),
-              ],
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            elevation: 0,
+            centerTitle: false,
+            title: Text(
+              "Scan Result",
+              style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500, fontSize: 16.0),
             ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              color: Colors.grey,
-              child: Column(
-                children: [
-                  Text(
-                    '${widget.typeText}',
-                    style: GoogleFonts.roboto(
-                        color: Colors.black.withOpacity(0.5),
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Image.asset("assets/images/back.png")),
+              // IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_sharp,color: Colors.white,))
+              PopupMenuButton<int>(
+                onSelected: (item) => handleClick(item),
+                itemBuilder: (context) => [
+                  PopupMenuItem<int>(
+                    value: 0,
+                    child: const Text('Copy to Clipboard'),
+                    onTap: () async {
+                      await FlutterClipboard.copy(replaceAllspecialcharacter!);
+                      Fluttertoast.showToast(
+                          msg: "Result Copied!",
+                          timeInSecForIosWeb: 2,
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          backgroundColor: Colors.black);
+                    },
                   ),
-                  const SizedBox(
-                    height: 8,
+                  PopupMenuItem<int>(
+                    value: 1,
+                    child: const Text('Share Result'),
+                    onTap: () async {
+                      await Share.share(replaceAllspecialcharacter!);
+                    },
                   ),
-                  Text(
-                    '${widget.qrCode}',
-                    style: GoogleFonts.roboto(
-                        color: Colors.black.withOpacity(0.5),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w300),
-                  )
+                  PopupMenuItem<int>(
+                    value: 2,
+                    child: const Text('Share Screenshot'),
+                    onTap: () async {
+                      final shareShotImage =
+                          await _screenShotController.capture();
+                      shareScreenshot(shareShotImage!);
+                    },
+                  ),
                 ],
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "SCANNED INFORMATIO",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.black.withOpacity(0.5),
+            ],
+          ),
+          body: Column(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                color: Colors.grey,
+                child: Column(
+                  children: [
+                    Text(
+                      '${widget.typeText}',
+                      style: GoogleFonts.roboto(
+                          color: Colors.black.withOpacity(0.5),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (int i = 0; i < resultMap.length; i++)
-                        Container(
-                          alignment: Alignment.center,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    '${resultMap[i]['title']}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: blueColor1),
-                                  ),
-                                  Text('(${resultMap[i]['identifer']}): ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: blueColor1)),
-                                ],
-                              )),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    '${resultMap[i]['value']}',
-                                    textAlign: TextAlign.start,
-                                  )),
-                              SizedBox(
-                                height: 5,
-                              ),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                ],
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      "${widget.qrCode}",
+                      style: GoogleFonts.roboto(
+                          color: Colors.black.withOpacity(0.5),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w300),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
-        ));
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "SCANNED INFORMATION",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (int i = 0; i < resultMap.length; i++)
+                          Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 5),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                    child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      '${resultMap[i]['title']}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: blueColor1),
+                                    ),
+                                    Text(
+                                      '(${resultMap[i]['identifer']}): ',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: blueColor1),
+                                    ),
+                                  ],
+                                )),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      '${resultMap[i]['value']}',
+                                      textAlign: TextAlign.start,
+                                    )),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

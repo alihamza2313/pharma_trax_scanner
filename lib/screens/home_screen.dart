@@ -1,8 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pharma_trax_scanner/screens/barcode_scanner.dart';
 import 'package:pharma_trax_scanner/screens/data_matrix_scanner.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Widgets/app_drawer.dart';
 
@@ -194,46 +196,80 @@ class _HomePageState extends State<HomePage> {
                             width: 5,
                           ),
                           Expanded(
-                            child: Text(
-                              "CONTACT@PHARMATRAX.PK",
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w500,
-                                color: blueColor1,
-                                fontSize: 16,
-                                decoration: TextDecoration.underline,
-                              ),
+                            child: RichText(
+                              text: TextSpan(
+                                  text: "CONTACT@PHARMATRAX.PK",
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w500,
+                                    color: blueColor1,
+                                    fontSize: 16,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () async {
+                                      // ignore: deprecated_member_use
+                                      await launch(
+                                          "mailto:CONTACT@PHARMATRAX.PK?");
+                                    }),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Text(
-                      "WWW.PHARMATRAX.PK",
-                      style: GoogleFonts.inter(
-                        fontWeight: FontWeight.w500,
-                        color: blueColor1,
-                        fontSize: 16,
-                        decoration: TextDecoration.underline,
+                    RichText(
+                      text: TextSpan(
+                        text: "WWW.PHARMATRAX.PK",
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: blueColor1,
+                          fontSize: 16,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () async {
+                            const url = "https://WWW.PHARMATRAX.PK";
+                            // ignore: deprecated_member_use
+                            if (!await canLaunch(url)) {
+                              // ignore: deprecated_member_use
+                              await launch(url);
+                            } else {
+                              throw "Connot Load Url ";
+                            }
+                          },
                       ),
                     ),
-                    Text(
-                      "WWW.ZAUQ.COM",
-                      style: GoogleFonts.inter(
-                        fontWeight: FontWeight.w500,
-                        color: blueColor1,
-                        fontSize: 16,
-                        decoration: TextDecoration.underline,
+                    RichText(
+                      text: TextSpan(
+                        text: "WWW.ZAUQ.COM",
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: blueColor1,
+                          fontSize: 16,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () async {
+                            const url = "https://WWW.ZAUQ.COM";
+                            // ignore: deprecated_member_use
+                            if (!await canLaunch(url)) {
+                              // ignore: deprecated_member_use
+                              await launch(url);
+                            } else {
+                              throw "Connot Load Url ";
+                            }
+                          },
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 100, vertical: 5),
-                        // height: 120,
-                        // width: 120,
-                        child: Image.asset('assets/images/zauq.png')),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 100, vertical: 5),
+                      // height: 120,
+                      // width: 120,
+                      child: Image.asset('assets/images/zauq.png'),
+                    ),
                   ],
                 ),
               ),

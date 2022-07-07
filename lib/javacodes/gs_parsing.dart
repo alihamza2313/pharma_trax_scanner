@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+
 import 'package:pharma_trax_scanner/javacodes/aii_model.dart';
 class GS1ParseEngine
 {
@@ -11,17 +11,19 @@ class GS1ParseEngine
         buildAiiMap();
     }
 
+    // ignore: non_constant_identifier_names
     static void AddAI(String identifier, String title, int length)
     {
         aiiMap={"identifier":identifier,'AII': AII(title, '', length, length, false)};
     }
 
+    // ignore: non_constant_identifier_names
     static void AddAII(String identifier, String title, int length, bool requiredFNC1)
     {
         aiiMap={"identifier":identifier,'AII': AII(title, '', length, length, requiredFNC1)};
     }
 
-    static void AddAIII(String identifier, String title, int minimumLength, int maximumLength)
+    static  void AddAIII(String identifier, String title, int minimumLength, int maximumLength)
     {
         aiiMap={"identifier":identifier,'AII': AII(title, '', minimumLength, maximumLength, true)};
     }
@@ -257,6 +259,7 @@ class GS1ParseEngine
                 break;
             }
         }
+        // ignore: unnecessary_this
         if ((stringBuilder.length > 0) && (this.error == null)) {
             this.error = (("AI " + stringBuilder.toString()) + " not found");
         }
