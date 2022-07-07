@@ -6,6 +6,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:pharma_trax_scanner/Widgets/db_helper.dart';
+import 'package:pharma_trax_scanner/screens/home_screen.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -114,12 +116,51 @@ class _SigninpageState extends State<Signinpage> {
 
         if (response.statusCode == 200) {
           Map getApiData = jsonDecode(response.body);
-          log(getApiData.toString());
+
+          log(getApiData['Info'].toString());
+          insertDbInfo(getApiData['Info']);
+          log(getApiData['Companies'].toString());
+          for (int i = 0; i < getApiData['Companies'].length; i++) {
+            insertDbData(getApiData['Companies'][i]);
+          }
+          Navigator.of(context).pushReplacementNamed(HomePage.routeName);
         }
       } catch (e) {
         e.toString();
       }
     }
+  }
+
+  final dbhelper = DataBaseHelper.instance;
+
+  void insertDbInfo(Map<String, dynamic> dbInfo) async {
+    Map<String, dynamic> row = {
+      DataBaseHelper.infoTableColumnVersion: dbInfo['Version'].toString(),
+      DataBaseHelper.infoTableColumnUpdateDate: dbInfo['UpdateDate'].toString(),
+      DataBaseHelper.infoTableColumnMessage: dbInfo['Message'].toString(),
+      DataBaseHelper.infoTableColumnStatus: dbInfo['Status'].toString()
+    };
+    final id = await dbhelper.insertInfoTable(row);
+    print("----------------------------");
+    print(id);
+    print(row);
+    print("----------------------------");
+  }
+
+  void insertDbData(Map<String, dynamic> dbData) async {
+    Map<String, dynamic> row = {
+      DataBaseHelper.table1ColumnId: dbData['Id'].toString(),
+      DataBaseHelper.table1ColumnPlain1: dbData['Pline1'].toString(),
+      DataBaseHelper.table1ColumnCline3: dbData['Cline3'].toString(),
+      DataBaseHelper.table1ColumnSline4: dbData['Sline4'].toString(),
+      DataBaseHelper.table1ColumnVersion: dbData['Version'].toString(),
+      DataBaseHelper.table1ColumnIsModified: dbData['IsModified'].toString()
+    };
+    final id = await dbhelper.insertTable1(row);
+    print("----------------------------");
+    print(id);
+    print(row);
+    print("----------------------------");
   }
 
   @override

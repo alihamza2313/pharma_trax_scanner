@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: Signinpage(),
+        home: const Signinpage(),
         //this is routes
         routes: {
           HomePage.routeName: (ctx) => const HomePage(),
