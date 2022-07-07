@@ -5,24 +5,33 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
 class DataBaseHelper {
-  static const databaseName = "pharam_trax_scanner.db";
-  static const databaseVersion = 1;
+  static String databaseName = "pharam_trax_scanner.db";
+  static int databaseVersion = 1;
+
+  // Info Table name "dbinfo" has info of data base
+  static String infoTable = "dbinfo";
+
+  static String infoTableColumnVersion = "version";
+  static String infoTableColumnUpdateDate = "update_date";
+  static String infoTableColumnMessage = "message";
+  static String infoTableColumnStatus = "status";
 
   // Table #1 name "products" has list of all items
-  static const table1 = "products";
+  static String table1 = "products";
 
-  static const table1ColumnId = "id";
-  static const table1ColumnPlain1 = "plain1";
-  static const table1ColumnCline3 = "cline3";
-  static const table1ColumnSline4 = "sline4";
-  static const table1ColumnVersion = "version";
+  static String table1ColumnId = "id";
+  static String table1ColumnPlain1 = "plain1";
+  static String table1ColumnCline3 = "cline3";
+  static String table1ColumnSline4 = "sline4";
+  static String table1ColumnVersion = "version";
+  static String table1ColumnIsModified = "is_modified";
 
   // Table #2 name "scanned_products" has list of all items
-  static const table2 = "scanned_products";
+  static String table2 = "scanned_products";
 
-  static const table2ColumnId = "id";
-  static const table2ColumnBarcodeType = "barcode_type";
-  static const table2ColumnDate = "date";
+  static String table2ColumnId = "id";
+  static String table2ColumnBarcodeType = "barcode_type";
+  static String table2ColumnDate = "date";
 
   static Database? _database;
 
@@ -43,15 +52,22 @@ class DataBaseHelper {
         version: databaseVersion, onCreate: _onCreate);
   }
 
-  // ignore: non_constant_identifier_names
-  Future _onCreate(Database db, int Version) async {
+  Future _onCreate(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE $infoTable (
+        $infoTableColumnVersion TEXT NOT NULL,
+        $infoTableColumnUpdateDate TEXT NOT NULL,
+        $infoTableColumnMessage TEXT NOT NULL,
+        $infoTableColumnStatus TEXT NOT NULL
+      )''');
     await db.execute('''
       CREATE TABLE $table1 (
         $table1ColumnId TEXT PRIMARY KEY,
         $table1ColumnPlain1 TEXT NOT NULL,
         $table1ColumnCline3 TEXT NOT NULL,
-        $table1ColumnSline4 REAL NOT NULL,
-        $table1ColumnVersion TEXT NOT NULL 
+        $table1ColumnSline4 TEXT NOT NULL,
+        $table1ColumnVersion TEXT NOT NULL,
+        $table1ColumnIsModified TEXT NOT NULL
       )''');
     await db.execute('''
       CREATE TABLE $table2 (
@@ -61,10 +77,18 @@ class DataBaseHelper {
       )''');
   }
 
+  // Functiuons to perform some functionality with database info table name "dbinfo"
+  Future<int?> insertInfoTable(Map<String, dynamic> row) async {
+    Database? db = await instance.database;
+    await db!.delete(infoTable);
+    return await db.insert(infoTable, row);
+  }
+
   // Functiuons to perform some functionality with database table #1 name "products"
   Future<int?> insertTable1(Map<String, dynamic> row) async {
     Database? db = await instance.database;
-    return await db!.insert(table1, row);
+    await db!.delete(table1);
+    return await db.insert(table1, row);
   }
 
   // Functiuons to perform some functionality with database table #2 name "scanned_products"
