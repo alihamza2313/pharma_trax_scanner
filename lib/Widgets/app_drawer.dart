@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pharma_trax_scanner/Widgets/about_pharma.dart';
-//  import 'package:pharma_trax_scanner/screens/line_equipment.dart';
 import '../Widgets/line_level_hardware.dart';
 import '../utils/colors.dart';
 import 'How_it_works.dart';

@@ -39,8 +39,7 @@ for more detailed functions like internal logistics, sales or distribution appli
               onTapUrl: (url) async {
                 // print(url);
                 var filePath = Uri.parse(url);
-                //final Uri uri = Uri.file(filePath);
-                 await launchUrl(filePath);
+                await launchUrl(filePath);
                 return true;
               },
             ),

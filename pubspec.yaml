@@ -41,6 +41,11 @@ dependencies:
   url_launcher: ^6.1.4
   flutter_widget_from_html: ^0.8.5
   qr_mobile_vision: ^3.0.1 
+  fluttertoast: ^8.0.8
+  http: ^0.13.4
+  flutter_overlay_loader: ^2.0.0 
+  internet_connection_checker: ^0.0.1+4
+  shared_preferences: ^2.0.15
  
 
 dev_dependencies:
