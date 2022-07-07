@@ -5,24 +5,24 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
 class DataBaseHelper {
-  static final databaseName = "pharam_trax_scanner.db";
-  static final databaseVersion = 1;
+  static const databaseName = "pharam_trax_scanner.db";
+  static const databaseVersion = 1;
 
   // Table #1 name "products" has list of all items
-  static final table1 = "products";
+  static const table1 = "products";
 
-  static final table1ColumnId = "id";
-  static final table1ColumnPlain1 = "plain1";
-  static final table1ColumnCline3 = "cline3";
-  static final table1ColumnSline4 = "sline4";
-  static final table1ColumnVersion = "version";
+  static const table1ColumnId = "id";
+  static const table1ColumnPlain1 = "plain1";
+  static const table1ColumnCline3 = "cline3";
+  static const table1ColumnSline4 = "sline4";
+  static const table1ColumnVersion = "version";
 
   // Table #2 name "scanned_products" has list of all items
-  static final table2 = "scanned_products";
+  static const table2 = "scanned_products";
 
-  static final table2ColumnId = "id";
-  static final table2ColumnBarcodeType = "barcode_type";
-  static final table2ColumnDate = "date";
+  static const table2ColumnId = "id";
+  static const table2ColumnBarcodeType = "barcode_type";
+  static const table2ColumnDate = "date";
 
   static Database? _database;
 
@@ -43,6 +43,7 @@ class DataBaseHelper {
         version: databaseVersion, onCreate: _onCreate);
   }
 
+  // ignore: non_constant_identifier_names
   Future _onCreate(Database db, int Version) async {
     await db.execute('''
       CREATE TABLE $table1 (
