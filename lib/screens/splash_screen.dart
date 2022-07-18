@@ -1,4 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:pharma_trax_scanner/screens/home_screen.dart';
+import 'package:pharma_trax_scanner/screens/signinpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class SplashScreenPage extends StatefulWidget {
@@ -9,6 +14,54 @@ class SplashScreenPage extends StatefulWidget {
 }
 
 class _SplashScreenPageState extends State<SplashScreenPage> {
+
+
+
+SharedPreferences? prefs;
+
+bool? isLoginvalid=false;
+
+
+@override
+  void initState() {
+  getSharePrefenceValue();
+
+
+
+ Timer(Duration(seconds: 5),
+          (){
+
+            if(isLoginvalid ==false){
+
+              Navigator.push(context,
+                                        MaterialPageRoute(builder:
+                                                          (context) => 
+                                                          Signinpage()
+                                                         ));
+
+            }else{
+ Navigator.push(context,
+                                        MaterialPageRoute(builder:
+                                                          (context) => 
+                                                          HomePage()
+                                                         ));
+            }
+
+          }
+                                       
+         );
+
+
+    super.initState();
+  }
+  getSharePrefenceValue()async{
+    
+ prefs = await SharedPreferences.getInstance();
+
+ isLoginvalid = prefs!.getBool('isLogin');
+  }
+
+
   @override
   Widget build(BuildContext context) {
 

@@ -8,17 +8,37 @@ import 'package:url_launcher/url_launcher.dart';
 class How_it_works extends StatelessWidget {
   const How_it_works({Key? key}) : super(key: key);
 
-  static const routeName = '/how_it_works';
+  // static const routeName = '/how_it_works';
 
-  static const htmldata = """ 
+
+  final link = "https://www.pharmatrax.pk/pharma-trax-pro-line";
+
+  static const htmldata1 = """ 
+
+  
   <img src="asset:assets/images/how_it_works.png" alt="web-img2" >
-<h3> <u>HOW IT WORKS</u></h3> <br /><h4>PHARMA TRAX PRINT MODULE</h4> <br /><p>We print Variable Data directly on Products, Packaging and Labels in Human Readable (Alphanumeric format) as well as Machine Readable (Linear, 2 D Barcodes, Data Matrix, QR Code, RFID) which provide identification and traceability information to stakeholders and we can effortlessly and reliably capture Machine readable data using smart phones, hand held devices, industrial scanners and vision cameras. We can print using all popular technologies like CIJ, Thermal Ink Jet, Thermal transfer, Laser marking etc.</p> <br /><h4>PHARMA TRAX VERIFICATION MODULE</h4> <br /><p>We use industrial Imagers, scanners and vision systems to read machine readable information in production, warehousing and distribution environment. It is used for Print Verification, Product movement at check points and product visibility in warehousing and distribution channels. We can integrate any imaging, scanning and camera system according to application.</p> <br /><p>We use RFID technologies for high speed, non-line of sight data identification and traceability; we use a combination of RFID standards Like Low frequency (LF), High Frequency (HF) and Ultra High Frequency (UHF) depending upon the application.</p> <br /><p>We also use Near field Communication (NFC) a consumer RFID standard that allows to communicate using consumer smart phones for Pharma Trax applications. RFID technology and Tag selection is done with customer’s needs in mind to deliver a robust and functional solution.</p> <br /><h4>PHARMA TRAX CLOUD MODULE</h4> <br /><p>Pharma Trax Cloud provides the back-end data repository and reporting engine. It works with several of our check point modules like printing, verification and apps to provide complete traceability applications.</p> <br /><p>We provide Pharma Trax Cloud as a hosted application (SAAS - Software as a service); we can discuss the possibility of having a licensed private hosting at customer’s site for certain applications.</p> <br /><h4>PHARMA TRAX APPS</h4> <br /><p>
-Pharma Trax app enables consumers to Identify and Track products using their own smart phones. We have mobile apps for Android, 
-IOS, Windows CE platforms to allow consumers to access traceability information; these platforms are used within the organization 
-for more detailed functions like internal logistics, sales or distribution applications.</p> <br /><p>We can customize the apps to
- customer’s needs for applications like sales campaigns, data analytics, distribution channel management, Genuine product check.
-</p> <br /><p>For more details, please visit: <font color="#4A90CC">
- <a href="https://www.pharmatrax.pk/services/implementation-services/">Implementation Services </a> </font></p>
+
+  """;
+  static const htmldata = """ 
+
+
+
+  <p style="padding-left:20px;"><h3>PHARMA TRAX LINE LEVEL HARDWARE</h3> 
+  <br/>
+  <h4>PHARMA TRAX</h4> <br/>
+
+  <p>Pharma Trax is a suite of integrated modules which enables Pharmaceutical manufacturing and distribution companies to achieve Item Level Serialization, Traceability of Products and it's Shipping units.</p> <br /><p>This solution is specifically designed to cater to Health care and Pharmaceutical Industry's initiatives for Patient Safety, Obsolesce Management, Recall Effectiveness, Drugs ownership tracking, Brand protection, Supply Chain visibility - EPCIS, Sales and Distribution tracking and Track and Trace in true spirit.</p> <br /><p>Our bespoke solutions cater to regulatory as well as commercial needs of health care and pharmaceutical industry.</p> <br /><p>Pharma Trax line level hardware is designed based on speed requirements and capex budgets. Our solution is based on various integrated modules like:</p>
+  
+  <br />
+  <ul><li>&nbsp;&nbsp;Printing Module that prints GS1 compliant codes</li><li>&nbsp;&nbsp;Verification Module that uses Industrial Imaging Scanners, Vision systems</li><li>
+&nbsp;&nbsp;Rejection module uses air blast or pneumatic plungers which 
+physically rejects the product to rejection bins</li><li>&nbsp;&nbsp;Mechanical
+ Module which interconnects various modules and allows reliable material</li></ul> <br />
+<p>Our hardware design can be customized according to budget as well as packaging process and has following variants:
+</p> <br /><ul><li>&nbsp;&nbsp;Pre Packaging Offline</li><li>&nbsp;&nbsp;Online Versions</li><li>&nbsp;&nbsp;Post
+ packaging Offline</li><li>&nbsp;&nbsp;Online Label Application</li><li>&nbsp;&nbsp;Customized Solutions</li></ul> <br /><p>
+</font></p>For more details, please visit: <font color="#4A90CC"> <a href="https://www.pharmatrax.pk/pharma-trax-pro-line/">
+Pharma Trax Pro Line</a></p>
   
   """;
 
@@ -26,24 +46,32 @@ for more detailed functions like internal logistics, sales or distribution appli
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const AppDrawer(),
-      // ignore: prefer_const_constructors
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("How it Works"),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: HtmlWidget(
-            htmldata,
-            onTapUrl: (url) async {
-              // print(url);
-              var filePath = Uri.parse(url);
-              //final Uri uri = Uri.file(filePath);
-              await launchUrl(filePath);
-              return true;
-            },
-          ),
+        child: Column(
+          children: [
+            HtmlWidget(
+              htmldata1
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+              child: HtmlWidget(
+                
+                htmldata,
+                onTapUrl: (url) async {
+                  // print(url);
+                  var filePath = Uri.parse(url);
+                  //final Uri uri = Uri.file(filePath);
+
+                  await launchUrl(filePath);
+                  return true;
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

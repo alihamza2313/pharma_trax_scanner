@@ -86,9 +86,9 @@ class _SigninpageState extends State<Signinpage> {
   // ignore: non_constant_identifier_names
   SavePrefValue(String tioken, int second) async {
     prefs = await SharedPreferences.getInstance();
-
     prefs!.setString('token', tioken);
     prefs!.setString('seconds', second.toString());
+    prefs!.setBool('isLogin', true);
 
     Fluttertoast.showToast(msg: second.toString());
   }

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pharma_trax_scanner/screens/barcode_scanner.dart';
 import 'package:pharma_trax_scanner/screens/data_matrix_scanner.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../Widgets/app_drawer.dart';
@@ -19,6 +20,27 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+
+SharedPreferences? prefs;
+
+
+//List list = []; 
+
+
+@override
+  void initState() {
+
+   // list = [1,2,3]; 
+  SaveValueInPrefecnce();
+    super.initState();
+  }
+  SaveValueInPrefecnce()async{
+    
+ prefs = await SharedPreferences.getInstance();
+ prefs!.setBool('isLogin', true);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +55,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       appBar: AppBar(
+        backgroundColor: blueColor1,
         leading: Builder(
           builder: (context) => // Ensure Scaffold is in context
               IconButton(
@@ -75,6 +98,55 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
+
+
+
+          // Row(children: list.map((item)  {
+
+            
+          //         if (item == 1) {
+          //           return Text(
+          //             item.toString(),
+          //             style: TextStyle(
+          //               fontWeight: FontWeight.bold,
+          //             ),
+          //           );
+          //         }else{
+          //           return Text(item.toString());
+          //         }
+          //         // if (item < 100) {
+          //         //   return Padding(
+          //         //     padding: const EdgeInsets.all(8.0),
+          //         //     child: Text(
+          //         //       item.toString(),
+          //         //       style: const TextStyle(
+          //         //         fontWeight: FontWeight.bold,
+          //         //         color: Colors.red,
+          //         //       ),
+          //         //     ),
+          //         //   );
+          //         // }
+          //         // if (item == 100) {
+          //         //   return Padding(
+          //         //     padding: const EdgeInsets.all(8.0),
+          //         //     child: Text(
+          //         //       item.toString(),
+          //         //       style: TextStyle(
+          //         //         fontWeight: FontWeight.bold,
+          //         //         color: Colors.green,
+          //         //       ),
+          //         //     ),
+          //         //   );
+          //         // }
+                  
+          //       }).toList()),
+
+
+
+                        
+
+ 
+
                         const SizedBox(
                           height: 30,
                         ),
@@ -86,14 +158,14 @@ class _HomePageState extends State<HomePage> {
                                     builder: (_) => const BarCodeScanner()));
                               },
                               child: Container(
-                                color: Colors.blue,
-                                width: MediaQuery.of(context).size.width * 0.8,
+                                color: blueColor1,
+                                width: MediaQuery.of(context).size.width * 0.7,
                                 child: Row(
                                   children: [
                                     Container(
                                       padding: const EdgeInsets.all(10),
-                                      height: 60,
-                                      width: 60,
+                                      height: 50,
+                                      width: 50,
                                       color: blueColor2,
                                       child: Image.asset(
                                           'assets/images/code_128.png'),
@@ -105,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                                         style: GoogleFonts.inter(
                                           fontWeight: FontWeight.w500,
                                           color: Colors.white,
-                                          fontSize: 18,
+                                          fontSize: 16,
                                         ),
                                       ),
                                     ),
@@ -122,14 +194,14 @@ class _HomePageState extends State<HomePage> {
                                     builder: (_) => const DataMatrixSacnner()));
                               },
                               child: Container(
-                                color: Colors.blue,
-                                width: MediaQuery.of(context).size.width * 0.8,
+                                color: blueColor1,
+                                width: MediaQuery.of(context).size.width * 0.7,
                                 child: Row(
                                   children: [
                                     Container(
                                       padding: const EdgeInsets.all(10),
-                                      height: 60,
-                                      width: 60,
+                                      height: 50,
+                                      width: 50,
                                       color: blueColor2,
                                       child: Image.asset(
                                           'assets/images/data_matrix.png'),
@@ -141,7 +213,7 @@ class _HomePageState extends State<HomePage> {
                                         style: GoogleFonts.inter(
                                           fontWeight: FontWeight.w500,
                                           color: Colors.white,
-                                          fontSize: 18,
+                                          fontSize: 16,
                                         ),
                                       ),
                                     )
