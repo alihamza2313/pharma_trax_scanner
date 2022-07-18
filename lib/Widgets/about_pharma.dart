@@ -7,8 +7,8 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 class About_pharma extends StatelessWidget {
   const About_pharma({Key? key}) : super(key: key);
   // final link="https://www.pharmatrax.pk/pharma-trax-cloud/";
-  // static const routeName = "/About-pharma";
- final link = "https://www.pharmatrax.pk/pharma-trax-pro-line";
+  static const routeName = "/About-pharma";
+  final link = "https://www.pharmatrax.pk/pharma-trax-pro-line";
 
   static const htmldata1 = """ 
 
@@ -52,13 +52,10 @@ Pharma Trax Pro Line</a></p>
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HtmlWidget(
-              htmldata1
-            ),
+            HtmlWidget(htmldata1),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
               child: HtmlWidget(
-                
                 htmldata,
                 onTapUrl: (url) async {
                   // print(url);
