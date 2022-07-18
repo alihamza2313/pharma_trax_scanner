@@ -11,12 +11,20 @@ class LineLevelHardware extends StatelessWidget {
   static const routeName = '/line_level_hardware';
 
   final link = "https://www.pharmatrax.pk/pharma-trax-pro-line";
-  static const htmldata = """ 
+
+  static const htmldata1 = """ 
 
   
   <img src="asset:assets/images/line_level_hardware.png" alt="web-img2" >
 
-  <h3>PHARMA TRAX LINE LEVEL HARDWARE</h3> 
+
+  
+  """;
+  static const htmldata = """ 
+
+
+
+  <p style="padding-left:20px;"><h3>PHARMA TRAX LINE LEVEL HARDWARE</h3> 
   <br/>
   <h4>PHARMA TRAX</h4> <br/>
 
@@ -31,7 +39,7 @@ physically rejects the product to rejection bins</li><li>&nbsp;&nbsp;Mechanical
 </p> <br /><ul><li>&nbsp;&nbsp;Pre Packaging Offline</li><li>&nbsp;&nbsp;Online Versions</li><li>&nbsp;&nbsp;Post
  packaging Offline</li><li>&nbsp;&nbsp;Online Label Application</li><li>&nbsp;&nbsp;Customized Solutions</li></ul> <br /><p>
 </font></p>For more details, please visit: <font color="#4A90CC"> <a href="https://www.pharmatrax.pk/pharma-trax-pro-line/">
-Pharma Trax Pro Line</a>
+Pharma Trax Pro Line</a></p>
   
   """;
 
@@ -44,19 +52,27 @@ Pharma Trax Pro Line</a>
         title: const Text("Line Level HardWare"),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: HtmlWidget(
-            htmldata,
-            onTapUrl: (url) async {
-              // print(url);
-              var filePath = Uri.parse(url);
-              //final Uri uri = Uri.file(filePath);
+        child: Column(
+          children: [
+            HtmlWidget(
+              htmldata1
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+              child: HtmlWidget(
+                
+                htmldata,
+                onTapUrl: (url) async {
+                  // print(url);
+                  var filePath = Uri.parse(url);
+                  //final Uri uri = Uri.file(filePath);
 
-              await launchUrl(filePath);
-              return true;
-            },
-          ),
+                  await launchUrl(filePath);
+                  return true;
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

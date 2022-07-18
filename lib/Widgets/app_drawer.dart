@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:pharma_trax_scanner/Widgets/about_pharma.dart';
 import 'package:pharma_trax_scanner/screens/home_screen.dart';
 import 'package:pharma_trax_scanner/screens/scan_history.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import "../Widgets/about_pharma.dart";
 import '../Widgets/line_equipment.dart';
 import 'how_it_works.dart';
@@ -15,6 +18,9 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+SharedPreferences prefs;
+
     return Drawer(
       child: ListView(padding: EdgeInsets.zero, children: [
         SizedBox(
@@ -100,6 +106,15 @@ class AppDrawer extends StatelessWidget {
           title: const Text("Update Database"),
         ),
         ListTile(
+
+          onTap: ()async{
+           
+           prefs = await SharedPreferences.getInstance();
+
+           prefs.setBool('isLogin', false);
+           exit(0);
+
+          },
           leading: SizedBox(
             height: 25,
             width: 25,
@@ -126,7 +141,7 @@ class AppDrawer extends StatelessWidget {
           title: const Text("Line Level Hardware"),
           onTap: () {
             Navigator.of(context)
-                .pushReplacementNamed(LineLevelHardware.routeName);
+                .pushReplacementNamed('/line_level_hardware');
           },
         ),
         ListTile(
@@ -141,7 +156,7 @@ class AppDrawer extends StatelessWidget {
           title: const Text("Line Equipment"),
           onTap: () {
             Navigator.of(context)
-                .pushReplacementNamed(Line_equipment.routeName);
+                .pushReplacementNamed('/line_equipment');
           },
         ),
         ListTile(
@@ -156,7 +171,7 @@ class AppDrawer extends StatelessWidget {
           title: const Text("How it Works"),
           onTap: () {
             Navigator.of(context)
-                .pushReplacementNamed(LineLevelHardware.routeName);
+                .pushReplacementNamed('/how_it_works');
             print('How_it_works');
           },
         ),
@@ -171,12 +186,10 @@ class AppDrawer extends StatelessWidget {
           ),
           title: const Text("About Pharma Trax"),
           onTap: () {
+           
             Navigator.of(context).pop();
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: ((context) => const About_pharma()),
-              ),
-            );
+              Navigator.of(context)
+                .pushReplacementNamed('/About-pharma');
           },
         ),
       ]),

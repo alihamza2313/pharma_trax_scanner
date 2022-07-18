@@ -7,6 +7,7 @@ import 'package:pharma_trax_scanner/Widgets/how_it_works.dart';
 import 'package:pharma_trax_scanner/Widgets/line_equipment.dart';
 import 'package:pharma_trax_scanner/screens/scan_history.dart';
 import 'package:pharma_trax_scanner/screens/signinpage.dart';
+import 'package:pharma_trax_scanner/screens/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,15 +30,16 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const Signinpage(),
+        home: const SplashScreenPage(),
         //this is routes
         routes: {
           HomePage.routeName: (ctx) => const HomePage(),
+       
           ScanHistory.routeName: (ctx) => const ScanHistory(),
-          LineLevelHardware.routeName: (ctx) => const LineLevelHardware(),
-          Line_equipment.routeName: (ctx) => const Line_equipment(),
-          How_it_works.routeName: (ctx) => const How_it_works(),
-          About_pharma.routeName: (context) => const About_pharma()
+         '/line_level_hardware': (ctx) => const LineLevelHardware(),
+          '/line_equipment': (ctx) => const Line_equipment(),
+          '/how_it_works': (ctx) => const How_it_works(),
+          '/About-pharma': (context) => const About_pharma()
         });
   }
 }
