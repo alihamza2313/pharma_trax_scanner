@@ -91,6 +91,11 @@ class DataBaseHelper {
     return await db.insert(table1, row);
   }
 
+  Future<List<Map<String, dynamic>>> fatchTable1() async {
+    Database? db = await instance.database;
+    return await db!.query(table1);
+  }
+
   // Functiuons to perform some functionality with database table #2 name "scanned_products"
   Future<int?> insertTable2(Map<String, dynamic> row) async {
     Database? db = await instance.database;
@@ -106,4 +111,9 @@ class DataBaseHelper {
     Database? db = await instance.database;
     await db!.delete(table2);
   }
+
+
+      
+
+
 }

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import "../screens/home_screen.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -85,9 +86,9 @@ class _SigninpageState extends State<Signinpage> {
   // ignore: non_constant_identifier_names
   SavePrefValue(String tioken, int second) async {
     prefs = await SharedPreferences.getInstance();
-
     prefs!.setString('token', tioken);
     prefs!.setString('seconds', second.toString());
+    prefs!.setBool('isLogin', true);
 
     Fluttertoast.showToast(msg: second.toString());
   }
@@ -170,136 +171,138 @@ class _SigninpageState extends State<Signinpage> {
         decoration: const BoxDecoration(
             image: DecorationImage(image: AssetImage('assets/images/dna.png'))),
         child: Center(
-          child: Container(
-            width: 350,
-            height: 300,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                color: const Color.fromARGB(255, 247, 248, 248),
-                width: 0,
-              ),
-              borderRadius: BorderRadius.circular(15),
-              // ignore: prefer_const_literals_to_create _immutables
-              // ignore: prefer_const_literals_to_create_immutables
-              boxShadow: [
-                const BoxShadow(
-                  color: Colors.black,
-                  offset: Offset(
-                    2.0,
-                    2.0,
+          child: Expanded(
+            child: Container(
+              width: 350,
+              height: 350,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  color: const Color.fromARGB(255, 247, 248, 248),
+                  width: 0,
+                ),
+                borderRadius: BorderRadius.circular(15),
+                // ignore: prefer_const_literals_to_create _immutables
+                // ignore: prefer_const_literals_to_create_immutables
+                boxShadow: [
+                  const BoxShadow(
+                    color: Colors.black,
+                    offset: Offset(
+                      2.0,
+                      2.0,
+                    ),
+                    blurRadius: 10.0,
+                    spreadRadius: 2.0,
                   ),
-                  blurRadius: 10.0,
-                  spreadRadius: 2.0,
+                  const BoxShadow(
+                    color: Colors.white,
+                    offset: Offset(0.0, 0.0),
+                    blurRadius: 0.0,
+                    spreadRadius: 0.0,
+                  ),
+                ],
+              ),
+              child: Column(children: <Widget>[
+                Container(
+                  // ignore: prefer_const_constructors
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    border: Border.all(width: 0.4, color: Colors.grey),
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10.0),
+                        topRight: Radius.circular(10.0),
+                        bottomRight: Radius.zero,
+                        bottomLeft: Radius.zero),
+                  ),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Image.asset(
+                            'assets/images/email.png',
+                            height: 50,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Text(
+                          'Provide Your Email',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                const BoxShadow(
-                  color: Colors.white,
-                  offset: Offset(0.0, 0.0),
-                  blurRadius: 0.0,
-                  spreadRadius: 0.0,
-                ),
-              ],
-            ),
-            child: Column(children: <Widget>[
-              Container(
-                // ignore: prefer_const_constructors
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  border: Border.all(width: 0.4, color: Colors.grey),
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
-                      bottomRight: Radius.zero,
-                      bottomLeft: Radius.zero),
-                ),
-                child: Center(
+                Expanded(
                   child: Column(
+                    // ignore: prefer_const_literals_to_create_immutables
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Image.asset(
-                          'assets/images/email.png',
-                          height: 50,
+                        padding: const EdgeInsets.all(9.0),
+                        child: Text(
+                          "Please provide your Email address. We dont share your email address with others.",
+                          textAlign: TextAlign.justify,
+                          style: GoogleFonts.inter(
+                              color: textColor,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 14),
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text(
-                        'Provide Your Email',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
+                      Container(
+                        width: 320,
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          children: [
+                            TextField(
+                              autocorrect: true,
+                              controller: emailcontroller,
+                              decoration: const InputDecoration(
+                                hintText: 'Enter Your Email Here...',
+                                prefixIcon: Icon(Icons.email),
+                                hintStyle: TextStyle(color: Colors.grey),
+                                filled: true,
+                                fillColor: Colors.white70,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12.0)),
+                                  borderSide:
+                                      BorderSide(color: Colors.blue, width: 2),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide:
+                                      BorderSide(color: Colors.blue, width: 2),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: FlatButton(
+                                child: const Text('Login'),
+                                onPressed: () {
+                                  LoginUserWithEmail(emailcontroller.text);
+          
+                                  Navigator.of(context)
+                                      .pushReplacementNamed(HomePage.routeName);
+                                  Fluttertoast.showToast(
+                                      msg: emailcontroller.text);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  // ignore: prefer_const_literals_to_create_immutables
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(9.0),
-                      child: Text(
-                        "Please provide your Email address. We dont share your email address with others.",
-                        textAlign: TextAlign.justify,
-                        style: GoogleFonts.inter(
-                            color: textColor,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 14),
-                      ),
-                    ),
-                    Container(
-                      width: 320,
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: [
-                          TextField(
-                            autocorrect: true,
-                            controller: emailcontroller,
-                            decoration: const InputDecoration(
-                              hintText: 'Enter Your Email Here...',
-                              prefixIcon: Icon(Icons.email),
-                              hintStyle: TextStyle(color: Colors.grey),
-                              filled: true,
-                              fillColor: Colors.white70,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12.0)),
-                                borderSide:
-                                    BorderSide(color: Colors.blue, width: 2),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide:
-                                    BorderSide(color: Colors.blue, width: 2),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20),
-                            child: FlatButton(
-                              child: const Text('Login'),
-                              onPressed: () {
-                                LoginUserWithEmail(emailcontroller.text);
-
-                                // Navigator.of(context)
-                                //     .pushReplacementNamed(HomePage.routeName);
-                                // Fluttertoast.showToast(
-                                //     msg: emailcontroller.text);
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ]),
+              ]),
+            ),
           ),
         ),
       ),
