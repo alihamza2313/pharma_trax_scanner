@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pharma_trax_scanner/Widgets/app_drawer.dart';
 import 'package:pharma_trax_scanner/Widgets/db_helper.dart';
+import 'package:pharma_trax_scanner/screens/qr_result.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
 
 class ScanHistory extends StatefulWidget {
@@ -20,6 +21,7 @@ class _ScanHistoryState extends State<ScanHistory> {
 
   Future<void> fatchData() async {
     data = await dbhelper.fatchTable2();
+    data = data.reversed.toList();
     setState(() {});
   }
 
@@ -118,27 +120,40 @@ class _ScanHistoryState extends State<ScanHistory> {
             itemCount: data.length,
             itemBuilder: (BuildContext context, int index) {
               return Column(children: [
-                ListTile(
-                  leading:
-                      '${data[index]['barcode_type']}' == 'DATA MATRIX (GS1)'
-                          ? const CircleAvatar(
-                              backgroundColor: blueColor1,
-                              child: ImageIcon(
-                                AssetImage("assets/images/data_matrix.png"),
-                                color: Colors.white,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QRCodeResultScreen(
+                              data[index]['id'],
+                              data[index]['barcode_type'],
+                              false),
+                        ));
+                  },
+                  child: ListTile(
+                    leading:
+                        '${data[index]['barcode_type']}' == 'DATA MATRIX (GS1)'
+                            ? const CircleAvatar(
+                                backgroundColor: blueColor1,
+                                child: ImageIcon(
+                                  AssetImage("assets/images/data_matrix.png"),
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const CircleAvatar(
+                                backgroundColor: blueColor1,
+                                child: ImageIcon(
+                                  AssetImage("assets/images/code_128.png"),
+                                  color: Colors.white,
+                                ),
                               ),
-                            )
-                          : const CircleAvatar(
-                              backgroundColor: blueColor1,
-                              child: ImageIcon(
-                                AssetImage("assets/images/code_128.png"),
-                                color: Colors.white,
-                              ),
-                            ),
-                  title: Text("${data[index]['id']}",
-                      overflow: TextOverflow.ellipsis),
-                  subtitle: Text(
-                      "Type: ${data[index]['barcode_type']}\nScanned At: ${data[index]['date']}"),
+                    title: Text(
+                        "${data[index]['id'].substring(1, data[index]['id'].length)}",
+                        overflow: TextOverflow.ellipsis),
+                    subtitle: Text(
+                        "Type: ${data[index]['barcode_type']}\nScanned At: ${data[index]['date']}"),
+                  ),
                 ),
                 const Divider(),
               ]);

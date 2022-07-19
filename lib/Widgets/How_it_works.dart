@@ -8,8 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 class How_it_works extends StatelessWidget {
   const How_it_works({Key? key}) : super(key: key);
 
-  // static const routeName = '/how_it_works';
-
+  static const routeName = '/how_it_works';
 
   final link = "https://www.pharmatrax.pk/pharma-trax-pro-line";
 
@@ -53,13 +52,10 @@ Pharma Trax Pro Line</a></p>
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HtmlWidget(
-              htmldata1
-            ),
+            HtmlWidget(htmldata1),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
               child: HtmlWidget(
-                
                 htmldata,
                 onTapUrl: (url) async {
                   // print(url);
