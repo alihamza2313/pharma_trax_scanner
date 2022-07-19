@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         home: const HomePage(),
         //this is routes
         routes: {
-          HomePage.routeName: (ctx) => const HomePage(),
+
           ScanHistory.routeName: (ctx) => const ScanHistory(),
           '/line_level_hardware': (ctx) => const LineLevelHardware(),
           '/line_equipment': (ctx) => const Line_equipment(),

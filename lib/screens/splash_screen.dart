@@ -24,26 +24,27 @@ bool? isLoginvalid=false;
 
 @override
   void initState() {
-  getSharePrefenceValue();
-
+ 
+ getSharePrefenceValue();
 
 
  Timer(Duration(seconds: 5),
           (){
 
-            if(isLoginvalid ==false){
-
-              Navigator.push(context,
-                                        MaterialPageRoute(builder:
-                                                          (context) => 
-                                                          Signinpage()
-                                                         ));
-
-            }else{
- Navigator.push(context,
+            if(isLoginvalid==true){
+               Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(builder:
                                                           (context) => 
                                                           HomePage()
+                                                         ));
+
+
+            }else{
+
+              Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(builder:
+                                                          (context) => 
+                                                          Signinpage()
                                                          ));
             }
 
