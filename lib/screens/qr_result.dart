@@ -573,16 +573,9 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
   List<Map<String, dynamic>> resultMap = [];
 
+  List getLocalstoreData = [];
 
-
-
-List getLocalstoreData = [];
-
-
-List qrResultConvertList =[];
-
-
- 
+  List qrResultConvertList = [];
 
   String? getSpecialCharacter;
   String? afterAlldataNewstringg;
@@ -591,19 +584,17 @@ List qrResultConvertList =[];
   String? productName;
   String? CompanyName;
 
-  bool isGTINExistValue =false;
+  bool isGTINExistValue = false;
 
   String? replaceAllspecialcharacter;
 
   @override
   void initState() {
-
 //fatchData();
-
-
 
     if (widget.isScanFile!) {
       insertScanData(widget.qrCode.toString(), widget.typeText.toString());
+      widget.isScanFile = false;
     }
     String? getqrcoderesult = widget.qrCode.toString();
 
@@ -615,19 +606,13 @@ List qrResultConvertList =[];
     getSpecialCharacter = getqrcoderesult.codeUnitAt(0).toString();
 
     if (getSpecialCharacter == "29") {
+      for (int i = 0; i < widget.qrCode!.length; i++) {
+        qrResultConvertList.add(widget.qrCode![i].toString());
+      }
 
-
-for(int i=0;i<widget.qrCode!.length;i++){
-
-qrResultConvertList.add(widget.qrCode![i].toString());
-}
-
-log(qrResultConvertList.toString());
+      log(qrResultConvertList.toString());
 
       CheckValueForTest(widget.qrCode.toString());
-        
-          
-
     } else {
       log("inValid Data Matrix");
     }
@@ -643,7 +628,7 @@ log(qrResultConvertList.toString());
 
   void insertScanData(String qrData, String qrType) async {
     Map<String, dynamic> row = {
-      DataBaseHelper.table2ColumnId: qrData.substring(1, qrData.length),
+      DataBaseHelper.table2ColumnId: qrData,
       DataBaseHelper.table2ColumnBarcodeType: qrType,
       DataBaseHelper.table2ColumnDate:
           DateFormat('dd:MM:yy').add_jm().format(DateTime.now()).toString()
@@ -1056,48 +1041,36 @@ log(qrResultConvertList.toString());
     }
   }
 
+  CheckValueExitInDb() async {
+    getLocalstoreData = await dbhelper.fatchTable1();
 
+    // log("this funcation Call");
+    //   log(getLocalstoreData[0].toString());
+    // log(getLocalstoreData.length.toString());
 
+    for (int j = 0; j < resultMap.length; j++) {
+      if (resultMap[j]['title'] == "GTIN") {
+        setState(() {
+          isGTINExistValue = true;
+        });
 
- CheckValueExitInDb() async {
+        // log(resultMap[j].toString());
 
- getLocalstoreData = await dbhelper.fatchTable1();
-  
-
-  // log("this funcation Call");
-  //   log(getLocalstoreData[0].toString());
-  // log(getLocalstoreData.length.toString());
-
-for(int j=0;j<resultMap.length;j++)
-{
-
-if(resultMap[j]['title']=="GTIN"){
-  setState(() {
-    isGTINExistValue =true;
-  });
-
- // log(resultMap[j].toString());
-
-  String? getData = resultMap[j]['value'];
+        String? getData = resultMap[j]['value'];
 //log(getData.toString());
 
+        for (int i = 0; i < getLocalstoreData.length; i++) {
+          if (getData == getLocalstoreData[i]['id']) {
+            productName = getLocalstoreData[i]['plain1'];
+            CompanyName = getLocalstoreData[i]['cline3'];
 
- for(int i=0;i<getLocalstoreData.length;i++){
- if(getData ==getLocalstoreData[i]['id'] ){
+            // log(getLocalstoreData[i]['plain1']);
+            //   log(getLocalstoreData[i]['cline3']);
 
-  productName = getLocalstoreData[i]['plain1'];
-  CompanyName = getLocalstoreData[i]['cline3'];
-
-    // log(getLocalstoreData[i]['plain1']);
-    //   log(getLocalstoreData[i]['cline3']);
-
-  }
- 
-}
-  
-}
-}
-
+          }
+        }
+      }
+    }
 
 //   for(int i=0;i<data.length;i++){
 //  if(getData ==data[i]['id'] ){
@@ -1106,18 +1079,13 @@ if(resultMap[j]['title']=="GTIN"){
 //       log(data[i]['cline3']);
 
 //   }
- 
+
 // }
 
 //}
 
-
 //}
-
-}
-
-
-
+  }
 
   void handleClick(int item) {
     switch (item) {
@@ -1191,7 +1159,6 @@ if(resultMap[j]['title']=="GTIN"){
             ],
           ),
           appBar: AppBar(
-
             backgroundColor: blueColor1,
             automaticallyImplyLeading: false,
             elevation: 0,
@@ -1264,47 +1231,44 @@ if(resultMap[j]['title']=="GTIN"){
                       height: 8,
                     ),
 
-                  Wrap(children:
-                   qrResultConvertList.map((item)  {
-
-            
-                  if (item == widget.qrCode![0]) {
-                    return Text(
-                      'NFC',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    );
-                  }else{
-                    return Text(item.toString());
-                  }
-                  // if (item < 100) {
-                  //   return Padding(
-                  //     padding: const EdgeInsets.all(8.0),
-                  //     child: Text(
-                  //       item.toString(),
-                  //       style: const TextStyle(
-                  //         fontWeight: FontWeight.bold,
-                  //         color: Colors.red,
-                  //       ),
-                  //     ),
-                  //   );
-                  // }
-                  // if (item == 100) {
-                  //   return Padding(
-                  //     padding: const EdgeInsets.all(8.0),
-                  //     child: Text(
-                  //       item.toString(),
-                  //       style: TextStyle(
-                  //         fontWeight: FontWeight.bold,
-                  //         color: Colors.green,
-                  //       ),
-                  //     ),
-                  //   );
-                  // }
-                  
-                }).toList()),
+                    Wrap(
+                        children: qrResultConvertList.map((item) {
+                      if (item == widget.qrCode![0]) {
+                        return Text(
+                          'NFC',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      } else {
+                        return Text(item.toString());
+                      }
+                      // if (item < 100) {
+                      //   return Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child: Text(
+                      //       item.toString(),
+                      //       style: const TextStyle(
+                      //         fontWeight: FontWeight.bold,
+                      //         color: Colors.red,
+                      //       ),
+                      //     ),
+                      //   );
+                      // }
+                      // if (item == 100) {
+                      //   return Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child: Text(
+                      //       item.toString(),
+                      //       style: TextStyle(
+                      //         fontWeight: FontWeight.bold,
+                      //         color: Colors.green,
+                      //       ),
+                      //     ),
+                      //   );
+                      // }
+                    }).toList()),
                     // Text(
                     //   "${widget.qrCode}",
                     //   style: GoogleFonts.roboto(
@@ -1382,12 +1346,12 @@ if(resultMap[j]['title']=="GTIN"){
                   ],
                 ),
               ),
-
-const SizedBox(height: 20,),
-
-               Visibility(
+              const SizedBox(
+                height: 20,
+              ),
+              Visibility(
                 visible: isGTINExistValue,
-                 child: Container(
+                child: Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -1404,18 +1368,20 @@ const SizedBox(height: 20,),
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                           mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Expanded(
-                            child:  Text(
+                            child: Text(
                               'PRODUCT: ',
                               textAlign: TextAlign.end,
-                              style:  TextStyle(
+                              style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: blueColor1),
                             ),
                           ),
-                                 const SizedBox(width: 5,),
+                          const SizedBox(
+                            width: 5,
+                          ),
                           Expanded(
                             flex: 2,
                             child: Text(
@@ -1425,45 +1391,42 @@ const SizedBox(height: 20,),
                               //     color: blueColor1),
                             ),
                           ),
-                         
-                         
-                         
                         ],
                       ),
-               const SizedBox(height: 5,),
-               
-               
-                         Row(
-                                 crossAxisAlignment: CrossAxisAlignment.center,
-                           mainAxisAlignment: MainAxisAlignment.center,
-                           children: [
-                         const Expanded(
-                           child: Text(
-                             'COMPANY: ',
-                             textAlign: TextAlign.end,
-                             style: TextStyle(
-                                 fontWeight: FontWeight.bold,
-                                 color: blueColor1),
-                           ),
-                         ),
-                         const SizedBox(width: 5,),
-                         Expanded(
-                          flex: 2,
-                           child: Text(
-                             '$CompanyName',
-                            //  style: const TextStyle(
-                            //      fontWeight: FontWeight.bold,
-                            //      color: blueColor1),
-                           ),
-                         ),
-                           ],
-                         ),
-                            
-                         
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Expanded(
+                            child: Text(
+                              'COMPANY: ',
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: blueColor1),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              '$CompanyName',
+                              //  style: const TextStyle(
+                              //      fontWeight: FontWeight.bold,
+                              //      color: blueColor1),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                             ),
-               ),
+                ),
+              ),
             ],
           ),
         ),
