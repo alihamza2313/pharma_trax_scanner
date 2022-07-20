@@ -3,11 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pharma_trax_scanner/screens/barcode_scanner.dart';
 import 'package:pharma_trax_scanner/screens/data_matrix_scanner.dart';
+import 'package:pharma_trax_scanner/screens/qr_result.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../Widgets/app_drawer.dart';
+
+import 'dart:async';
+import 'dart:developer';
+import 'dart:io' show Platform;
+
+import 'package:barcode_scan2/barcode_scan2.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -27,6 +36,7 @@ SharedPreferences? prefs;
 //List list = []; 
 
 
+
 @override
   void initState() {
 
@@ -43,6 +53,7 @@ SharedPreferences? prefs;
 
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       key: _key,
       drawer: const AppDrawer(),
@@ -154,7 +165,7 @@ SharedPreferences? prefs;
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
+                                Navigator.of(context).pushReplacement(MaterialPageRoute(
                                     builder: (_) => const BarCodeScanner()));
                               },
                               child: Container(
@@ -190,6 +201,9 @@ SharedPreferences? prefs;
                             ),
                             GestureDetector(
                               onTap: () {
+
+                           
+
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => const DataMatrixSacnner()));
                               },
@@ -349,4 +363,7 @@ SharedPreferences? prefs;
       ),
     );
   }
+
+
+   
 }
