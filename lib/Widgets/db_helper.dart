@@ -84,16 +84,30 @@ class DataBaseHelper {
     return await db.insert(infoTable, row);
   }
 
+  Future<List<Map<String, dynamic>>> fatchInfoTable() async {
+    Database? db = await instance.database;
+    return await db!.query(infoTable);
+  }
+
   // Functiuons to perform some functionality with database table #1 name "products"
+  bool _check = true;
   Future<int?> insertTable1(Map<String, dynamic> row) async {
     Database? db = await instance.database;
-    await db!.delete(table1);
-    return await db.insert(table1, row);
+    if (_check) {
+      deleteTable1();
+      _check = false;
+    }
+    return await db!.insert(table1, row);
   }
 
   Future<List<Map<String, dynamic>>> fatchTable1() async {
     Database? db = await instance.database;
     return await db!.query(table1);
+  }
+
+  Future<void> deleteTable1() async {
+    Database? db = await instance.database;
+    await db!.delete(table1);
   }
 
   // Functiuons to perform some functionality with database table #2 name "scanned_products"
@@ -111,9 +125,4 @@ class DataBaseHelper {
     Database? db = await instance.database;
     await db!.delete(table2);
   }
-
-
-      
-
-
 }

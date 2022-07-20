@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:pharma_trax_scanner/Widgets/about_pharma.dart';
 import 'package:pharma_trax_scanner/screens/home_screen.dart';
 import 'package:pharma_trax_scanner/screens/scan_history.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "../Widgets/about_pharma.dart";
 import '../Widgets/line_equipment.dart';
+import '../providers/auth_provider.dart';
 import 'how_it_works.dart';
 import '../Widgets/line_level_hardware.dart';
 import '../utils/colors.dart';
@@ -18,8 +20,8 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-SharedPreferences prefs;
+    final auth = Provider.of<AuthProvider>(context);
+    SharedPreferences prefs;
 
     return Drawer(
       child: ListView(padding: EdgeInsets.zero, children: [
@@ -76,7 +78,7 @@ SharedPreferences prefs;
           title: const Text("Scan GS1 Barcode"),
           onTap: () {
             Navigator.of(context).pop();
-            Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+            Navigator.of(context).pushReplacementNamed('/home_screen');
           },
         ),
         ListTile(
@@ -91,10 +93,15 @@ SharedPreferences prefs;
           title: const Text("Scan History"),
           onTap: () {
             Navigator.of(context).pop();
-            Navigator.of(context).pushReplacementNamed(ScanHistory.routeName);
+            Navigator.of(context).pushReplacementNamed('/scan_history');
           },
         ),
         ListTile(
+          onTap: () async {
+            auth.logout();
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed('/update_database');
+          },
           leading: SizedBox(
             height: 25,
             width: 25,
@@ -106,14 +113,10 @@ SharedPreferences prefs;
           title: const Text("Update Database"),
         ),
         ListTile(
-
-          onTap: ()async{
-           
-           prefs = await SharedPreferences.getInstance();
-
-           prefs.setBool('isLogin', false);
-           exit(0);
-
+          onTap: () async {
+            auth.logout();
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed('/signin_page');
           },
           leading: SizedBox(
             height: 25,
@@ -140,8 +143,8 @@ SharedPreferences prefs;
           ),
           title: const Text("Line Level Hardware"),
           onTap: () {
-            Navigator.of(context)
-                .pushReplacementNamed('/line_level_hardware');
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed('/line_level_hardware');
           },
         ),
         ListTile(
@@ -155,8 +158,8 @@ SharedPreferences prefs;
           ),
           title: const Text("Line Equipment"),
           onTap: () {
-            Navigator.of(context)
-                .pushReplacementNamed('/line_equipment');
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed('/line_equipment');
           },
         ),
         ListTile(
@@ -170,8 +173,8 @@ SharedPreferences prefs;
           ),
           title: const Text("How it Works"),
           onTap: () {
-            Navigator.of(context)
-                .pushReplacementNamed('/how_it_works');
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed('/how_it_works');
             print('How_it_works');
           },
         ),
@@ -186,10 +189,8 @@ SharedPreferences prefs;
           ),
           title: const Text("About Pharma Trax"),
           onTap: () {
-           
             Navigator.of(context).pop();
-              Navigator.of(context)
-                .pushReplacementNamed('/About-pharma');
+            Navigator.of(context).pushReplacementNamed('/About-pharma');
           },
         ),
       ]),

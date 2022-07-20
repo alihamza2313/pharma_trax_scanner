@@ -63,6 +63,7 @@ class _DataMatrixSacnnerState extends State<DataMatrixSacnner> {
                             width: 300.0,
                             height: 300.0,
                             child: QrCamera(
+                              fit: BoxFit.cover,
                               formats: const [BarcodeFormats.DATA_MATRIX],
                               onError: (context, error) => Text(
                                 error.toString(),
