@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 import "../screens/home_screen.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -15,6 +18,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Signinpage extends StatefulWidget {
   const Signinpage({Key? key}) : super(key: key);
 
+  static const routeName = '/signin_page';
+
   @override
   State<Signinpage> createState() => _SigninpageState();
 }
@@ -23,241 +28,117 @@ class _SigninpageState extends State<Signinpage> {
   TextEditingController emailcontroller = TextEditingController();
   SharedPreferences? prefs;
 
-  // ignore: non_constant_identifier_names
-  Future LoginUserWithEmail(String getemail) async {
-    Loader.show(
-      context,
-      isSafeAreaOverlay: true,
-      isBottomBarOverlay: true,
-      overlayFromBottom: 80,
-      overlayColor: Colors.black26,
-      progressIndicator: const CircularProgressIndicator(
-        backgroundColor: Colors.white,
-      ),
-    );
-
-    if (!await InternetConnectionChecker().hasConnection) {
-      Fluttertoast.showToast(
-        msg: 'No Internet',
-      );
-      Loader.hide();
-    } else {
-      Loader.hide();
-
-      var provinceBodyPayment = jsonEncode(<String, String>{
-        'Email': getemail,
-        'Password': 'P@ssw0rd',
-        'ConfirmPassword': 'P@ssw0rd',
-      });
-
-      log(provinceBodyPayment);
-
-      try {
-        http.Response response = await http.post(
-            Uri.parse(
-              'http://api.pharmasync.pk/api/account/register',
-            ),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: provinceBodyPayment);
-
-        if (response.statusCode == 200) {
-          Map getResponseData = jsonDecode(response.body);
-          int seconds = getResponseData["expires_in"];
-          String getToken = getResponseData['access_token'];
-
-          GetAllDataApiCall(getemail, getToken);
-
-          SavePrefValue(getToken, seconds);
-
-          // print(seconds);
-          // log(getResponseData.toString());
-        } else {
-          log("Response not 200");
-        }
-      } catch (e) {
-        log(e.toString());
-      }
-    }
-  }
-
-  //  SHARED PREFERENCES from API 1( Token & Second )
-  // ignore: non_constant_identifier_names
-  SavePrefValue(String tioken, int second) async {
-    prefs = await SharedPreferences.getInstance();
-    prefs!.setString('token', tioken);
-    prefs!.setString('seconds', second.toString());
-    prefs!.setBool('isLogin', true);
-
-    Fluttertoast.showToast(msg: second.toString());
-  }
-
-  // API for Data calling
-  // ignore: non_constant_identifier_names
-  GetAllDataApiCall(String email, String token) async {
-    if (!await InternetConnectionChecker().hasConnection) {
-      Fluttertoast.showToast(
-        msg: 'No Internet',
-      );
-      Loader.hide();
-    } else {
-      Loader.hide();
-
-      // log(email.toString());
-
-      try {
-        http.Response response = await http.get(
-          Uri.parse('http://api.pharmasync.pk/api/gtin'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer $token',
-          },
-        );
-
-        if (response.statusCode == 200) {
-          Map getApiData = jsonDecode(response.body);
-
-          log(getApiData['Info'].toString());
-          insertDbInfo(getApiData['Info']);
-          log(getApiData['Companies'].toString());
-          for (int i = 0; i < getApiData['Companies'].length; i++) {
-            insertDbData(getApiData['Companies'][i]);
-          }
-          Navigator.of(context).pushReplacementNamed(HomePage.routeName);
-        }
-      } catch (e) {
-        e.toString();
-      }
-    }
-  }
-
-  final dbhelper = DataBaseHelper.instance;
-
-  void insertDbInfo(Map<String, dynamic> dbInfo) async {
-    Map<String, dynamic> row = {
-      DataBaseHelper.infoTableColumnVersion: dbInfo['Version'].toString(),
-      DataBaseHelper.infoTableColumnUpdateDate: dbInfo['UpdateDate'].toString(),
-      DataBaseHelper.infoTableColumnMessage: dbInfo['Message'].toString(),
-      DataBaseHelper.infoTableColumnStatus: dbInfo['Status'].toString()
-    };
-    final id = await dbhelper.insertInfoTable(row);
-    print("----------------------------");
-    print(id);
-    print(row);
-    print("----------------------------");
-  }
-
-  void insertDbData(Map<String, dynamic> dbData) async {
-    Map<String, dynamic> row = {
-      DataBaseHelper.table1ColumnId: dbData['Id'].toString(),
-      DataBaseHelper.table1ColumnPlain1: dbData['Pline1'].toString(),
-      DataBaseHelper.table1ColumnCline3: dbData['Cline3'].toString(),
-      DataBaseHelper.table1ColumnSline4: dbData['Sline4'].toString(),
-      DataBaseHelper.table1ColumnVersion: dbData['Version'].toString(),
-      DataBaseHelper.table1ColumnIsModified: dbData['IsModified'].toString()
-    };
-    final id = await dbhelper.insertTable1(row);
-    print("----------------------------");
-    print(id);
-    print(row);
-    print("----------------------------");
-  }
-
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthProvider>(context);
+
+    Future loginProcess() async {
+      Loader.show(
+        context,
+        isSafeAreaOverlay: true,
+        isBottomBarOverlay: true,
+        overlayFromBottom: 80,
+        overlayColor: Colors.black26,
+        progressIndicator: const CircularProgressIndicator(
+          backgroundColor: Colors.white,
+        ),
+      );
+
+      if (!await InternetConnectionChecker().hasConnection) {
+        Fluttertoast.showToast(
+          msg: 'No Internet',
+        );
+        Loader.hide();
+      } else {
+        Loader.hide();
+
+        await auth.login(emailcontroller.text);
+      }
+    }
+
+    void loginUserWithEmail() {
+      Navigator.of(context).pushReplacementNamed('/home_screen');
+      loginProcess();
+      Fluttertoast.showToast(msg: emailcontroller.text);
+    }
+
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(image: AssetImage('assets/images/dna.png'))),
-        child: Center(
-          child: Expanded(
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/dna.png'),
+              ),
+            ),
+          ),
+          Center(
             child: Container(
-              width: 350,
-              height: 350,
+              width: MediaQuery.of(context).size.width - 40,
+              height: MediaQuery.of(context).size.width - 80,
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(
-                  color: const Color.fromARGB(255, 247, 248, 248),
-                  width: 0,
-                ),
+                border:
+                    Border.all(color: const Color.fromARGB(255, 247, 248, 248)),
                 borderRadius: BorderRadius.circular(15),
                 // ignore: prefer_const_literals_to_create _immutables
                 // ignore: prefer_const_literals_to_create_immutables
                 boxShadow: [
                   const BoxShadow(
-                    color: Colors.black,
-                    offset: Offset(
-                      2.0,
-                      2.0,
-                    ),
-                    blurRadius: 10.0,
-                    spreadRadius: 2.0,
-                  ),
-                  const BoxShadow(
-                    color: Colors.white,
-                    offset: Offset(0.0, 0.0),
-                    blurRadius: 0.0,
-                    spreadRadius: 0.0,
-                  ),
+                      color: Colors.black,
+                      offset: Offset(2.0, 2.0),
+                      blurRadius: 10.0,
+                      spreadRadius: 2.0),
+                  const BoxShadow(color: Colors.white)
                 ],
               ),
-              child: Column(children: <Widget>[
-                Container(
-                  // ignore: prefer_const_constructors
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    border: Border.all(width: 0.4, color: Colors.grey),
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10.0),
-                        topRight: Radius.circular(10.0),
-                        bottomRight: Radius.zero,
-                        bottomLeft: Radius.zero),
-                  ),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Image.asset(
-                            'assets/images/email.png',
-                            height: 50,
-                          ),
+              child: Stack(
+                children: [
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        // ignore: prefer_const_constructors
+                        decoration: const BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15.0),
+                              topRight: Radius.circular(15.0)),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const Text(
-                          'Provide Your Email',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(9.0),
-                        child: Text(
-                          "Please provide your Email address. We dont share your email address with others.",
-                          textAlign: TextAlign.justify,
-                          style: GoogleFonts.inter(
-                              color: textColor,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 14),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: Image.asset('assets/images/email.png',
+                                  height: 50),
+                            ),
+                            const SizedBox(height: 10),
+                            const Center(
+                              child: Text('Provide Your Email',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20)),
+                            ),
+                            const SizedBox(height: 5),
+                          ],
                         ),
                       ),
+                      const SizedBox(height: 15),
                       Container(
                         width: 320,
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.only(
+                            top: 5, left: 10.0, right: 10.0),
                         child: Column(
                           children: [
+                            Text(
+                              "Please provide your Email address. We dont share your email address with others.",
+                              textAlign: TextAlign.justify,
+                              style: GoogleFonts.inter(
+                                  color: textColor,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14),
+                            ),
+                            const SizedBox(height: 10),
                             TextField(
                               autocorrect: true,
                               controller: emailcontroller,
@@ -269,7 +150,7 @@ class _SigninpageState extends State<Signinpage> {
                                 fillColor: Colors.white70,
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(12.0)),
+                                      BorderRadius.all(Radius.circular(10.0)),
                                   borderSide:
                                       BorderSide(color: Colors.blue, width: 2),
                                 ),
@@ -281,30 +162,23 @@ class _SigninpageState extends State<Signinpage> {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20),
-                              child: FlatButton(
-                                child: const Text('Login'),
-                                onPressed: () {
-                                  LoginUserWithEmail(emailcontroller.text);
-          
-                                  Navigator.of(context)
-                                      .pushReplacementNamed(HomePage.routeName);
-                                  Fluttertoast.showToast(
-                                      msg: emailcontroller.text);
-                                },
-                              ),
+                            const SizedBox(height: 10),
+                            TextButton(
+                              child: const Text('Login'),
+                              onPressed: () {
+                                loginUserWithEmail();
+                              },
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
-                ),
-              ]),
+                ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
