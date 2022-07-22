@@ -77,6 +77,9 @@ class DataBaseHelper {
       )''');
   }
 
+
+
+
   // Functiuons to perform some functionality with database info table name "dbinfo"
   Future<int?> insertInfoTable(Map<String, dynamic> row) async {
     Database? db = await instance.database;
