@@ -1,6 +1,7 @@
 {
     "configurations": [
         
+<<<<<<< HEAD
         
         {
             "name": "Attach to Chrome",
@@ -14,6 +15,10 @@
             "type": "dart",
             "request": "attach"
         },
+=======
+    
+      
+>>>>>>> origin/main
         {
             "name": "Flutter",
             "program": "lib/main.dart",
