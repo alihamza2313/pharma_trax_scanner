@@ -200,13 +200,13 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> logout() async {
-    _token = 'null';
-    _userId = 'null';
-    _startdate = 'null' as DateTime;
+    _token = '';
+    _userId = '';
+    _startdate = null;
     _expiryDate = 0;
-    if (_authTimer != 'null' as Timer) {
+    if (_authTimer != null) {
       _authTimer!.cancel();
-      _authTimer = 'null' as Timer;
+      _authTimer = null;
     }
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
