@@ -115,6 +115,7 @@ class AppDrawer extends StatelessWidget {
         ListTile(
           onTap: () async {
             auth.logout();
+            
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/signin_page');
           },
