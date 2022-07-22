@@ -1,17 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
-import "../screens/home_screen.dart";
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:pharma_trax_scanner/Widgets/db_helper.dart';
-import 'package:pharma_trax_scanner/screens/home_screen.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
