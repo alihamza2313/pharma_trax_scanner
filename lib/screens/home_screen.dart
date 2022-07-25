@@ -30,30 +30,24 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
-SharedPreferences? prefs;
+  SharedPreferences? prefs;
 
+//List list = [];
 
-//List list = []; 
-
-
-
-@override
+  @override
   void initState() {
-
-   // list = [1,2,3]; 
-  SaveValueInPrefecnce();
+    // list = [1,2,3];
+    SaveValueInPrefecnce();
     super.initState();
   }
-  SaveValueInPrefecnce()async{
-    
- prefs = await SharedPreferences.getInstance();
- prefs!.setBool('isLogin', true);
-  }
 
+  SaveValueInPrefecnce() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs!.setBool('isLogin', true);
+  }
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       key: _key,
       drawer: const AppDrawer(),
@@ -110,53 +104,44 @@ SharedPreferences? prefs;
                           ],
                         ),
 
+                        // Row(children: list.map((item)  {
 
+                        //         if (item == 1) {
+                        //           return Text(
+                        //             item.toString(),
+                        //             style: TextStyle(
+                        //               fontWeight: FontWeight.bold,
+                        //             ),
+                        //           );
+                        //         }else{
+                        //           return Text(item.toString());
+                        //         }
+                        //         // if (item < 100) {
+                        //         //   return Padding(
+                        //         //     padding: const EdgeInsets.all(8.0),
+                        //         //     child: Text(
+                        //         //       item.toString(),
+                        //         //       style: const TextStyle(
+                        //         //         fontWeight: FontWeight.bold,
+                        //         //         color: Colors.red,
+                        //         //       ),
+                        //         //     ),
+                        //         //   );
+                        //         // }
+                        //         // if (item == 100) {
+                        //         //   return Padding(
+                        //         //     padding: const EdgeInsets.all(8.0),
+                        //         //     child: Text(
+                        //         //       item.toString(),
+                        //         //       style: TextStyle(
+                        //         //         fontWeight: FontWeight.bold,
+                        //         //         color: Colors.green,
+                        //         //       ),
+                        //         //     ),
+                        //         //   );
+                        //         // }
 
-          // Row(children: list.map((item)  {
-
-            
-          //         if (item == 1) {
-          //           return Text(
-          //             item.toString(),
-          //             style: TextStyle(
-          //               fontWeight: FontWeight.bold,
-          //             ),
-          //           );
-          //         }else{
-          //           return Text(item.toString());
-          //         }
-          //         // if (item < 100) {
-          //         //   return Padding(
-          //         //     padding: const EdgeInsets.all(8.0),
-          //         //     child: Text(
-          //         //       item.toString(),
-          //         //       style: const TextStyle(
-          //         //         fontWeight: FontWeight.bold,
-          //         //         color: Colors.red,
-          //         //       ),
-          //         //     ),
-          //         //   );
-          //         // }
-          //         // if (item == 100) {
-          //         //   return Padding(
-          //         //     padding: const EdgeInsets.all(8.0),
-          //         //     child: Text(
-          //         //       item.toString(),
-          //         //       style: TextStyle(
-          //         //         fontWeight: FontWeight.bold,
-          //         //         color: Colors.green,
-          //         //       ),
-          //         //     ),
-          //         //   );
-          //         // }
-                  
-          //       }).toList()),
-
-
-
-                        
-
- 
+                        //       }).toList()),
 
                         const SizedBox(
                           height: 30,
@@ -165,8 +150,10 @@ SharedPreferences? prefs;
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                    builder: (_) => const BarCodeScanner()));
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                            const BarCodeScanner()));
                               },
                               child: Container(
                                 color: blueColor1,
@@ -201,9 +188,6 @@ SharedPreferences? prefs;
                             ),
                             GestureDetector(
                               onTap: () {
-
-                           
-
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => const DataMatrixSacnner()));
                               },
@@ -363,7 +347,4 @@ SharedPreferences? prefs;
       ),
     );
   }
-
-
-   
 }

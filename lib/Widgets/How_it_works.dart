@@ -48,6 +48,7 @@ Pharma Trax Pro Line</a></p>
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("How it Works"),
+        backgroundColor: const Color(0xFF4A90CC),
       ),
       body: SingleChildScrollView(
         child: Column(
