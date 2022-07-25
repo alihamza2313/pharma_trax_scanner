@@ -1,0 +1,111 @@
+Future getAllDocumentTypes(String requesttype) async {
+    Loader.show(
+      context,
+      isSafeAreaOverlay: true,
+      isBottomBarOverlay: true,
+      overlayFromBottom: 80,
+      overlayColor: Colors.black26,
+      progressIndicator: const CircularProgressIndicator(
+        backgroundColor: Colors.white,
+        color: greenBackGroundColor2,
+      ),
+    );
+    if (!await InternetConnectionChecker().hasConnection) {
+      Fluttertoast.showToast(
+        msg: 'No Internet',
+      );
+      Loader.hide();
+    } else {
+      setState(() {
+        isLoadingCheck = true;
+      });
+     
+      var provinceBodyPayment = jsonEncode(<String, String>{
+        "ofr_ContactNo": phoneCodeandNumber.toString(),
+        "ofr_LicenseNo": licenserNumberController.text.toString(),
+        "ofr_ServiceCode": requesttype.toString(),
+        "ofr_VehicleNo": vehicalNumberController.text.toString(),
+        "ofr_LangCode": getlanguage.toString(),
+        "ofr_VehiclePlateCharCode":
+            finalCharcode.toString(), //charcodeController.text.toString(),
+
+       "ofr_VehicleValue": vehicalValueController.text.toString(),
+        "ofr_PromotionCode": "",
+        "ofr_IsRenewalRequest": widget.reNewValue.toString(),
+        "ofr_IsTransferRequest": widget.transferOnwerShip.toString(),
+        "ofr_IsNewPlateRequest": widget.reNewWithPlateNo.toString(),
+      });
+
+      log(provinceBodyPayment);
+
+      try {
+        response = await http.post(
+            //Uri.parse('https://test.bima.om/api/Insurance/GetInsuranceOffers'),
+            Uri.parse('${getbaseUrl}Insurance/GetInsuranceOffers'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer ${token}',
+            },
+            body: provinceBodyPayment);
+
+
+        if (response.statusCode == 200) {
+          print('GetAll  List successfully');
+         // log(response.body);
+          getDataFromJsonBody = jsonDecode(response.body);
+
+          print(getDataFromJsonBody);
+
+          var list1 = {};
+
+          list1 = getDataFromJsonBody['VehicleInsuraceData'];
+          listt = list1;
+
+          listProvince = await list1['insuranceOfferProviders'];
+
+           Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => InsuranceOffer(widget.reNewValue ,widget.transferOnwerShip,widget.reNewWithPlateNo, vehicalValueController.text.toString()),
+              ),
+            );
+          setState(() {
+            isLoadingCheck = false;
+            Loader.hide();
+          });
+        } else {
+          setState(() {
+            isLoadingCheck = false;
+            Loader.hide();
+
+            
+          });
+        }
+      } catch (e) {
+        Map getErrorMessageResponse = jsonDecode(response.body);
+
+        if(getErrorMessageResponse['VehicleInsuraceData']['ModelState_Errors'][0]["key"] == "VehicleValue"){
+
+            vehiclValueVisible = true;
+        }
+      
+        
+ Get.snackbar("Alert Message".tr,
+            '${getErrorMessageResponse['VehicleInsuraceData']['ModelState_Errors'][0]['errorMessage'].toString()}',
+            duration: Duration(seconds: 3),
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.black54,
+            colorText: Colors.white);
+     //   }
+       
+
+        Loader.hide();
+        isLoadingCheck = false;
+
+        setState(() {
+          Loader.hide();
+          isLoadingCheck = false;
+        });
+      }
+    }
+  }
