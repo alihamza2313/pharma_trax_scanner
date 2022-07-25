@@ -15,9 +15,16 @@ import '../utils/colors.dart';
 import 'How_it_works.dart';
 import 'line_equipment.dart';
 
-class AppDrawer extends StatelessWidget {
+class AppDrawer extends StatefulWidget {
   const AppDrawer({Key? key}) : super(key: key);
 
+  @override
+  State<AppDrawer> createState() => _AppDrawerState();
+}
+
+int indexClicked = 0;
+
+class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
@@ -26,170 +33,285 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(padding: EdgeInsets.zero, children: [
         SizedBox(
-          // height: 150,
-          child: DrawerHeader(
-            decoration: const BoxDecoration(color: blueColor1),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: blueColor2,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  padding: const EdgeInsets.all(5),
-                  height: 50,
-                  width: 50,
-                  child: Image.asset("assets/images/splash_logo.png"),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Title(
-                    color: Colors.white,
-                    child: const Text(
-                      "PHARMA TRAX",
-                      style: TextStyle(color: Colors.white),
-                    )),
-                const SizedBox(
-                  height: 5,
-                ),
-                Title(
-                    color: Colors.white,
-                    child: Text("ali@gmail.com",
-                        style: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
-                            fontWeight: FontWeight.normal,
-                            fontSize: 12)))
-              ],
-            ),
-          ),
-        ),
+            height: 180,
+            child: DrawerHeader(
+              decoration: const BoxDecoration(color: colorPrimaryLightBlue),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                        decoration: BoxDecoration(
+                          color: colorPrimaryDarkes,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        padding: const EdgeInsets.all(5),
+                        height: 50,
+                        width: 50,
+                        child: Image.asset("assets/images/splash_logo.png")),
+                    const SizedBox(height: 10),
+                    Title(
+                        color: Colors.white,
+                        child: const Text(
+                          "PHARMA TRAX",
+                          style: TextStyle(color: textWhite),
+                        )),
+                    const SizedBox(height: 5),
+                    Title(
+                        color: Colors.white,
+                        child: Text(
+                          "ali@gmail.com",
+                          style: TextStyle(
+                              color: resultbackgroundColor.withOpacity(0.6),
+                              fontWeight: FontWeight.normal,
+                              fontSize: 14),
+                        )),
+                  ]),
+            )),
         ListTile(
+          selected: indexClicked == 0,
+          selectedTileColor: textColor.withOpacity(0.2),
           leading: SizedBox(
-            height: 25,
-            width: 25,
+            height: 24,
+            width: 24,
             child: Image.asset(
               "assets/images/barcode_scanner.png",
-              color: Colors.black.withOpacity(0.6),
+              color: indexClicked == 0
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
             ),
           ),
-          title: const Text("Scan GS1 Barcode"),
+          title: Text(
+            "Scan GS1 Barcode",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: indexClicked == 0
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
+            ),
+          ),
           onTap: () {
+            setState(() {
+              indexClicked = 0;
+            });
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/home_screen');
           },
         ),
         ListTile(
+          selected: indexClicked == 1,
+          selectedTileColor: textColor.withOpacity(0.2),
           leading: SizedBox(
-            height: 25,
-            width: 25,
+            height: 24,
+            width: 24,
             child: Image.asset(
               "assets/images/history.png",
-              color: Colors.black.withOpacity(0.6),
+              color: indexClicked == 1
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
             ),
           ),
-          title: const Text("Scan History"),
+          title: Text(
+            "Scan History",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: indexClicked == 1
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
+            ),
+          ),
           onTap: () {
+            setState(() {
+              indexClicked = 1;
+            });
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/scan_history');
           },
         ),
         ListTile(
-          onTap: () async {
-            auth.logout();
+          selected: indexClicked == 2,
+          selectedTileColor: textColor.withOpacity(0.2),
+          leading: SizedBox(
+            height: 24,
+            width: 24,
+            child: Image.asset(
+              "assets/images/update.png",
+              color: indexClicked == 2
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
+            ),
+          ),
+          title: Text(
+            "Update Database",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: indexClicked == 2
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
+            ),
+          ),
+          onTap: () {
+            setState(() {
+              indexClicked = 2;
+            });
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/update_database');
           },
-          leading: SizedBox(
-            height: 25,
-            width: 25,
-            child: Image.asset(
-              "assets/images/update.png",
-              color: Colors.black.withOpacity(0.6),
-            ),
-          ),
-          title: const Text("Update Database"),
         ),
         ListTile(
-          onTap: () async {
-            auth.logout();
-            
+          selected: indexClicked == 3,
+          selectedTileColor: textColor.withOpacity(0.2),
+          leading: SizedBox(
+            height: 24,
+            width: 24,
+            child: Image.asset(
+              "assets/images/sign_out.png",
+              color: indexClicked == 3
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
+            ),
+          ),
+          title: Text(
+            "Sign Out",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: indexClicked == 3
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
+            ),
+          ),
+          onTap: () {
+            setState(() {
+              indexClicked = 3;
+            });
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/signin_page');
           },
-          leading: SizedBox(
-            height: 25,
-            width: 25,
-            child: Image.asset(
-              "assets/images/sign_out.png",
-              color: Colors.black.withOpacity(0.6),
-            ),
-          ),
-          title: const Text("Sign Out"),
         ),
-        const Divider(),
+        const Divider(
+          thickness: 1,
+        ),
         const ListTile(
-          leading: Text("Pharma Trax Product Line"),
-        ),
+            leading: Text(
+          "Pharma Trax Product Line",
+          style: TextStyle(color: textColor),
+        )),
         ListTile(
+          selected: indexClicked == 4,
+          selectedTileColor: textColor.withOpacity(0.2),
           leading: SizedBox(
-            height: 25,
-            width: 25,
+            height: 24,
+            width: 24,
             child: Image.asset(
               "assets/images/hardware.png",
-              color: Colors.black.withOpacity(0.6),
+              color: indexClicked == 4
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
             ),
           ),
-          title: const Text("Line Level Hardware"),
+          title: Text(
+            "Line Level Hardware",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: indexClicked == 4
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
+            ),
+          ),
           onTap: () {
+            setState(() {
+              indexClicked = 4;
+            });
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/line_level_hardware');
           },
         ),
         ListTile(
+          selected: indexClicked == 5,
+          selectedTileColor: textColor.withOpacity(0.2),
           leading: SizedBox(
-            height: 25,
-            width: 25,
+            height: 24,
+            width: 24,
             child: Image.asset(
               "assets/images/equipment.png",
-              color: Colors.black.withOpacity(0.6),
+              color: indexClicked == 5
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
             ),
           ),
-          title: const Text("Line Equipment"),
+          title: Text(
+            "Line Equipment",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: indexClicked == 5
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
+            ),
+          ),
           onTap: () {
+            setState(() {
+              indexClicked = 5;
+            });
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/line_equipment');
           },
         ),
         ListTile(
+          selected: indexClicked == 6,
+          selectedTileColor: textColor.withOpacity(0.2),
           leading: SizedBox(
-            height: 25,
-            width: 25,
+            height: 24,
+            width: 24,
             child: Image.asset(
               "assets/images/gears.png",
-              color: Colors.black.withOpacity(0.6),
+              color: indexClicked == 6
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
             ),
           ),
-          title: const Text("How it Works"),
+          title: Text(
+            "How it Works",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: indexClicked == 6
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
+            ),
+          ),
           onTap: () {
+            setState(() {
+              indexClicked = 6;
+            });
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/how_it_works');
-            print('How_it_works');
           },
         ),
         ListTile(
+          selected: indexClicked == 7,
+          selectedTileColor: textColor.withOpacity(0.2),
           leading: SizedBox(
-            height: 25,
-            width: 25,
+            height: 24,
+            width: 24,
             child: Image.asset(
               "assets/images/about.png",
-              color: Colors.black.withOpacity(0.6),
+              color: indexClicked == 7
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
             ),
           ),
-          title: const Text("About Pharma Trax"),
+          title: Text(
+            "About Pharma Traxt",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: indexClicked == 7
+                  ? colorPrimaryLightBlue
+                  : Colors.black.withOpacity(0.6),
+            ),
+          ),
           onTap: () {
+            setState(() {
+              indexClicked = 7;
+            });
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/About-pharma');
           },
