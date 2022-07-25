@@ -1110,114 +1110,123 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
   Widget build(BuildContext context) {
     return Screenshot(
       controller: _screenShotController,
-      child: SafeArea(
-        child: Scaffold(
-          floatingActionButton: SpeedDial(
-            childMargin:
-                const EdgeInsets.symmetric(vertical: 22, horizontal: 5),
-            // icon: Icons.add,
-            animatedIcon: AnimatedIcons.menu_close,
-            backgroundColor: blueColor1,
+      child: Scaffold(
+        floatingActionButton: SpeedDial(
+          
+          childMargin:
+              const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+          // icon: Icons.add,
+          animatedIcon: AnimatedIcons.menu_close,
+          backgroundColor: colorPrimaryLightBlue,
+          childPadding: EdgeInsets.symmetric(vertical: 8),
+          animationDuration:const Duration(milliseconds: 350),
+          
 
-            children: [
-              SpeedDialChild(
-                  child: const ImageIcon(AssetImage("assets/images/copy.png")),
-                  label: "Copy Result",
-                  labelStyle: const TextStyle(color: Colors.white),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  labelBackgroundColor: Colors.black,
+          children: [
+            SpeedDialChild(
+                child: const ImageIcon(AssetImage("assets/images/copy.png"),color:Colors.white),
+                label: "Copy Result",
+                labelStyle: const TextStyle(color: Colors.white),
+                backgroundColor: copybuttonColor,
+                labelBackgroundColor: Colors.black,
+                onTap: () async {
+                  await FlutterClipboard.copy(replaceAllspecialcharacter!);
+                  Fluttertoast.showToast(
+                    
+                      msg: "Result Copied!",
+                      toastLength: Toast.LENGTH_SHORT,
+                      timeInSecForIosWeb: 2,
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: Colors.black);
+                }),
+            SpeedDialChild(
+                child: const ImageIcon(AssetImage("assets/images/share.png"),color:Colors.white),
+                label: "Share Result",
+                labelStyle: const TextStyle(color: Colors.white),
+                labelBackgroundColor: Colors.black,
+                backgroundColor: sharebuttonColor,
+                onTap: () async {
+                  await Share.share(replaceAllspecialcharacter!);
+                }),
+            SpeedDialChild(
+                child: const ImageIcon(
+                  
+                    AssetImage("assets/images/screenshot.png"),color:Colors.white),
+                label: "Share ScreenShot",
+                
+                labelStyle: const TextStyle(color: Colors.white),
+                labelBackgroundColor: Colors.black,
+                backgroundColor: screenshotbuttonColor,
+                onTap: () async {
+                  final shareShotImage =
+                      await _screenShotController.capture();
+                  shareScreenshot(shareShotImage!);
+                }),
+          ],
+        ),
+        
+        appBar: AppBar(
+        
+          backgroundColor: colorPrimaryLightBlue,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          centerTitle: false,
+          title: Text(
+            "Scan Result",
+            style: GoogleFonts.inter(
+                fontWeight: FontWeight.w500, fontSize: 16.0),
+          ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Image.asset("assets/images/back.png")),
+            // IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_sharp,color: Colors.white,))
+            PopupMenuButton<int>(
+              onSelected: (item) => handleClick(item),
+              itemBuilder: (context) => [
+                PopupMenuItem<int>(
+                  value: 0,
+                  child: const Text('Copy to Clipboard'),
                   onTap: () async {
                     await FlutterClipboard.copy(replaceAllspecialcharacter!);
                     Fluttertoast.showToast(
                         msg: "Result Copied!",
-                        toastLength: Toast.LENGTH_SHORT,
                         timeInSecForIosWeb: 2,
+                        toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
                         backgroundColor: Colors.black);
-                  }),
-              SpeedDialChild(
-                  child: const ImageIcon(AssetImage("assets/images/share.png")),
-                  label: "Share Result",
-                  labelStyle: const TextStyle(color: Colors.white),
-                  labelBackgroundColor: Colors.black,
-                  backgroundColor: Theme.of(context).primaryColor,
+                  },
+                ),
+                PopupMenuItem<int>(
+                  value: 1,
+                  child: const Text('Share Result'),
                   onTap: () async {
                     await Share.share(replaceAllspecialcharacter!);
-                  }),
-              SpeedDialChild(
-                  child: const ImageIcon(
-                      AssetImage("assets/images/screenshot.png")),
-                  label: "Share ScreenShot",
-                  labelStyle: const TextStyle(color: Colors.white),
-                  labelBackgroundColor: Colors.black,
-                  backgroundColor: Theme.of(context).primaryColor,
+                  },
+                ),
+                PopupMenuItem<int>(
+                  value: 2,
+                  child: const Text('Share Screenshot'),
                   onTap: () async {
                     final shareShotImage =
                         await _screenShotController.capture();
                     shareScreenshot(shareShotImage!);
-                  }),
-            ],
-          ),
-          appBar: AppBar(
-            backgroundColor: blueColor1,
-            automaticallyImplyLeading: false,
-            elevation: 0,
-            centerTitle: false,
-            title: Text(
-              "Scan Result",
-              style: GoogleFonts.inter(
-                  fontWeight: FontWeight.w500, fontSize: 16.0),
-            ),
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
                   },
-                  icon: Image.asset("assets/images/back.png")),
-              // IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_sharp,color: Colors.white,))
-              PopupMenuButton<int>(
-                onSelected: (item) => handleClick(item),
-                itemBuilder: (context) => [
-                  PopupMenuItem<int>(
-                    value: 0,
-                    child: const Text('Copy to Clipboard'),
-                    onTap: () async {
-                      await FlutterClipboard.copy(replaceAllspecialcharacter!);
-                      Fluttertoast.showToast(
-                          msg: "Result Copied!",
-                          timeInSecForIosWeb: 2,
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          backgroundColor: Colors.black);
-                    },
-                  ),
-                  PopupMenuItem<int>(
-                    value: 1,
-                    child: const Text('Share Result'),
-                    onTap: () async {
-                      await Share.share(replaceAllspecialcharacter!);
-                    },
-                  ),
-                  PopupMenuItem<int>(
-                    value: 2,
-                    child: const Text('Share Screenshot'),
-                    onTap: () async {
-                      final shareShotImage =
-                          await _screenShotController.capture();
-                      shareScreenshot(shareShotImage!);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-          body: Column(
+                ),
+              ],
+            ),
+          ],
+        ),
+        body: SafeArea(
+          child: Column(
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
                 padding:
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                color: Colors.grey,
+                color: resultbackgroundColor,
                 child: Column(
                   children: [
                     Text(
@@ -1230,19 +1239,23 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                     const SizedBox(
                       height: 8,
                     ),
-
+        
                     Wrap(
                         children: qrResultConvertList.map((item) {
                       if (item == widget.qrCode![0]) {
-                        return Text(
+                        return const Text(
                           'NFC',
                           style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
+                            color: colorPrimaryLightBlue,
+                            fontWeight: FontWeight.normal,
                           ),
                         );
                       } else {
-                        return Text(item.toString());
+                        return Text(item.toString(),style: TextStyle(
+                          color: Colors.black54,
+                          
+                          fontSize: 16
+                        ),);
                       }
                       // if (item < 100) {
                       //   return Padding(
@@ -1315,14 +1328,14 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                                     Text(
                                       '${resultMap[i]['title']}',
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: blueColor1),
+                                          fontWeight: FontWeight.w600,
+                                          color: colorPrimaryLightBlue),
                                     ),
                                     Text(
                                       '(${resultMap[i]['identifer']}): ',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: blueColor1),
+                                          color: colorPrimaryLightBlue),
                                     ),
                                   ],
                                 )),
@@ -1334,6 +1347,9 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                                     child: Text(
                                       '${resultMap[i]['value']}',
                                       textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        color:Colors.black54
+                                      ),
                                     )),
                                 const SizedBox(
                                   height: 5,
@@ -1375,8 +1391,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                               'PRODUCT: ',
                               textAlign: TextAlign.end,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: blueColor1),
+                                  fontWeight: FontWeight.w600,
+                                  color: colorPrimaryLightBlue),
                             ),
                           ),
                           const SizedBox(
@@ -1386,6 +1402,9 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                             flex: 2,
                             child: Text(
                               '$productName',
+                               style: TextStyle(
+                                        color:Colors.black54
+                                      ),
                               // style: const TextStyle(
                               //     fontWeight: FontWeight.bold,
                               //     color: blueColor1),
@@ -1405,8 +1424,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                               'COMPANY: ',
                               textAlign: TextAlign.end,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: blueColor1),
+                                  fontWeight: FontWeight.w600,
+                                  color: colorPrimaryLightBlue),
                             ),
                           ),
                           const SizedBox(
@@ -1416,6 +1435,9 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                             flex: 2,
                             child: Text(
                               '$CompanyName',
+                               style: TextStyle(
+                                        color:Colors.black54
+                                      ),
                               //  style: const TextStyle(
                               //      fontWeight: FontWeight.bold,
                               //      color: blueColor1),
