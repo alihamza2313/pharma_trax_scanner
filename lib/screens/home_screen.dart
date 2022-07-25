@@ -1,10 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:pharma_trax_scanner/screens/barcode_scanner.dart';
 import 'package:pharma_trax_scanner/screens/data_matrix_scanner.dart';
 import 'package:pharma_trax_scanner/screens/qr_result.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -37,10 +39,13 @@ SharedPreferences? prefs;
 
 
 
+
 @override
   void initState() {
 
-   // list = [1,2,3]; 
+getSharePrefenceValue();
+
+
   SaveValueInPrefecnce();
     super.initState();
   }
@@ -50,15 +55,57 @@ SharedPreferences? prefs;
  prefs!.setBool('isLogin', true);
   }
 
+  getSharePrefenceValue() async{
+ prefs = await SharedPreferences.getInstance();
+ int?  getExpireSecond = prefs!.getInt('isexpireSecond');
+ String? getexpiryDate=prefs!.getString('iscurentTime');
+
+log(getexpiryDate.toString());
+
+ DateTime? now  = DateTime.now();
+ final getdiffernce = now.difference(DateTime.parse(getexpiryDate!));
+
+ log(getdiffernce.inSeconds.toString());
+
+if(getdiffernce.inSeconds >= getExpireSecond!){
+
+LogoutFunction();
+
+}
+
+
+  }
+
+
+LogoutFunction() async{
+
+  final prefs = await SharedPreferences.getInstance();
+        prefs.setBool('isLogin',false);
+         prefs.setString('istoken','');
+            prefs.setString('isexpire','');
+               prefs.setString('iscurentTime', '');
+                  prefs.setString('email','');
+                   prefs.setString('isexpireSecond','');
+
+                    
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed('/signin_page');
+
+}  
+
 
   @override
   Widget build(BuildContext context) {
+
+
+    
    
     return Scaffold(
       key: _key,
       drawer: const AppDrawer(),
       drawerEnableOpenDragGesture: false,
       floatingActionButton: FloatingActionButton(
+        backgroundColor:colorPrimaryLightBlue ,
         onPressed: () {},
         child: const Icon(
           Icons.share,
@@ -66,12 +113,18 @@ SharedPreferences? prefs;
         ),
       ),
       appBar: AppBar(
-        backgroundColor: blueColor1,
+        backgroundColor: colorPrimaryLightBlue,
         leading: Builder(
           builder: (context) => // Ensure Scaffold is in context
               IconButton(
                   icon: const Icon(Icons.menu),
-                  onPressed: () => Scaffold.of(context).openDrawer()),
+                  onPressed: (){
+                     Scaffold.of(context).openDrawer();
+                    
+                   
+                  
+                  }
+                  ),
         ),
         title: const Text("Pharma Trax Scanner"),
       ),
@@ -94,72 +147,29 @@ SharedPreferences? prefs;
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                                  const EdgeInsets.symmetric(horizontal: 35),
                               child:
                                   Image.asset('assets/images/pharmatrax.png'),
                             ),
-                            Text(
-                              "Pakistan's first Track and Trace Serialization Solution Complete End to End Turnkey Solution Market Leader in Track and Trace Solutions",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.inter(
-                                color: textColor,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 16,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                "Pakistan's first Track and Trace Serialization Solution Complete End to End Turnkey Solution Market Leader in Track and Trace Solutions",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.inter(
+                                  color: textColor,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ],
                         ),
 
-
-
-          // Row(children: list.map((item)  {
-
-            
-          //         if (item == 1) {
-          //           return Text(
-          //             item.toString(),
-          //             style: TextStyle(
-          //               fontWeight: FontWeight.bold,
-          //             ),
-          //           );
-          //         }else{
-          //           return Text(item.toString());
-          //         }
-          //         // if (item < 100) {
-          //         //   return Padding(
-          //         //     padding: const EdgeInsets.all(8.0),
-          //         //     child: Text(
-          //         //       item.toString(),
-          //         //       style: const TextStyle(
-          //         //         fontWeight: FontWeight.bold,
-          //         //         color: Colors.red,
-          //         //       ),
-          //         //     ),
-          //         //   );
-          //         // }
-          //         // if (item == 100) {
-          //         //   return Padding(
-          //         //     padding: const EdgeInsets.all(8.0),
-          //         //     child: Text(
-          //         //       item.toString(),
-          //         //       style: TextStyle(
-          //         //         fontWeight: FontWeight.bold,
-          //         //         color: Colors.green,
-          //         //       ),
-          //         //     ),
-          //         //   );
-          //         // }
-                  
-          //       }).toList()),
-
-
-
-                        
-
  
 
                         const SizedBox(
-                          height: 30,
+                          height: 35,
                         ),
                         Column(
                           children: [
@@ -169,15 +179,15 @@ SharedPreferences? prefs;
                                     builder: (_) => const BarCodeScanner()));
                               },
                               child: Container(
-                                color: blueColor1,
-                                width: MediaQuery.of(context).size.width * 0.7,
+                                color: colorPrimaryLightBlue,
+                                width: MediaQuery.of(context).size.width * 0.7-20,
                                 child: Row(
                                   children: [
                                     Container(
                                       padding: const EdgeInsets.all(10),
                                       height: 50,
                                       width: 50,
-                                      color: blueColor2,
+                                      color: colorPrimaryLightDark,
                                       child: Image.asset(
                                           'assets/images/code_128.png'),
                                     ),
@@ -188,7 +198,7 @@ SharedPreferences? prefs;
                                         style: GoogleFonts.inter(
                                           fontWeight: FontWeight.w500,
                                           color: Colors.white,
-                                          fontSize: 16,
+                                          fontSize: 14,
                                         ),
                                       ),
                                     ),
@@ -208,15 +218,15 @@ SharedPreferences? prefs;
                                     builder: (_) => const DataMatrixSacnner()));
                               },
                               child: Container(
-                                color: blueColor1,
-                                width: MediaQuery.of(context).size.width * 0.7,
+                                color: colorPrimaryLightBlue,
+                                width: MediaQuery.of(context).size.width * 0.7-20,
                                 child: Row(
                                   children: [
                                     Container(
                                       padding: const EdgeInsets.all(10),
                                       height: 50,
                                       width: 50,
-                                      color: blueColor2,
+                                      color: colorPrimaryLightDark,
                                       child: Image.asset(
                                           'assets/images/data_matrix.png'),
                                     ),
@@ -227,7 +237,7 @@ SharedPreferences? prefs;
                                         style: GoogleFonts.inter(
                                           fontWeight: FontWeight.w500,
                                           color: Colors.white,
-                                          fontSize: 16,
+                                          fontSize: 15,
                                         ),
                                       ),
                                     )
@@ -258,7 +268,7 @@ SharedPreferences? prefs;
                       style: GoogleFonts.inter(
                         fontWeight: FontWeight.w500,
                         color: textColor,
-                        fontSize: 16,
+                        fontSize: 15,
                       ),
                     ),
                     const SizedBox(
@@ -275,7 +285,7 @@ SharedPreferences? prefs;
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.w500,
                               color: textColor,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                           const SizedBox(
@@ -288,7 +298,7 @@ SharedPreferences? prefs;
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
                                     color: blueColor1,
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     decoration: TextDecoration.underline,
                                   ),
                                   recognizer: TapGestureRecognizer()
@@ -308,7 +318,7 @@ SharedPreferences? prefs;
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
                           color: blueColor1,
-                          fontSize: 16,
+                          fontSize: 14,
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
@@ -330,7 +340,7 @@ SharedPreferences? prefs;
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
                           color: blueColor1,
-                          fontSize: 16,
+                          fontSize: 14,
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
@@ -351,7 +361,7 @@ SharedPreferences? prefs;
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 100, vertical: 5),
+                          horizontal: 130, vertical: 5),
                       // height: 120,
                       // width: 120,
                       child: Image.asset('assets/images/zauq.png'),
