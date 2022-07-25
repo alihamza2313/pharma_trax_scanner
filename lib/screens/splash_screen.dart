@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pharma_trax_scanner/screens/home_screen.dart';
 import 'package:pharma_trax_scanner/screens/signinpage.dart';
+import 'package:pharma_trax_scanner/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -28,7 +29,7 @@ bool? isLoginvalid=false;
  getSharePrefenceValue();
 
 
- Timer(Duration(seconds: 5),
+ Timer(Duration(seconds: 1),
           (){
 
             if(isLoginvalid==true){
@@ -70,9 +71,12 @@ bool? isLoginvalid=false;
       
       body: Container(
         decoration: const BoxDecoration(
-          image:  DecorationImage(image: AssetImage('assets/images/dna.png'))
+          color: colorPrimaryLightDark,
         ),
-        height: MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,),
+        height: MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,
+        
+        child: Center(child: Image.asset('assets/images/splash_logo.png',height: 100,),),
+        ),
 
     );
     

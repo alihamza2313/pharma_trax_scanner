@@ -1,19 +1,9 @@
-import 'dart:io';
-
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:pharma_trax_scanner/Widgets/about_pharma.dart';
-import 'package:pharma_trax_scanner/screens/home_screen.dart';
-import 'package:pharma_trax_scanner/screens/scan_history.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import "../Widgets/about_pharma.dart";
-import '../Widgets/line_equipment.dart';
 import '../providers/auth_provider.dart';
-import 'how_it_works.dart';
-import '../Widgets/line_level_hardware.dart';
 import '../utils/colors.dart';
-import 'How_it_works.dart';
-import 'line_equipment.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -25,49 +15,78 @@ class AppDrawer extends StatefulWidget {
 int indexClicked = 0;
 
 class _AppDrawerState extends State<AppDrawer> {
+  SharedPreferences? prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    getSharePrefenceValue();
+  }
+
+  String? auth2;
+
+  getSharePrefenceValue() async {
+    prefs = await SharedPreferences.getInstance();
+    String? getEmail = prefs!.getString('email').toString();
+    log(getEmail.toString());
+
+    setState(() {
+      auth2 = getEmail;
+    });
+  }
+
+// log(getdiffernce.inSeconds.toString());
+
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
-    SharedPreferences prefs;
 
-    return Drawer(
+    return SafeArea(
+        child: Drawer(
       child: ListView(padding: EdgeInsets.zero, children: [
         SizedBox(
-            height: 180,
-            child: DrawerHeader(
-              decoration: const BoxDecoration(color: colorPrimaryLightBlue),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                        decoration: BoxDecoration(
-                          color: colorPrimaryDarkes,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        padding: const EdgeInsets.all(5),
-                        height: 50,
-                        width: 50,
-                        child: Image.asset("assets/images/splash_logo.png")),
-                    const SizedBox(height: 10),
-                    Title(
-                        color: Colors.white,
-                        child: const Text(
-                          "PHARMA TRAX",
-                          style: TextStyle(color: textWhite),
-                        )),
-                    const SizedBox(height: 5),
-                    Title(
-                        color: Colors.white,
-                        child: Text(
-                          "ali@gmail.com",
-                          style: TextStyle(
-                              color: resultbackgroundColor.withOpacity(0.6),
-                              fontWeight: FontWeight.normal,
-                              fontSize: 14),
-                        )),
-                  ]),
-            )),
+          height: 180,
+          child: DrawerHeader(
+            decoration: const BoxDecoration(color: blueColor1),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: colorPrimaryDarkes,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  padding: const EdgeInsets.all(5),
+                  height: 60,
+                  width: 70,
+                  child: Image.asset("assets/images/splash_logo.png"),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Title(
+                    color: Colors.white,
+                    child: const Text(
+                      "PHARMA TRAX",
+                      style: TextStyle(color: Colors.white),
+                    )),
+                const SizedBox(
+                  height: 5,
+                ),
+                Title(
+                    color: Colors.white,
+                    child: auth2 != null
+                        ? Text("$auth2",
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.6),
+                                fontWeight: FontWeight.normal,
+                                fontSize: 12))
+                        : Text(''))
+              ],
+            ),
+          ),
+        ),
         ListTile(
           selected: indexClicked == 0,
           selectedTileColor: textColor.withOpacity(0.2),
@@ -317,6 +336,6 @@ class _AppDrawerState extends State<AppDrawer> {
           },
         ),
       ]),
-    );
+    ));
   }
 }

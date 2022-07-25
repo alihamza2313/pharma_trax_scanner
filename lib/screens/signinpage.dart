@@ -50,16 +50,17 @@ class _SigninpageState extends State<Signinpage> {
         );
         Loader.hide();
       } else {
-        Loader.hide();
-
         await auth.login(emailcontroller.text);
+        Loader.hide();
       }
     }
 
-    void loginUserWithEmail() {
-      Navigator.of(context).pushReplacementNamed('/home_screen');
-      loginProcess();
-      Fluttertoast.showToast(msg: emailcontroller.text);
+    void loginUserWithEmail() async{
+   
+     await loginProcess();
+       Fluttertoast.showToast(msg: emailcontroller.text);
+        Navigator.of(context).pushReplacementNamed('/home_screen');
+    
     }
 
     return Scaffold(
