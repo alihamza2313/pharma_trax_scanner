@@ -35,6 +35,11 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  SaveValueInPrefecnce() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs!.setBool('isLogin', true);
+  }
+
   getSharePrefenceValue() async {
     prefs = await SharedPreferences.getInstance();
     int? getExpireSecond = prefs!.getInt('isexpireSecond');
