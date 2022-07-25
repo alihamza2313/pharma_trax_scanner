@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     getSharePrefenceValue();
 
-    SaveValueInPrefecnce();
+    // SaveValueInPrefecnce();
     super.initState();
   }
 
