@@ -50,28 +50,36 @@ Pharma Trax Pro Line</a></p>
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("About Pharma Trax"),
+        backgroundColor: const Color(0xFF4A90CC),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            HtmlWidget(htmldata1),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
-              child: HtmlWidget(
-                htmldata,
-                onTapUrl: (url) async {
-                  // print(url);
-                  var filePath = Uri.parse(url);
-                  //final Uri uri = Uri.file(filePath);
-
-                  await launchUrl(filePath);
-                  return true;
-                },
-              ),
-            ),
-          ],
+      body: Stack(children: <Widget>[
+        new Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('images/about_pharma_trax.png'))),
         ),
-      ),
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              HtmlWidget(htmldata1),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+                child: HtmlWidget(
+                  htmldata,
+                  onTapUrl: (url) async {
+                    // print(url);
+                    var filePath = Uri.parse(url);
+                    //final Uri uri = Uri.file(filePath);
+
+                    await launchUrl(filePath);
+                    return true;
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ]),
     );
   }
 }
