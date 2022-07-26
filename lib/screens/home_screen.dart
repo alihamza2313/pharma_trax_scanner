@@ -6,6 +6,7 @@ import 'package:pharma_trax_scanner/screens/data_matrix_scanner.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Widgets/app_drawer.dart';
@@ -54,11 +55,9 @@ class _HomePageState extends State<HomePage> {
 
     log(getdiffernce.inSeconds.toString());
 
-if(getdiffernce.inSeconds >= double.parse(getExpireSecond!)){
-
-LogoutFunction();
-
-}
+    if (getdiffernce.inSeconds >= double.parse(getExpireSecond!)) {
+      LogoutFunction();
+    }
   }
 
 
