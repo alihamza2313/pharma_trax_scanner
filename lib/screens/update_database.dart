@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
@@ -31,10 +32,10 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
 
   Future<void> fatchData() async {
     data = await dbhelper.fatchInfoTable();
+
     version = data[0]['version'];
     updatedDate =DateTime.parse(data[0]['update_date']);
-
-     formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(updatedDate!);
+    formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(updatedDate!);
     setState(() {});
   }
 
@@ -67,22 +68,16 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
           backgroundColor: Colors.white,
         ),
       );
-
-      if (!await InternetConnectionChecker().hasConnection) {
-        Fluttertoast.showToast(
-          msg: 'No Internet',
-        );
-        Loader.hide();
- 
-      }
-     else{
+    
        try{
  await auth.getUpdateApiCall( geEmail!, gettoken!);
  Loader.hide();
         }catch(e){
+          Loader.hide();
+           Fluttertoast.showToast(msg: 'Something want wrong');
           print(e);
         }
-     }
+     
     }
 
     return Scaffold(

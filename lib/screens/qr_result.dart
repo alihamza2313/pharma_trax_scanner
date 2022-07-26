@@ -13,8 +13,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:pharma_trax_scanner/Widgets/db_helper.dart';
 
-// ignore: must_be_immutable
+
 class QRCodeResultScreen extends StatefulWidget {
+
   String? qrCode;
   String? typeText;
   bool? isScanFile;
@@ -570,13 +571,12 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
       "maximumLength": 90
     },
   ];
-
+  
+  
+  final dbhelper = DataBaseHelper.instance;
   List<Map<String, dynamic>> resultMap = [];
-
   List getLocalstoreData = [];
-
   List qrResultConvertList = [];
-
   String? getSpecialCharacter;
   String? afterAlldataNewstringg;
   String? getSpecialcharcatershape;
@@ -590,8 +590,10 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
   @override
   void initState() {
-//fatchData();
 
+ CheckValueExitInDbb();
+
+// fatchData();
     if (widget.isScanFile!) {
       insertScanData(widget.qrCode.toString(), widget.typeText.toString());
       widget.isScanFile = false;
@@ -617,14 +619,15 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
       log("inValid Data Matrix");
     }
 
-    log(resultMap.toString());
+//    log(resultMap.toString());
 
-    CheckValueExitInDb();
+   // CheckValueExitInDb();
 
     super.initState();
+  
   }
 
-  final dbhelper = DataBaseHelper.instance;
+
 
   void insertScanData(String qrData, String qrType) async {
     Map<String, dynamic> row = {
@@ -639,7 +642,9 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
     print("----------------------------");
   }
 
-  CheckValueForTest(String? newStringafterSpecialCharcter) {
+  CheckValueForTest(String? newStringafterSpecialCharcter) async {
+  
+
     if (newStringafterSpecialCharcter!.codeUnitAt(0).toString() == "29") {
       String? newStringDeleteFirstIndex = newStringafterSpecialCharcter
           .substring(1, newStringafterSpecialCharcter.length);
@@ -1041,50 +1046,54 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
     }
   }
 
-  CheckValueExitInDb() async {
-    getLocalstoreData = await dbhelper.fatchTable1();
 
-    // log("this funcation Call");
-    //   log(getLocalstoreData[0].toString());
-    // log(getLocalstoreData.length.toString());
+//   Future<void> fatchData() async {
+   
+//      List<Map<String,dynamic>>  data = await dbhelper.fatchTable1();
+    
+//       log(data.toString());
+// log(data.length.toString());
+
+//     // version = data[0]['version'];
+//     // updatedDate =DateTime.parse(data[0]['update_date']);
+//     // formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(updatedDate!);
+//     setState(() {});
+//   }
+ 
+  List<Map<String, dynamic>> data = [];
+
+  Future<void> CheckValueExitInDbb() async {
+     List<Map<String,dynamic>>  getLocalstoreData = await dbhelper.fatchTable1();
+print(getLocalstoreData.length.toString());
+    log(getLocalstoreData.toString());
+   log("/////////////////////////");
+   log(resultMap.toString());
 
     for (int j = 0; j < resultMap.length; j++) {
-      if (resultMap[j]['title'] == "GTIN") {
+      if (resultMap[j]['title'].toString().contains( "GTIN")) {
         setState(() {
           isGTINExistValue = true;
+
         });
-
-        // log(resultMap[j].toString());
-
-        String? getData = resultMap[j]['value'];
-//log(getData.toString());
+       log(resultMap[j].toString());
+       String? getData = resultMap[j]['value'] ;
+     
 
         for (int i = 0; i < getLocalstoreData.length; i++) {
-          if (getData == getLocalstoreData[i]['id']) {
-            productName = getLocalstoreData[i]['plain1'];
+          if (getData! ==  getLocalstoreData[i]['id']) {
+             setState(() {
+            productName =  getLocalstoreData[i]['plain1'];
             CompanyName = getLocalstoreData[i]['cline3'];
-
-            // log(getLocalstoreData[i]['plain1']);
-            //   log(getLocalstoreData[i]['cline3']);
-
+             });
           }
         }
       }
     }
 
-//   for(int i=0;i<data.length;i++){
-//  if(getData ==data[i]['id'] ){
 
-//     log(data[i]['plain1']);
-//       log(data[i]['cline3']);
 
-//   }
+  
 
-// }
-
-//}
-
-//}
   }
 
   void handleClick(int item) {
@@ -1400,7 +1409,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(
+                            child:productName == null ? Text('') : Text(
                               '$productName',
                                style: TextStyle(
                                         color:Colors.black54
@@ -1433,7 +1442,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(
+                            child: CompanyName == null ? Text('') : Text(
                               '$CompanyName',
                                style: TextStyle(
                                         color:Colors.black54
@@ -1449,6 +1458,13 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                   ),
                 ),
               ),
+
+
+              // MaterialButton(onPressed: () async{
+              //   await fatchData();
+              // },
+              // child: Text('click'),
+              // )
             ],
           ),
         ),
