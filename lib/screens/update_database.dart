@@ -1,9 +1,8 @@
-import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:pharma_trax_scanner/Widgets/app_drawer.dart';
@@ -27,14 +26,14 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
   List<Map<String, dynamic>> data = [];
   String version = '';
   DateTime? updatedDate;
-   String? formattedDate;
+  String? formattedDate;
 
   Future<void> fatchData() async {
     data = await dbhelper.fatchInfoTable();
     version = data[0]['version'];
-    updatedDate =DateTime.parse(data[0]['update_date']);
+    updatedDate = DateTime.parse(data[0]['update_date']);
 
-     formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(updatedDate!);
+    formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(updatedDate!);
     setState(() {});
   }
 
@@ -50,39 +49,73 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
     final _height = MediaQuery.of(context).size.height;
     final auth = Provider.of<AuthProvider>(context);
 
-    updateDatabase() async {
-
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-
-          String? geEmail =await prefs.getString('email');
-          String? gettoken =await  prefs.getString('istoken');
-  
-   Loader.show(
-        context,
-        isSafeAreaOverlay: true,
-        isBottomBarOverlay: true,
-        overlayFromBottom: 80,
-        overlayColor: Colors.black26,
-        progressIndicator: const CircularProgressIndicator(
-          backgroundColor: Colors.white,
+    showLoading({String title = "Updating Database.."}) {
+      Get.dialog(
+        Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Container(
+              height: 40,
+              child: Row(
+                children: [
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  const Center(
+                    child: CircularProgressIndicator.adaptive(
+                      strokeWidth: 6.0,
+                      backgroundColor: Colors.blue,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    title,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
+        barrierDismissible: false,
       );
+    }
+
+    updateDatabase() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      String? geEmail = prefs.getString('email');
+      String? gettoken = prefs.getString('istoken');
+
+      //  Loader.show(
+      //       context,
+      //       isSafeAreaOverlay: true,
+      //       isBottomBarOverlay: true,
+      //       overlayFromBottom: 80,
+      //       overlayColor: Colors.black26,
+      //       progressIndicator: const CircularProgressIndicator(
+      //         backgroundColor: Colors.white,
+      //       ),
+      //     );
+      showLoading();
 
       if (!await InternetConnectionChecker().hasConnection) {
         Fluttertoast.showToast(
           msg: 'No Internet',
         );
         Loader.hide();
- 
-      }
-     else{
-       try{
- await auth.getUpdateApiCall( geEmail!, gettoken!);
- Loader.hide();
-        }catch(e){
+      } else {
+        try {
+          await auth.getUpdateApiCall(geEmail!, gettoken!);
+          Loader.hide();
+        } catch (e) {
           print(e);
         }
-     }
+      }
     }
 
     return Scaffold(
@@ -90,10 +123,13 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: colorPrimaryLightBlue,
-        title: const Text("Update Database",),
+        title: const Text(
+          "Update Database",
+        ),
       ),
       body: Container(
-        decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/dna.png'))),
+        decoration: const BoxDecoration(
+            image: DecorationImage(image: AssetImage('assets/images/dna.png'))),
         width: _width,
         height: _height,
         child: Center(
@@ -152,17 +188,20 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
                 ),
               ),
               Container(
- padding: EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 width: _width * 0.8,
                 height: 60,
                 child: MaterialButton(
-                 
                   color: colorPrimaryLightBlue,
                   onPressed: updateDatabase,
                   // style: ButtonStyle(
                   //   backgroundColor: Co
                   // ),
-                  child: const Text('UPDATE DATABASE',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500),),
+                  child: const Text(
+                    'UPDATE DATABASE',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w500),
+                  ),
                 ),
               ),
               const SizedBox(height: 5),

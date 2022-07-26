@@ -5,6 +5,8 @@ import 'dart:developer';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
@@ -25,6 +27,10 @@ class AuthProvider with ChangeNotifier {
   bool get isAuth {
     token != null;
     return true;
+  }
+
+  hideLoading() {
+    Get.back();
   }
 
   dynamic get token {
@@ -125,9 +131,9 @@ class AuthProvider with ChangeNotifier {
           log(getApiData.toString());
 
           insertDbInfo(getApiData['Info']);
-            for (int i = 0; i < getApiData['Companies'].length; i++) {
-              insertDbData(getApiData['Companies'][i]);
-            }
+          for (int i = 0; i < getApiData['Companies'].length; i++) {
+            insertDbData(getApiData['Companies'][i]);
+          }
 
           // Navigator.of(context).pushReplacementNamed(HomePage.routeName);
         }
@@ -137,11 +143,7 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-
-
-
-
-    getUpdateApiCall(String email, String token) async {
+  getUpdateApiCall(String email, String token) async {
     log(email);
 
     if (!await InternetConnectionChecker().hasConnection) {
@@ -179,15 +181,17 @@ class AuthProvider with ChangeNotifier {
           updatedDate = data[0]['update_date'];
 
           if (data != null) {
-            if (double.parse(version) <getApiData['Info']['Version']) {
+            if (double.parse(version) < getApiData['Info']['Version']) {
               insertDbInfo(getApiData['Info']);
               for (int i = 0; i < getApiData['Companies'].length; i++) {
                 insertDbData(getApiData['Companies'][i]);
               }
               Fluttertoast.showToast(msg: '${getApiData['Info']['Message']}');
-           
             } else {
-                  Fluttertoast.showToast(msg: 'Database Already Updated to Latest Version');
+              Fluttertoast.showToast(
+                  msg: 'Database Already Updated to Latest Version');
+
+              hideLoading();
             }
           } else {
             insertDbInfo(getApiData['Info']);
@@ -209,7 +213,8 @@ class AuthProvider with ChangeNotifier {
   void insertDbInfo(Map<String, dynamic> dbInfo) async {
     Map<String, dynamic> row = {
       DataBaseHelper.infoTableColumnVersion: dbInfo['Version'].toString(),
-      DataBaseHelper.infoTableColumnUpdateDate: DateTime.now().toIso8601String(),
+      DataBaseHelper.infoTableColumnUpdateDate:
+          DateTime.now().toIso8601String(),
       DataBaseHelper.infoTableColumnMessage: dbInfo['Message'].toString(),
       DataBaseHelper.infoTableColumnStatus: dbInfo['Status'].toString()
     };
