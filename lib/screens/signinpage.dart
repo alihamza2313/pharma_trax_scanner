@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -64,7 +62,10 @@ class _SigninpageState extends State<Signinpage> {
         ),
         barrierDismissible: false,
       );
-<<<<<<< HEAD
+    }
+
+    hideLoading() {
+      Get.back();
     }
 
     Future loginProcess() async {
@@ -72,38 +73,25 @@ class _SigninpageState extends State<Signinpage> {
 
       if (!await InternetConnectionChecker().hasConnection) {
         Fluttertoast.showToast(
-          msg: 'No Internet',
+          msg: 'Internet Error',
         );
         Loader.hide();
       } else {
         await auth.login(emailcontroller.text);
-=======
-     
-      try{
-          await auth.login(emailcontroller.text);
-       Navigator.of(context).pushReplacementNamed('/home_screen');
->>>>>>> origin/main
-        Loader.hide();
-      }catch(e){
-          Loader.hide();
-          Fluttertoast.showToast(msg: 'Something want wrong');
-      }
-      }
-    
 
-<<<<<<< HEAD
+        try {
+          await auth.login(emailcontroller.text);
+          Navigator.of(context).pushReplacementNamed('/home_screen');
+          Loader.hide();
+        } catch (e) {
+          Loader.hide();
+          Fluttertoast.showToast(msg: 'Something went wrong');
+        }
+      }
+    }
+
     void loginUserWithEmail() async {
       await loginProcess();
-      // Fluttertoast.showToast(msg: emailcontroller.text);
-      Navigator.of(context).pushReplacementNamed('/home_screen');
-=======
-    void loginUserWithEmail() async{
-   
-     await loginProcess();
-   
-    
-    
->>>>>>> origin/main
     }
 
     return Scaffold(

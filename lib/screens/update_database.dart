@@ -1,15 +1,7 @@
-<<<<<<< HEAD
-=======
-import 'dart:convert';
-import 'dart:developer';
-import 'dart:ffi';
-
->>>>>>> origin/main
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:pharma_trax_scanner/Widgets/app_drawer.dart';
@@ -39,12 +31,7 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
     data = await dbhelper.fatchInfoTable();
 
     version = data[0]['version'];
-<<<<<<< HEAD
     updatedDate = DateTime.parse(data[0]['update_date']);
-
-=======
-    updatedDate =DateTime.parse(data[0]['update_date']);
->>>>>>> origin/main
     formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(updatedDate!);
     setState(() {});
   }
@@ -95,7 +82,10 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
         ),
         barrierDismissible: false,
       );
-<<<<<<< HEAD
+    }
+
+    hideLoading() {
+      Get.back();
     }
 
     updateDatabase() async {
@@ -104,43 +94,23 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
       String? geEmail = prefs.getString('email');
       String? gettoken = prefs.getString('istoken');
 
-      //  Loader.show(
-      //       context,
-      //       isSafeAreaOverlay: true,
-      //       isBottomBarOverlay: true,
-      //       overlayFromBottom: 80,
-      //       overlayColor: Colors.black26,
-      //       progressIndicator: const CircularProgressIndicator(
-      //         backgroundColor: Colors.white,
-      //       ),
-      //     );
       showLoading();
 
       if (!await InternetConnectionChecker().hasConnection) {
         Fluttertoast.showToast(
           msg: 'No Internet',
         );
-        Loader.hide();
+        hideLoading();
       } else {
         try {
           await auth.getUpdateApiCall(geEmail!, gettoken!);
-          Loader.hide();
+          hideLoading();
         } catch (e) {
+          hideLoading();
+          Fluttertoast.showToast(msg: 'Something went wrong');
           print(e);
         }
       }
-=======
-    
-       try{
- await auth.getUpdateApiCall( geEmail!, gettoken!);
- Loader.hide();
-        }catch(e){
-          Loader.hide();
-           Fluttertoast.showToast(msg: 'Something want wrong');
-          print(e);
-        }
-     
->>>>>>> origin/main
     }
 
     return Scaffold(
