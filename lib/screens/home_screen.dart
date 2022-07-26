@@ -4,6 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pharma_trax_scanner/screens/barcode_scanner.dart';
 import 'package:pharma_trax_scanner/screens/data_matrix_scanner.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
+import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Widgets/app_drawer.dart';
@@ -57,6 +60,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+
   LogoutFunction() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLogin', false);
@@ -79,8 +83,10 @@ class _HomePageState extends State<HomePage> {
       drawer: const AppDrawer(),
       drawerEnableOpenDragGesture: false,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: colorPrimaryLightBlue,
-        onPressed: () {},
+        backgroundColor:colorPrimaryLightBlue ,
+        onPressed: () {
+          Share.share('https://play.google.com/store/apps/details?id=pk.pharmatrax.pharmatraxscanner');
+        },
         child: const Icon(
           Icons.share,
           color: Colors.white,
