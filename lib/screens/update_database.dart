@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:ffi';
+
+>>>>>>> origin/main
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,9 +37,14 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
 
   Future<void> fatchData() async {
     data = await dbhelper.fatchInfoTable();
+
     version = data[0]['version'];
+<<<<<<< HEAD
     updatedDate = DateTime.parse(data[0]['update_date']);
 
+=======
+    updatedDate =DateTime.parse(data[0]['update_date']);
+>>>>>>> origin/main
     formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(updatedDate!);
     setState(() {});
   }
@@ -83,6 +95,7 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
         ),
         barrierDismissible: false,
       );
+<<<<<<< HEAD
     }
 
     updateDatabase() async {
@@ -116,6 +129,18 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
           print(e);
         }
       }
+=======
+    
+       try{
+ await auth.getUpdateApiCall( geEmail!, gettoken!);
+ Loader.hide();
+        }catch(e){
+          Loader.hide();
+           Fluttertoast.showToast(msg: 'Something want wrong');
+          print(e);
+        }
+     
+>>>>>>> origin/main
     }
 
     return Scaffold(

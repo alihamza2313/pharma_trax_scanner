@@ -35,27 +35,33 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  SaveValueInPrefecnce() async {
-    prefs = await SharedPreferences.getInstance();
-    prefs!.setBool('isLogin', true);
+  SaveValueInPrefecnce()async{
+    
+ prefs = await SharedPreferences.getInstance();
+ prefs!.setBool('isLogin', true);
   }
 
-  getSharePrefenceValue() async {
-    prefs = await SharedPreferences.getInstance();
-    int? getExpireSecond = prefs!.getInt('isexpireSecond');
-    String? getexpiryDate = prefs!.getString('iscurentTime');
+  getSharePrefenceValue() async{
+ prefs = await SharedPreferences.getInstance();
+ String?  getExpireSecond = prefs!.getString('isexpireSecond');
+ String? getexpiryDate=prefs!.getString('iscurentTime');
 
-    log(getexpiryDate.toString());
+log(getexpiryDate.toString());
 
-    DateTime? now = DateTime.now();
-    final getdiffernce = now.difference(DateTime.parse(getexpiryDate!));
+ DateTime? now  = DateTime.now();
+ final getdiffernce = now.difference(DateTime.parse(getexpiryDate!));
 
-    log(getdiffernce.inSeconds.toString());
+ log(getdiffernce.inSeconds.toString());
 
-    if (getdiffernce.inSeconds >= getExpireSecond!) {
-      LogoutFunction();
-    }
-  }
+if(getdiffernce.inSeconds >= double.parse(getExpireSecond!)){
+
+LogoutFunction();
+
+}
+
+
+
+ 
 
   LogoutFunction() async {
     final prefs = await SharedPreferences.getInstance();

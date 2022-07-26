@@ -96,10 +96,10 @@ class DataBaseHelper {
   bool _check = true;
   Future<int?> insertTable1(Map<String, dynamic> row) async {
     Database? db = await instance.database;
-    if (_check) {
-      deleteTable1();
-      _check = false;
-    }
+    // if (db !=null) {
+     
+    //   // _check = false;
+    // }
     return await db!.insert(table1, row);
   }
 
