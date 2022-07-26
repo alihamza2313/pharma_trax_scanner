@@ -1,4 +1,4 @@
-package com.example.pharma_trax_scanner
+package pk.pharmatrax.pharmatraxscanner
 
 import io.flutter.embedding.android.FlutterActivity
 

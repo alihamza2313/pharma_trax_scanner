@@ -43,23 +43,23 @@ class _SigninpageState extends State<Signinpage> {
           backgroundColor: Colors.white,
         ),
       );
-
-      if (!await InternetConnectionChecker().hasConnection) {
-        Fluttertoast.showToast(
-          msg: 'No Internet',
-        );
+     
+      try{
+          await auth.login(emailcontroller.text);
+       Navigator.of(context).pushReplacementNamed('/home_screen');
         Loader.hide();
-      } else {
-        await auth.login(emailcontroller.text);
-        Loader.hide();
+      }catch(e){
+          Loader.hide();
+          Fluttertoast.showToast(msg: 'Something want wrong');
       }
-    }
+      }
+    
 
     void loginUserWithEmail() async{
    
      await loginProcess();
-       Fluttertoast.showToast(msg: emailcontroller.text);
-        Navigator.of(context).pushReplacementNamed('/home_screen');
+   
+    
     
     }
 

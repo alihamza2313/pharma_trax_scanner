@@ -57,7 +57,7 @@ getSharePrefenceValue();
 
   getSharePrefenceValue() async{
  prefs = await SharedPreferences.getInstance();
- int?  getExpireSecond = prefs!.getInt('isexpireSecond');
+ String?  getExpireSecond = prefs!.getString('isexpireSecond');
  String? getexpiryDate=prefs!.getString('iscurentTime');
 
 log(getexpiryDate.toString());
@@ -67,7 +67,7 @@ log(getexpiryDate.toString());
 
  log(getdiffernce.inSeconds.toString());
 
-if(getdiffernce.inSeconds >= getExpireSecond!){
+if(getdiffernce.inSeconds >= double.parse(getExpireSecond!)){
 
 LogoutFunction();
 

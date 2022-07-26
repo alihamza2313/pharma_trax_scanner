@@ -48,12 +48,21 @@ class AuthProvider with ChangeNotifier {
     try {
       await apiResponse(provinceBodyPayment, userId);
     } catch (e) {
+      Fluttertoast.showToast(msg: 'Something want wrong');
       print(e.toString());
     }
   }
 
   Future<void> apiResponse(String provinceBodyPayment, String getemail) async {
-    http.Response response = await http.post(
+
+    if (!await InternetConnectionChecker().hasConnection) {
+      Fluttertoast.showToast(
+        msg: 'Internet Error',
+      );
+    } 
+    else {
+ try{
+   http.Response response = await http.post(
         Uri.parse(
           'http://api.pharmasync.pk/api/account/register',
         ),
@@ -79,7 +88,7 @@ class AuthProvider with ChangeNotifier {
       await prefs.setBool('isLogin', true);
       await prefs.setString('istoken', _token!);
       //  prefs.setString('isexpire',_expiryDate!.toIso8601String());
-      await prefs.setInt('isexpireSecond', _expirySecond!);
+      await prefs.setString('isexpireSecond', _expirySecond.toString());
       await prefs.setString('iscurentTime', DateTime.now().toIso8601String());
       await prefs.setString('email', getemail);
 
@@ -92,23 +101,18 @@ class AuthProvider with ChangeNotifier {
       //   savePrefValue(provinceBodyPayment, getemail, _token, _expiryDate);
       // }
     } else {
+       Fluttertoast.showToast(msg: 'Something want wrong');
       print("Response not 200");
     }
+ }catch(e){
+ Fluttertoast.showToast(msg: 'Something want wrong');
+ }
+    }
+  
   }
 
   getAllDataApiCall(String email, String token) async {
-    log(email);
-
-    if (!await InternetConnectionChecker().hasConnection) {
-      Fluttertoast.showToast(
-        msg: 'No Internet',
-      );
-    } else {
-      // log(email.toString());
-      var provinceBodyPayment = jsonEncode(<String, String>{
-        'Email': email,
-      });
-      print(provinceBodyPayment);
+  
 
       try {
         http.Response response = await http.get(
@@ -123,37 +127,42 @@ class AuthProvider with ChangeNotifier {
           Map getApiData = jsonDecode(response.body);
 
           log(getApiData.toString());
+
+           await dbhelper.deleteTable1();
 
           insertDbInfo(getApiData['Info']);
             for (int i = 0; i < getApiData['Companies'].length; i++) {
               insertDbData(getApiData['Companies'][i]);
             }
 
+            List<Map<String,dynamic>>  data = await dbhelper.fatchTable1();
+            log(data.toString());
+
           // Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+        }else{
+           Fluttertoast.showToast(msg: 'Something want wrong');
         }
       } catch (e) {
+         Fluttertoast.showToast(msg: 'Something want wrong');
         e.toString();
       }
     }
-  }
+  
+  
 
 
 
 
 
     getUpdateApiCall(String email, String token) async {
-    log(email);
-
+    
     if (!await InternetConnectionChecker().hasConnection) {
       Fluttertoast.showToast(
         msg: 'No Internet',
       );
     } else {
       // log(email.toString());
-      var provinceBodyPayment = jsonEncode(<String, String>{
-        'Email': email,
-      });
-      print(provinceBodyPayment);
+      
 
       try {
         http.Response response = await http.get(
@@ -167,7 +176,7 @@ class AuthProvider with ChangeNotifier {
         if (response.statusCode == 200) {
           Map getApiData = jsonDecode(response.body);
 
-          log(getApiData.toString());
+       //   log(getApiData.toString());
 
           final dbhelper = DataBaseHelper.instance;
           List<Map<String, dynamic>> data = [];
@@ -180,25 +189,36 @@ class AuthProvider with ChangeNotifier {
 
           if (data != null) {
             if (double.parse(version) <getApiData['Info']['Version']) {
+              await dbhelper.deleteTable1();
               insertDbInfo(getApiData['Info']);
               for (int i = 0; i < getApiData['Companies'].length; i++) {
                 insertDbData(getApiData['Companies'][i]);
               }
+               List<Map<String,dynamic>>  data = await dbhelper.fatchTable1();
+            log(data.toString());
+
+
               Fluttertoast.showToast(msg: '${getApiData['Info']['Message']}');
            
             } else {
                   Fluttertoast.showToast(msg: 'Database Already Updated to Latest Version');
             }
           } else {
+            await dbhelper.deleteTable1();
             insertDbInfo(getApiData['Info']);
             for (int i = 0; i < getApiData['Companies'].length; i++) {
               insertDbData(getApiData['Companies'][i]);
             }
+             List<Map<String,dynamic>>  data = await dbhelper.fatchTable1();
+            log(data.toString());
           }
 
           // Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+        }else{
+           Fluttertoast.showToast(msg: 'Something want wrong');
         }
       } catch (e) {
+         Fluttertoast.showToast(msg: 'Something want wrong');
         e.toString();
       }
     }
@@ -213,11 +233,11 @@ class AuthProvider with ChangeNotifier {
       DataBaseHelper.infoTableColumnMessage: dbInfo['Message'].toString(),
       DataBaseHelper.infoTableColumnStatus: dbInfo['Status'].toString()
     };
-    final id = await dbhelper.insertInfoTable(row);
-    print("----------------------------");
-    print(id);
-    print(row);
-    print("----------------------------");
+     await dbhelper.insertInfoTable(row);
+    // print("----------------------------");
+    // print(id);
+    // print(row);
+    // print("----------------------------");
   }
 
   void insertDbData(Map<String, dynamic> dbData) async {
@@ -229,15 +249,20 @@ class AuthProvider with ChangeNotifier {
       DataBaseHelper.table1ColumnVersion: dbData['Version'].toString(),
       DataBaseHelper.table1ColumnIsModified: dbData['IsModified'].toString()
     };
-    final id = await dbhelper.insertTable1(row);
-    print("----------------------------");
-    print(id);
-    print(row);
-    print("----------------------------");
+     final id =  await dbhelper.insertTable1(row);
+    // print("----------------------------");
+    // // print(id);
+    // // print(row);
+    // print("----------------------------");
   }
+
+
+
 
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    await dbhelper.deleteTable1();
+    await dbhelper.deleteTable2();
 
     prefs.setBool('isLogin', false);
     prefs.setString('istoken', '');
@@ -246,4 +271,5 @@ class AuthProvider with ChangeNotifier {
     prefs.setString('email', '');
     prefs.setString('isexpireSecond', '');
   }
+
 }
