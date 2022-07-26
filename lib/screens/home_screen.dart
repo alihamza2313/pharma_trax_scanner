@@ -1,24 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:pharma_trax_scanner/screens/barcode_scanner.dart';
 import 'package:pharma_trax_scanner/screens/data_matrix_scanner.dart';
-import 'package:pharma_trax_scanner/screens/qr_result.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../Widgets/app_drawer.dart';
-
-import 'dart:async';
 import 'dart:developer';
-import 'dart:io' show Platform;
-
-import 'package:barcode_scan2/barcode_scan2.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -42,37 +31,31 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     getSharePrefenceValue();
 
-    SaveValueInPrefecnce();
+    // SaveValueInPrefecnce();
     super.initState();
   }
 
-  SaveValueInPrefecnce()async{
-    
- prefs = await SharedPreferences.getInstance();
- prefs!.setBool('isLogin', true);
+  SaveValueInPrefecnce() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs!.setBool('isLogin', true);
   }
 
-  getSharePrefenceValue() async{
- prefs = await SharedPreferences.getInstance();
- String?  getExpireSecond = prefs!.getString('isexpireSecond');
- String? getexpiryDate=prefs!.getString('iscurentTime');
+  getSharePrefenceValue() async {
+    prefs = await SharedPreferences.getInstance();
+    String? getExpireSecond = prefs!.getString('isexpireSecond');
+    String? getexpiryDate = prefs!.getString('iscurentTime');
 
-log(getexpiryDate.toString());
+    log(getexpiryDate.toString());
 
- DateTime? now  = DateTime.now();
- final getdiffernce = now.difference(DateTime.parse(getexpiryDate!));
+    DateTime? now = DateTime.now();
+    final getdiffernce = now.difference(DateTime.parse(getexpiryDate!));
 
- log(getdiffernce.inSeconds.toString());
+    log(getdiffernce.inSeconds.toString());
 
-if(getdiffernce.inSeconds >= double.parse(getExpireSecond!)){
-
-LogoutFunction();
-
-}
-
-
-
- 
+    if (getdiffernce.inSeconds >= double.parse(getExpireSecond!)) {
+      LogoutFunction();
+    }
+  }
 
   LogoutFunction() async {
     final prefs = await SharedPreferences.getInstance();
@@ -83,7 +66,9 @@ LogoutFunction();
     prefs.setString('email', '');
     prefs.setString('isexpireSecond', '');
 
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pop();
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacementNamed('/signin_page');
   }
 

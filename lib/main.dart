@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:pharma_trax_scanner/Widgets/about_pharma.dart';
 import 'package:pharma_trax_scanner/providers/auth_provider.dart';
 import 'package:pharma_trax_scanner/screens/home_screen.dart';
@@ -33,11 +34,9 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthProvider(),
         ),
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
-
-          
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
@@ -52,7 +51,7 @@ class MyApp extends StatelessWidget {
             '/line_level_hardware': (ctx) => const LineLevelHardware(),
             '/line_equipment': (ctx) => const Line_equipment(),
             '/how_it_works': (ctx) => const How_it_works(),
-            '/About-pharma': (context) =>  About_pharma()
+            '/About-pharma': (context) => About_pharma()
           }),
     );
   }
