@@ -65,7 +65,7 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
                   ),
                   const Center(
                     child: CircularProgressIndicator.adaptive(
-                      strokeWidth: 6.0,
+                      strokeWidth: 9.0,
                       backgroundColor: Colors.blue,
                     ),
                   ),
