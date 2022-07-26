@@ -1065,18 +1065,15 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
   Future<void> CheckValueExitInDbb() async {
      List<Map<String,dynamic>>  getLocalstoreData = await dbhelper.fatchTable1();
-print(getLocalstoreData.length.toString());
-    log(getLocalstoreData.toString());
-   log("/////////////////////////");
-   log(resultMap.toString());
+// print(getLocalstoreData.length.toString());
+//     log(getLocalstoreData.toString());
+  //  log("/////////////////////////");
+  //  log(resultMap.toString());
 
     for (int j = 0; j < resultMap.length; j++) {
       if (resultMap[j]['title'].toString().contains( "GTIN")) {
-        setState(() {
-          isGTINExistValue = true;
-
-        });
-       log(resultMap[j].toString());
+      
+      //  log(resultMap[j].toString());
        String? getData = resultMap[j]['value'] ;
      
 
@@ -1086,6 +1083,7 @@ print(getLocalstoreData.length.toString());
             productName =  getLocalstoreData[i]['plain1'];
             CompanyName = getLocalstoreData[i]['cline3'];
             suplychain = getLocalstoreData[i]['sline4'];
+            log("Supplu chain $suplychain");
              });
           }
         }
@@ -1376,7 +1374,7 @@ print(getLocalstoreData.length.toString());
               const SizedBox(
                 height: 20,
               ),
-             productName == null ? Container(
+             productName == null && CompanyName == null && suplychain ==null ? Container(): Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -1391,7 +1389,7 @@ print(getLocalstoreData.length.toString());
                     const SizedBox(
                       height: 20,
                     ),
-                    Row(
+                 productName == null ? Center():    Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -1424,7 +1422,7 @@ print(getLocalstoreData.length.toString());
                     const SizedBox(
                       height: 5,
                     ),
-                    Row(
+                 CompanyName == null ? Center():    Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -1458,7 +1456,7 @@ print(getLocalstoreData.length.toString());
                      const SizedBox(
                       height: 5,
                     ),
-                    Row(
+                  suplychain!.isEmpty && suplychain =="null" && suplychain == null  ? Container(child: Text("lkj;l"),): Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -1476,28 +1474,22 @@ print(getLocalstoreData.length.toString());
                         ),
                         Expanded(
                           flex: 2,
-                          child: suplychain == null ? Text('') : Text(
-                            '$suplychain',
+                          child:suplychain!.isEmpty && suplychain =="null" && suplychain == null ? Text('dd')  :Text(
+                            '${suplychain.toString()}',
                              style: TextStyle(
                                       color:Colors.black54
                                     ),
-                            //  style: const TextStyle(
-                            //      fontWeight: FontWeight.bold,
-                            //      color: blueColor1),
+                         
                           ),
                         ),
                       ],
                     ),
                   ],
                 ),
-              ):Container(),
+              ),
 
 
-              // MaterialButton(onPressed: () async{
-              //   await fatchData();
-              // },
-              // child: Text('click'),
-              // )
+           
             ],
           ),
         ),

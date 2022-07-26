@@ -40,8 +40,8 @@ class _SigninpageState extends State<Signinpage> {
             child: Row(
               children: [
                 
-                CircularProgressIndicator.adaptive(
-                  backgroundColor: Colors.blue,
+                CircularProgressIndicator(
+                 
                 ),
                 const SizedBox(
                   width: 20,
