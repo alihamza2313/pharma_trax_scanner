@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:pharma_trax_scanner/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,6 +23,7 @@ class Signinpage extends StatefulWidget {
 class _SigninpageState extends State<Signinpage> {
   TextEditingController emailcontroller = TextEditingController();
   SharedPreferences? prefs;
+  var screensize;
 
   @override
   Widget build(BuildContext context) {
@@ -36,27 +38,23 @@ class _SigninpageState extends State<Signinpage> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Container(
-              height: 40,
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  const Center(
-                    child: CircularProgressIndicator.adaptive(
-                      backgroundColor: Colors.blue,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Text(
-                    title,
-                  ),
-                ],
-              ),
+
+            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 25),
+            child: Row(
+              children: [
+                
+                CircularProgressIndicator.adaptive(
+                  backgroundColor: Colors.blue,
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  title,
+                ),
+              ],
+
+           
             ),
           ),
         ),
@@ -70,6 +68,11 @@ class _SigninpageState extends State<Signinpage> {
 
     Future loginProcess() async {
       showLoading();
+
+      Future.delayed(Duration(milliseconds: 5000), () {
+        showLoading();
+        Get.off(HomePage());
+      });
 
       if (!await InternetConnectionChecker().hasConnection) {
         Fluttertoast.showToast(

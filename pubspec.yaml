@@ -66,7 +66,8 @@ dev_dependencies:
   flutter_launcher_icons: ^0.9.3
 flutter_icons:
  image_path: "assets/images/splash_logo.png"
- android: 'launcher_icon'
+ android: true
+ remove_alpha_iso: true
  ios: true
 
   # The "flutter_lints" package below contains a set of recommended lints to

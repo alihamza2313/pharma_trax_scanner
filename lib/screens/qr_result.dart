@@ -583,6 +583,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
   String? productName;
   String? CompanyName;
+  String? suplychain;
 
   bool isGTINExistValue = false;
 
@@ -1084,6 +1085,7 @@ print(getLocalstoreData.length.toString());
              setState(() {
             productName =  getLocalstoreData[i]['plain1'];
             CompanyName = getLocalstoreData[i]['cline3'];
+            suplychain = getLocalstoreData[i]['sline4'];
              });
           }
         }
@@ -1374,90 +1376,121 @@ print(getLocalstoreData.length.toString());
               const SizedBox(
                 height: 20,
               ),
-              Visibility(
-                visible: isGTINExistValue,
-                child: Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "MASTER DATA",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.black.withOpacity(0.5),
+             productName == null ? Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "MASTER DATA",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            'PRODUCT: ',
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: colorPrimaryLightBlue),
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Expanded(
-                            child: Text(
-                              'PRODUCT: ',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: colorPrimaryLightBlue),
-                            ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child:productName == null ? Text('') : Text(
+                            '$productName',
+                             style: TextStyle(
+                                      color:Colors.black54
+                                    ),
+                            // style: const TextStyle(
+                            //     fontWeight: FontWeight.bold,
+                            //     color: blueColor1),
                           ),
-                          const SizedBox(
-                            width: 5,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            'COMPANY: ',
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: colorPrimaryLightBlue),
                           ),
-                          Expanded(
-                            flex: 2,
-                            child:productName == null ? Text('') : Text(
-                              '$productName',
-                               style: TextStyle(
-                                        color:Colors.black54
-                                      ),
-                              // style: const TextStyle(
-                              //     fontWeight: FontWeight.bold,
-                              //     color: blueColor1),
-                            ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: CompanyName == null ? Text('') : Text(
+                            '$CompanyName',
+                             style: TextStyle(
+                                      color:Colors.black54
+                                    ),
+                            //  style: const TextStyle(
+                            //      fontWeight: FontWeight.bold,
+                            //      color: blueColor1),
                           ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Expanded(
-                            child: Text(
-                              'COMPANY: ',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: colorPrimaryLightBlue),
-                            ),
+                        ),
+                      ],
+                    ),
+
+                     const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            'SUPPLY CHAIN: ',
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: colorPrimaryLightBlue),
                           ),
-                          const SizedBox(
-                            width: 5,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: suplychain == null ? Text('') : Text(
+                            '$suplychain',
+                             style: TextStyle(
+                                      color:Colors.black54
+                                    ),
+                            //  style: const TextStyle(
+                            //      fontWeight: FontWeight.bold,
+                            //      color: blueColor1),
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: CompanyName == null ? Text('') : Text(
-                              '$CompanyName',
-                               style: TextStyle(
-                                        color:Colors.black54
-                                      ),
-                              //  style: const TextStyle(
-                              //      fontWeight: FontWeight.bold,
-                              //      color: blueColor1),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
+              ):Container(),
 
 
               // MaterialButton(onPressed: () async{

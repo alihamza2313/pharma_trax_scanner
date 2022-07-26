@@ -55,34 +55,29 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Container(
-              height: 40,
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  const Center(
-                    child: CircularProgressIndicator.adaptive(
-                      strokeWidth: 6.0,
-                      backgroundColor: Colors.blue,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Text(
-                    title,
-                  ),
-                ],
-              ),
+
+            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 25),
+            child: Row(
+              children: [
+                
+                CircularProgressIndicator(
+                
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  title,
+                ),
+              ],
+
             ),
           ),
         ),
         barrierDismissible: false,
       );
     }
+
 
     hideLoading() {
       Get.back();
