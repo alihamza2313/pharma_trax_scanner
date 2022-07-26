@@ -7,6 +7,7 @@ import 'package:pharma_trax_scanner/screens/data_matrix_scanner.dart';
 import 'package:pharma_trax_scanner/screens/qr_result.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -106,7 +107,9 @@ LogoutFunction() async{
       drawerEnableOpenDragGesture: false,
       floatingActionButton: FloatingActionButton(
         backgroundColor:colorPrimaryLightBlue ,
-        onPressed: () {},
+        onPressed: () {
+          Share.share('https://play.google.com/store/apps/details?id=pk.pharmatrax.pharmatraxscanner');
+        },
         child: const Icon(
           Icons.share,
           color: Colors.white,
