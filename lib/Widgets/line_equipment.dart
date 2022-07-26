@@ -39,9 +39,7 @@ physically rejects the product to rejection bins</li><li>&nbsp;&nbsp;Mechanical
  packaging Offline</li><li>&nbsp;&nbsp;Online Label Application</li><li>&nbsp;&nbsp;Customized Solutions</li></ul> <br /><p>
 </font></p>For more details, please visit: <font color="#4A90CC"> <a href="https://www.pharmatrax.pk/pharma-trax-pro-line/">
 Pharma Trax Pro Line</a></p>
-  
   """;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +47,7 @@ Pharma Trax Pro Line</a></p>
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Line Equipment"),
+        backgroundColor: const Color(0xFF4A90CC),
       ),
       body: SingleChildScrollView(
         child: Column(

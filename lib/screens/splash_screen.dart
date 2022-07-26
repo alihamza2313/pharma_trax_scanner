@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pharma_trax_scanner/screens/home_screen.dart';
 import 'package:pharma_trax_scanner/screens/signinpage.dart';
+import 'package:pharma_trax_scanner/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreenPage extends StatefulWidget {
@@ -19,7 +20,33 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
 
   @override
   void initState() {
-    getSharePrefenceValue();
+ 
+ getSharePrefenceValue();
+
+
+ Timer(Duration(seconds: 1),
+          (){
+
+            if(isLoginvalid==true){
+               Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(builder:
+                                                          (context) => 
+                                                          HomePage()
+                                                         ));
+
+
+            }else{
+
+              Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(builder:
+                                                          (context) => 
+                                                          Signinpage()
+                                                         ));
+            }
+
+          }
+                                       
+         );
 
     Timer(const Duration(seconds: 5), () {
       if (isLoginvalid == true) {
@@ -51,13 +78,13 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/dna.png'),
-          ),
+          color: colorPrimaryLightDark,
         ),
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-      ),
+        height: MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,
+        
+        child: Center(child: Image.asset('assets/images/splash_logo.png',height: 100,),),
+        ),
+
     );
   }
 }

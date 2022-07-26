@@ -50,17 +50,15 @@ Pharma Trax Pro Line</a></p>
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Line Level HardWare"),
+        backgroundColor: const Color(0xFF4A90CC),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HtmlWidget(
-              htmldata1
-            ),
+            HtmlWidget(htmldata1),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
               child: HtmlWidget(
-                
                 htmldata,
                 onTapUrl: (url) async {
                   // print(url);

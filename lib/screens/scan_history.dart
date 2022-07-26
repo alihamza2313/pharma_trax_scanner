@@ -92,8 +92,9 @@ class _ScanHistoryState extends State<ScanHistory> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const AppDrawer(),
-      backgroundColor: Colors.white,
+      
       appBar: AppBar(
+        backgroundColor: colorPrimaryLightBlue,
         title: const Text("Scan History"),
         actions: [
           IconButton(
@@ -106,64 +107,71 @@ class _ScanHistoryState extends State<ScanHistory> {
           // add more IconButton
         ],
       ),
-      body: Column(children: [
-        Container(
-          height: 30,
-          width: MediaQuery.of(context).size.width,
-          color: Colors.black12,
-          child: const Padding(
-            padding: EdgeInsets.all(5.0),
-            child: Text('Scan History'),
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => QRCodeResultScreen(
-                            data[index]['id'],
-                            data[index]['barcode_type'],
-                            false),
+      body: SafeArea(
+        child: Container(
+          
+          height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/dna.png',),fit: BoxFit.cover)),
+          child: Column(
+            children: [
+            Container(
+              height: 30,
+              width: MediaQuery.of(context).size.width,
+              color: resultbackgroundColor,
+              child: const Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Text('Scan History',style: TextStyle(color: Colors.black45),),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => QRCodeResultScreen(
+                                  data[index]['id'],
+                                  data[index]['barcode_type'],
+                                  false),
+                            ));
+                      },
+                      child: ListTile(
+                        leading:
+                            '${data[index]['barcode_type']}' == 'DATA MATRIX (GS1)'
+                                ? const CircleAvatar(
+                                    backgroundColor: blueColor1,
+                                    child: ImageIcon(
+                                      AssetImage("assets/images/data_matrix.png"),
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const CircleAvatar(
+                                    backgroundColor: blueColor1,
+                                    child: ImageIcon(
+                                      AssetImage("assets/images/code_128.png"),
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                        title: Text(
+                            "${data[index]['id'].substring(1, data[index]['id'].length)}",
+                            overflow: TextOverflow.ellipsis),
+                        subtitle: Text(
+                            "Type: ${data[index]['barcode_type']}\nScanned At: ${data[index]['date']}"),
                       ),
-                    );
-                  },
-                  child: ListTile(
-                    leading:
-                        '${data[index]['barcode_type']}' == 'DATA MATRIX (GS1)'
-                            ? const CircleAvatar(
-                                backgroundColor: blueColor1,
-                                child: ImageIcon(
-                                  AssetImage("assets/images/data_matrix.png"),
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const CircleAvatar(
-                                backgroundColor: blueColor1,
-                                child: ImageIcon(
-                                  AssetImage("assets/images/code_128.png"),
-                                  color: Colors.white,
-                                ),
-                              ),
-                    title: Text(
-                        "${data[index]['id'].substring(1, data[index]['id'].length)}",
-                        overflow: TextOverflow.ellipsis),
-                    subtitle: Text(
-                      "Type: ${data[index]['barcode_type']}\nScanned At: ${data[index]['date']}",
                     ),
-                  ),
-                ),
-                const Divider(),
-              ]);
-            },
-          ),
+                    const Divider(),
+                  ]);
+                },
+              ),
+            ),
+          ]),
         ),
-      ]),
+      ),
     );
   }
 }

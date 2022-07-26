@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:pharma_trax_scanner/Widgets/about_pharma.dart';
 import 'package:pharma_trax_scanner/providers/auth_provider.dart';
 import 'package:pharma_trax_scanner/screens/home_screen.dart';
@@ -8,6 +9,7 @@ import 'package:pharma_trax_scanner/Widgets/how_it_works.dart';
 import 'package:pharma_trax_scanner/Widgets/line_equipment.dart';
 import 'package:pharma_trax_scanner/screens/scan_history.dart';
 import 'package:pharma_trax_scanner/screens/signinpage.dart';
+import 'package:pharma_trax_scanner/screens/splash_screen.dart';
 import 'package:pharma_trax_scanner/screens/update_database.dart';
 import 'package:provider/provider.dart';
 
@@ -32,14 +34,14 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthProvider(),
         ),
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
           // home: Signinpage.isAuth ? const HomePage(): const Signinpage(),
-          home: const HomePage(),
+          home: const SplashScreenPage(),
           //this is routes
           routes: {
             '/signin_page': (ctx) => const Signinpage(),
@@ -49,7 +51,7 @@ class MyApp extends StatelessWidget {
             '/line_level_hardware': (ctx) => const LineLevelHardware(),
             '/line_equipment': (ctx) => const Line_equipment(),
             '/how_it_works': (ctx) => const How_it_works(),
-            '/About-pharma': (context) => const About_pharma()
+            '/About-pharma': (context) => About_pharma()
           }),
     );
   }

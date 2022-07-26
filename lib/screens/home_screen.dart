@@ -3,20 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pharma_trax_scanner/screens/barcode_scanner.dart';
 import 'package:pharma_trax_scanner/screens/data_matrix_scanner.dart';
-import 'package:pharma_trax_scanner/screens/qr_result.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../Widgets/app_drawer.dart';
-
-import 'dart:async';
 import 'dart:developer';
-import 'dart:io' show Platform;
-
-import 'package:barcode_scan2/barcode_scan2.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -30,35 +21,65 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
-SharedPreferences? prefs;
+  SharedPreferences? prefs;
 
+//List list = [];
 
-//List list = []; 
+//List list = [];
 
-
-
-@override
+  @override
   void initState() {
+    getSharePrefenceValue();
 
-   // list = [1,2,3]; 
-  SaveValueInPrefecnce();
+    // SaveValueInPrefecnce();
     super.initState();
   }
-  SaveValueInPrefecnce()async{
-    
- prefs = await SharedPreferences.getInstance();
- prefs!.setBool('isLogin', true);
+
+  SaveValueInPrefecnce() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs!.setBool('isLogin', true);
   }
 
+  getSharePrefenceValue() async {
+    prefs = await SharedPreferences.getInstance();
+    String? getExpireSecond = prefs!.getString('isexpireSecond');
+    String? getexpiryDate = prefs!.getString('iscurentTime');
+
+    log(getexpiryDate.toString());
+
+    DateTime? now = DateTime.now();
+    final getdiffernce = now.difference(DateTime.parse(getexpiryDate!));
+
+    log(getdiffernce.inSeconds.toString());
+
+    if (getdiffernce.inSeconds >= double.parse(getExpireSecond!)) {
+      LogoutFunction();
+    }
+  }
+
+  LogoutFunction() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLogin', false);
+    prefs.setString('istoken', '');
+    prefs.setString('isexpire', '');
+    prefs.setString('iscurentTime', '');
+    prefs.setString('email', '');
+    prefs.setString('isexpireSecond', '');
+
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pop();
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pushReplacementNamed('/signin_page');
+  }
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       key: _key,
       drawer: const AppDrawer(),
       drawerEnableOpenDragGesture: false,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: colorPrimaryLightBlue,
         onPressed: () {},
         child: const Icon(
           Icons.share,
@@ -66,12 +87,14 @@ SharedPreferences? prefs;
         ),
       ),
       appBar: AppBar(
-        backgroundColor: blueColor1,
+        backgroundColor: colorPrimaryLightBlue,
         leading: Builder(
           builder: (context) => // Ensure Scaffold is in context
               IconButton(
                   icon: const Icon(Icons.menu),
-                  onPressed: () => Scaffold.of(context).openDrawer()),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  }),
         ),
         title: const Text("Pharma Trax Scanner"),
       ),
@@ -94,90 +117,48 @@ SharedPreferences? prefs;
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                                  const EdgeInsets.symmetric(horizontal: 35),
                               child:
                                   Image.asset('assets/images/pharmatrax.png'),
                             ),
-                            Text(
-                              "Pakistan's first Track and Trace Serialization Solution Complete End to End Turnkey Solution Market Leader in Track and Trace Solutions",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.inter(
-                                color: textColor,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 16,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                "Pakistan's first Track and Trace Serialization Solution Complete End to End Turnkey Solution Market Leader in Track and Trace Solutions",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.inter(
+                                  color: textColor,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ],
                         ),
-
-
-
-          // Row(children: list.map((item)  {
-
-            
-          //         if (item == 1) {
-          //           return Text(
-          //             item.toString(),
-          //             style: TextStyle(
-          //               fontWeight: FontWeight.bold,
-          //             ),
-          //           );
-          //         }else{
-          //           return Text(item.toString());
-          //         }
-          //         // if (item < 100) {
-          //         //   return Padding(
-          //         //     padding: const EdgeInsets.all(8.0),
-          //         //     child: Text(
-          //         //       item.toString(),
-          //         //       style: const TextStyle(
-          //         //         fontWeight: FontWeight.bold,
-          //         //         color: Colors.red,
-          //         //       ),
-          //         //     ),
-          //         //   );
-          //         // }
-          //         // if (item == 100) {
-          //         //   return Padding(
-          //         //     padding: const EdgeInsets.all(8.0),
-          //         //     child: Text(
-          //         //       item.toString(),
-          //         //       style: TextStyle(
-          //         //         fontWeight: FontWeight.bold,
-          //         //         color: Colors.green,
-          //         //       ),
-          //         //     ),
-          //         //   );
-          //         // }
-                  
-          //       }).toList()),
-
-
-
-                        
-
- 
-
                         const SizedBox(
-                          height: 30,
+                          height: 35,
                         ),
                         Column(
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                    builder: (_) => const BarCodeScanner()));
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                            const BarCodeScanner()));
                               },
                               child: Container(
-                                color: blueColor1,
-                                width: MediaQuery.of(context).size.width * 0.7,
+                                color: colorPrimaryLightBlue,
+                                width: MediaQuery.of(context).size.width * 0.7 -
+                                    20,
                                 child: Row(
                                   children: [
                                     Container(
                                       padding: const EdgeInsets.all(10),
                                       height: 50,
                                       width: 50,
-                                      color: blueColor2,
+                                      color: colorPrimaryLightDark,
                                       child: Image.asset(
                                           'assets/images/code_128.png'),
                                     ),
@@ -188,7 +169,7 @@ SharedPreferences? prefs;
                                         style: GoogleFonts.inter(
                                           fontWeight: FontWeight.w500,
                                           color: Colors.white,
-                                          fontSize: 16,
+                                          fontSize: 14,
                                         ),
                                       ),
                                     ),
@@ -201,22 +182,20 @@ SharedPreferences? prefs;
                             ),
                             GestureDetector(
                               onTap: () {
-
-                           
-
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => const DataMatrixSacnner()));
                               },
                               child: Container(
-                                color: blueColor1,
-                                width: MediaQuery.of(context).size.width * 0.7,
+                                color: colorPrimaryLightBlue,
+                                width: MediaQuery.of(context).size.width * 0.7 -
+                                    20,
                                 child: Row(
                                   children: [
                                     Container(
                                       padding: const EdgeInsets.all(10),
                                       height: 50,
                                       width: 50,
-                                      color: blueColor2,
+                                      color: colorPrimaryLightDark,
                                       child: Image.asset(
                                           'assets/images/data_matrix.png'),
                                     ),
@@ -227,7 +206,7 @@ SharedPreferences? prefs;
                                         style: GoogleFonts.inter(
                                           fontWeight: FontWeight.w500,
                                           color: Colors.white,
-                                          fontSize: 16,
+                                          fontSize: 15,
                                         ),
                                       ),
                                     )
@@ -258,7 +237,7 @@ SharedPreferences? prefs;
                       style: GoogleFonts.inter(
                         fontWeight: FontWeight.w500,
                         color: textColor,
-                        fontSize: 16,
+                        fontSize: 15,
                       ),
                     ),
                     const SizedBox(
@@ -275,7 +254,7 @@ SharedPreferences? prefs;
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.w500,
                               color: textColor,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                           const SizedBox(
@@ -288,7 +267,7 @@ SharedPreferences? prefs;
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
                                     color: blueColor1,
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     decoration: TextDecoration.underline,
                                   ),
                                   recognizer: TapGestureRecognizer()
@@ -308,7 +287,7 @@ SharedPreferences? prefs;
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
                           color: blueColor1,
-                          fontSize: 16,
+                          fontSize: 14,
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
@@ -330,7 +309,7 @@ SharedPreferences? prefs;
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
                           color: blueColor1,
-                          fontSize: 16,
+                          fontSize: 14,
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
@@ -351,7 +330,7 @@ SharedPreferences? prefs;
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 100, vertical: 5),
+                          horizontal: 130, vertical: 5),
                       // height: 120,
                       // width: 120,
                       child: Image.asset('assets/images/zauq.png'),
@@ -363,7 +342,4 @@ SharedPreferences? prefs;
       ),
     );
   }
-
-
-   
 }

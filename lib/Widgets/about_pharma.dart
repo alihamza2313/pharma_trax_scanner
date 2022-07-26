@@ -13,7 +13,7 @@ class About_pharma extends StatelessWidget {
   static const htmldata1 = """ 
 
   
-  <img src="asset:assets/images/about_pharma_trax.png" alt="web-img2" >
+
 
 
   
@@ -48,28 +48,45 @@ Pharma Trax Pro Line</a></p>
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("About Pharma Trax"),
+        backgroundColor: const Color(0xFF4A90CC),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            HtmlWidget(htmldata1),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
-              child: HtmlWidget(
-                htmldata,
-                onTapUrl: (url) async {
-                  // print(url);
-                  var filePath = Uri.parse(url);
-                  //final Uri uri = Uri.file(filePath);
+      body: Stack(children: <Widget>[
+        // Container(
+        //   decoration: const BoxDecoration(
+        //       image: DecorationImage(
+        //           image: AssetImage('assets/images/about_pharma_trax.png'))),
+        // ),
+        SingleChildScrollView(
+          child: Column(
+            // ignore: prefer_const_literals_to_create_immutables
 
-                  await launchUrl(filePath);
-                  return true;
-                },
+            children: [
+              // Image(image: AssetImage("assets/images/about_pharma_trax.png")),
+
+              Image.asset(
+                "assets/images/about_pharma_trax.png",
+                color: const Color(0xFF4A90CC).withOpacity(0.9),
+                colorBlendMode: BlendMode.colorBurn,
               ),
-            ),
-          ],
+              HtmlWidget(htmldata1),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+                child: HtmlWidget(
+                  htmldata,
+                  onTapUrl: (url) async {
+                    // print(url);
+                    var filePath = Uri.parse(url);
+                    //final Uri uri = Uri.file(filePath);
+
+                    await launchUrl(filePath);
+                    return true;
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+      ]),
     );
   }
 }
