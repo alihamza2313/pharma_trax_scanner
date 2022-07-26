@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,35 +27,71 @@ class _SigninpageState extends State<Signinpage> {
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
 
-    Future loginProcess() async {
-      Loader.show(
-        context,
-        isSafeAreaOverlay: true,
-        isBottomBarOverlay: true,
-        overlayFromBottom: 80,
-        overlayColor: Colors.black26,
-        progressIndicator: const CircularProgressIndicator(
-          backgroundColor: Colors.white,
+    showLoading(
+        {String title =
+            "Please wait while we are initializing \nsettings for you..."}) {
+      Get.dialog(
+        Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Container(
+              height: 40,
+              child: Row(
+                children: [
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  const Center(
+                    child: CircularProgressIndicator.adaptive(
+                      backgroundColor: Colors.blue,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    title,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
+        barrierDismissible: false,
       );
-     
-      try{
-          await auth.login(emailcontroller.text);
-       Navigator.of(context).pushReplacementNamed('/home_screen');
-        Loader.hide();
-      }catch(e){
-          Loader.hide();
-          Fluttertoast.showToast(msg: 'Something want wrong');
-      }
-      }
-    
+    }
 
-    void loginUserWithEmail() async{
-   
-     await loginProcess();
-   
-    
-    
+    hideLoading() {
+      Get.back();
+    }
+
+    Future loginProcess() async {
+      showLoading();
+
+      if (!await InternetConnectionChecker().hasConnection) {
+        Fluttertoast.showToast(
+          msg: 'Internet Error',
+        );
+        Loader.hide();
+      } else {
+        await auth.login(emailcontroller.text);
+
+        try {
+          await auth.login(emailcontroller.text);
+          Navigator.of(context).pushReplacementNamed('/home_screen');
+          Loader.hide();
+        } catch (e) {
+          Loader.hide();
+          Fluttertoast.showToast(msg: 'Something went wrong');
+        }
+      }
+    }
+
+    void loginUserWithEmail() async {
+      await loginProcess();
     }
 
     return Scaffold(
@@ -92,9 +129,8 @@ class _SigninpageState extends State<Signinpage> {
                   Column(
                     children: <Widget>[
                       Container(
-                        // ignore: prefer_const_constructors
                         decoration: const BoxDecoration(
-                          color: Colors.blue,
+                          color: Color(0xFF4A90CC),
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(15.0),
                               topRight: Radius.circular(15.0)),
@@ -159,10 +195,13 @@ class _SigninpageState extends State<Signinpage> {
                             ),
                             const SizedBox(height: 10),
                             TextButton(
-                              child: const Text('Login'),
+                              style: ButtonStyle(
+                                  foregroundColor: MaterialStateProperty.all(
+                                      Color(0xFF4A90CC))),
                               onPressed: () {
                                 loginUserWithEmail();
                               },
+                              child: const Text('Login'),
                             ),
                           ],
                         ),
