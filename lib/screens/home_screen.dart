@@ -32,23 +32,20 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
-SharedPreferences? prefs;
+  SharedPreferences? prefs;
 
+//List list = [];
 
-//List list = []; 
+//List list = [];
 
-
-
-
-@override
+  @override
   void initState() {
+    getSharePrefenceValue();
 
-getSharePrefenceValue();
-
-
-  SaveValueInPrefecnce();
+    SaveValueInPrefecnce();
     super.initState();
   }
+
   SaveValueInPrefecnce()async{
     
  prefs = await SharedPreferences.getInstance();
@@ -74,38 +71,30 @@ LogoutFunction();
 }
 
 
+
+ 
+
+  LogoutFunction() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLogin', false);
+    prefs.setString('istoken', '');
+    prefs.setString('isexpire', '');
+    prefs.setString('iscurentTime', '');
+    prefs.setString('email', '');
+    prefs.setString('isexpireSecond', '');
+
+    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacementNamed('/signin_page');
   }
-
-
-LogoutFunction() async{
-
-  final prefs = await SharedPreferences.getInstance();
-        prefs.setBool('isLogin',false);
-         prefs.setString('istoken','');
-            prefs.setString('isexpire','');
-               prefs.setString('iscurentTime', '');
-                  prefs.setString('email','');
-                   prefs.setString('isexpireSecond','');
-
-                    
-            Navigator.of(context).pop();
-            Navigator.of(context).pushReplacementNamed('/signin_page');
-
-}  
-
 
   @override
   Widget build(BuildContext context) {
-
-
-    
-   
     return Scaffold(
       key: _key,
       drawer: const AppDrawer(),
       drawerEnableOpenDragGesture: false,
       floatingActionButton: FloatingActionButton(
-        backgroundColor:colorPrimaryLightBlue ,
+        backgroundColor: colorPrimaryLightBlue,
         onPressed: () {},
         child: const Icon(
           Icons.share,
@@ -118,13 +107,9 @@ LogoutFunction() async{
           builder: (context) => // Ensure Scaffold is in context
               IconButton(
                   icon: const Icon(Icons.menu),
-                  onPressed: (){
-                     Scaffold.of(context).openDrawer();
-                    
-                   
-                  
-                  }
-                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  }),
         ),
         title: const Text("Pharma Trax Scanner"),
       ),
@@ -152,7 +137,8 @@ LogoutFunction() async{
                                   Image.asset('assets/images/pharmatrax.png'),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               child: Text(
                                 "Pakistan's first Track and Trace Serialization Solution Complete End to End Turnkey Solution Market Leader in Track and Trace Solutions",
                                 textAlign: TextAlign.center,
@@ -165,9 +151,6 @@ LogoutFunction() async{
                             ),
                           ],
                         ),
-
- 
-
                         const SizedBox(
                           height: 35,
                         ),
@@ -175,12 +158,15 @@ LogoutFunction() async{
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                    builder: (_) => const BarCodeScanner()));
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                            const BarCodeScanner()));
                               },
                               child: Container(
                                 color: colorPrimaryLightBlue,
-                                width: MediaQuery.of(context).size.width * 0.7-20,
+                                width: MediaQuery.of(context).size.width * 0.7 -
+                                    20,
                                 child: Row(
                                   children: [
                                     Container(
@@ -211,15 +197,13 @@ LogoutFunction() async{
                             ),
                             GestureDetector(
                               onTap: () {
-
-                           
-
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => const DataMatrixSacnner()));
                               },
                               child: Container(
                                 color: colorPrimaryLightBlue,
-                                width: MediaQuery.of(context).size.width * 0.7-20,
+                                width: MediaQuery.of(context).size.width * 0.7 -
+                                    20,
                                 child: Row(
                                   children: [
                                     Container(
@@ -373,7 +357,4 @@ LogoutFunction() async{
       ),
     );
   }
-
-
-   
 }
