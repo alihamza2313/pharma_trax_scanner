@@ -38,27 +38,23 @@ class _SigninpageState extends State<Signinpage> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Container(
-              height: 40,
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 30,
-                  ),
-                  const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.blue,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 30,
-                  ),
-                  Text(
-                    title,
-                  ),
-                ],
-              ),
+
+            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 25),
+            child: Row(
+              children: [
+                
+                CircularProgressIndicator.adaptive(
+                  backgroundColor: Colors.blue,
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  title,
+                ),
+              ],
+
+           
             ),
           ),
         ),
