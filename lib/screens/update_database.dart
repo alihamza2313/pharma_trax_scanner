@@ -55,6 +55,7 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
+
             padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 25),
             child: Row(
               children: [
@@ -69,6 +70,7 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
                   title,
                 ),
               ],
+
             ),
           ),
         ),
