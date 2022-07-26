@@ -31,53 +31,54 @@ class _ScanHistoryState extends State<ScanHistory> {
 
   void _delete(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (BuildContext ctx) {
-          return AlertDialog(
-            title: Row(
-              children: [
-                Container(
-                  height: 30,
-                  width: 30,
-                  padding: const EdgeInsets.only(right: 5),
-                  child: Image.asset(
-                    "assets/images/trash.png",
-                    color: blueColor2,
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Container(
+                height: 30,
+                width: 30,
+                padding: const EdgeInsets.only(right: 5),
+                child: Image.asset(
+                  "assets/images/trash.png",
+                  color: blueColor2,
+                ),
+              ),
+              const Text('Clear History'),
+            ],
+          ),
+          content: const Text('Do you really want to clear scan history?'),
+          actions: [
+            TextButton(
+                child: Text(
+                  'CANCEL',
+                  style: TextStyle(
+                    color: Colors.red.shade700,
                   ),
                 ),
-                const Text('Clear History'),
-              ],
-            ),
-            content: const Text('Do you really want to clear scan history?'),
-            actions: [
-              TextButton(
-                  child: Text(
-                    'CANCEL',
-                    style: TextStyle(
-                      color: Colors.red.shade700,
-                    ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }),
+            TextButton(
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                    color: Colors.red.shade700,
                   ),
-                  onPressed: () {
+                ),
+                onPressed: () async {
+                  await dbhelper.deleteTable2();
+                  setState(() {
+                    _isShown = false;
+                    data = [];
                     Navigator.of(context).pop();
-                  }),
-              TextButton(
-                  child: Text(
-                    'OK',
-                    style: TextStyle(
-                      color: Colors.red.shade700,
-                    ),
-                  ),
-                  onPressed: () async {
-                    await dbhelper.deleteTable2();
-                    setState(() {
-                      _isShown = false;
-                      data = [];
-                      Navigator.of(context).pop();
-                    });
-                  })
-            ],
-          );
-        });
+                  });
+                })
+          ],
+        );
+      },
+    );
   }
 
   @override
