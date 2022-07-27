@@ -48,24 +48,16 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
                                        
          );
 
-    Timer(const Duration(seconds: 5), () {
-      if (isLoginvalid == true) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) =>const HomePage(),
-          ),
-        );
-      } else {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) =>const Signinpage(),
-          ),
-        );
-      }
-    });
+   
 
     super.initState();
   }
+@override
+  void dispose() {
+    super.dispose();
+    
+  }
+  
 
   getSharePrefenceValue() async {
     prefs = await SharedPreferences.getInstance();

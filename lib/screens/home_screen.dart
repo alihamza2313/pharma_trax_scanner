@@ -1,8 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pharma_trax_scanner/Widgets/db_helper.dart';
 import 'package:pharma_trax_scanner/screens/barcode_scanner.dart';
 import 'package:pharma_trax_scanner/screens/data_matrix_scanner.dart';
+import 'package:pharma_trax_scanner/screens/signinpage.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -43,6 +46,8 @@ class _HomePageState extends State<HomePage> {
     prefs!.setBool('isLogin', true);
   }
 
+  final dbhelper = DataBaseHelper.instance;
+
   getSharePrefenceValue() async {
     prefs = await SharedPreferences.getInstance();
     String? getExpireSecond = prefs!.getString('isexpireSecond');
@@ -56,6 +61,7 @@ class _HomePageState extends State<HomePage> {
     log(getdiffernce.inSeconds.toString());
 
     if (getdiffernce.inSeconds >= double.parse(getExpireSecond!)) {
+      
       LogoutFunction();
     }
   }
@@ -63,17 +69,19 @@ class _HomePageState extends State<HomePage> {
 
   LogoutFunction() async {
     final prefs = await SharedPreferences.getInstance();
+    await dbhelper.deleteTable1();
+    await dbhelper.deleteTable2();
     prefs.setBool('isLogin', false);
     prefs.setString('istoken', '');
-    prefs.setString('isexpire', '');
+    // prefs.setString('isexpire','');
     prefs.setString('iscurentTime', '');
     prefs.setString('email', '');
     prefs.setString('isexpireSecond', '');
 
     // ignore: use_build_context_synchronously
-    Navigator.of(context).pop();
+    //Navigator.of(context).pop();
     // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacementNamed('/signin_page');
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Signinpage()));
   }
 
   @override

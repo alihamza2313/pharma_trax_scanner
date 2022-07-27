@@ -66,35 +66,31 @@ class _SigninpageState extends State<Signinpage> {
       Get.back();
     }
 
-    Future loginProcess() async {
+    Future<void> loginProcess() async {
       showLoading();
-
-      Future.delayed(Duration(milliseconds: 5000), () {
-        showLoading();
-        Get.off(HomePage());
-      });
-
-      if (!await InternetConnectionChecker().hasConnection) {
-        Fluttertoast.showToast(
-          msg: 'Internet Error',
-        );
-        Loader.hide();
-      } else {
-        await auth.login(emailcontroller.text);
-
-        try {
-          await auth.login(emailcontroller.text);
-          Navigator.of(context).pushReplacementNamed('/home_screen');
-          Loader.hide();
-        } catch (e) {
-          Loader.hide();
-          Fluttertoast.showToast(msg: 'Something went wrong');
-        }
-      }
+    await auth.login(emailcontroller.text);
+     
+        
+      
     }
 
     void loginUserWithEmail() async {
-      await loginProcess();
+
+      if(emailcontroller.text.isEmpty){
+        Fluttertoast.showToast(msg: 'Email address invalid. Please enter a valid email address.');
+      }else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(emailcontroller.text)){
+     Fluttertoast.showToast(msg: 'Email address invalid. Please enter a valid email address.');
+      }
+      else{
+ await loginProcess();
+      hideLoading();
+       Navigator.of(context).pushReplacementNamed('/home_screen');
+       
+      }
+
+
+         
+         
     }
 
     return Scaffold(
@@ -196,15 +192,18 @@ class _SigninpageState extends State<Signinpage> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 10),
-                            TextButton(
-                              style: ButtonStyle(
-                                  foregroundColor: MaterialStateProperty.all(
-                                      Color(0xFF4A90CC))),
+                            const SizedBox(height: 20),
+                            MaterialButton(
+                              minWidth: MediaQuery.of(context).size.width,
+                              height: 50,
+                              color: colorPrimaryLightBlue,
+                              // style: ButtonStyle(
+                              //     foregroundColor: MaterialStateProperty.all(
+                              //         Color(0xFF4A90CC))),
                               onPressed: () {
                                 loginUserWithEmail();
                               },
-                              child: const Text('Login'),
+                              child: const Text('START',style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w400),),
                             ),
                           ],
                         ),

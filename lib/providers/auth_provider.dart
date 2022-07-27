@@ -43,15 +43,15 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> login(String userId) async {
     var provinceBodyPayment = jsonEncode(<String, String>{
-      'Email': userId,
+      'Email': userId.toString(),
       'Password': 'P@ssw0rd',
-      'ConfirmPassword': 'P@ssw0rd',
+      'ConfirmPassword':'P@ssw0rd',
     });
     print(provinceBodyPayment);
     try {
       await apiResponse(provinceBodyPayment, userId);
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Something want wrong');
+      Fluttertoast.showToast(msg:'Something went wrong');
       print(e.toString());
     }
   }
@@ -80,11 +80,6 @@ class AuthProvider with ChangeNotifier {
           _expirySecond = getResponseData['expires_in'];
           _token = getResponseData['access_token'];
 
-          //  log(_expiryDate.toString() );
-          //     log(_expirySecond.toString() );
-          //  log(_expirySecond.toString() );
-
-          //_autoLogout();
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setBool('isLogin', true);
           await prefs.setString('istoken', _token!);
@@ -99,15 +94,12 @@ class AuthProvider with ChangeNotifier {
 
           getAllDataApiCall(getemail, _token!);
 
-          // if (!prefs.containsKey('userData')) {
-          //   savePrefValue(provinceBodyPayment, getemail, _token, _expiryDate);
-          // }
         } else {
-          Fluttertoast.showToast(msg: 'Something want wrong');
+          Fluttertoast.showToast(msg: 'Something went wrong');
           print("Response not 200");
         }
       } catch (e) {
-        Fluttertoast.showToast(msg: 'Something want wrong');
+        Fluttertoast.showToast(msg: 'Something went wrong');
       }
     }
   }
@@ -139,10 +131,10 @@ class AuthProvider with ChangeNotifier {
 
         // Navigator.of(context).pushReplacementNamed(HomePage.routeName);
       } else {
-        Fluttertoast.showToast(msg: 'Something want wrong');
+        Fluttertoast.showToast(msg: 'Something went wrong');
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Something want wrong');
+      Fluttertoast.showToast(msg: 'Something went wrong');
       e.toString();
     }
   }
@@ -179,9 +171,12 @@ class AuthProvider with ChangeNotifier {
           updatedDate = data[0]['update_date'];
 
           if (data != null) {
+            insertDbInfo(getApiData['Info']);
+
             if (double.parse(version) < getApiData['Info']['Version']) {
               await dbhelper.deleteTable1();
-              insertDbInfo(getApiData['Info']);
+
+              // insertDbInfo(getApiData['Info']);
               for (int i = 0; i < getApiData['Companies'].length; i++) {
                 insertDbData(getApiData['Companies'][i]);
               }
@@ -199,16 +194,16 @@ class AuthProvider with ChangeNotifier {
             for (int i = 0; i < getApiData['Companies'].length; i++) {
               insertDbData(getApiData['Companies'][i]);
             }
-            List<Map<String, dynamic>> data = await dbhelper.fatchTable1();
-            log(data.toString());
+            // List<Map<String, dynamic>> data = await dbhelper.fatchTable1();
+            // log(data.toString());
           }
 
           // Navigator.of(context).pushReplacementNamed(HomePage.routeName);
         } else {
-          Fluttertoast.showToast(msg: 'Something want wrong');
+          Fluttertoast.showToast(msg: 'Something went wrong');
         }
       } catch (e) {
-        Fluttertoast.showToast(msg: 'Something want wrong');
+        Fluttertoast.showToast(msg: 'Something went wrong');
         e.toString();
       }
     }
@@ -224,7 +219,7 @@ class AuthProvider with ChangeNotifier {
       DataBaseHelper.infoTableColumnMessage: dbInfo['Message'].toString(),
       DataBaseHelper.infoTableColumnStatus: dbInfo['Status'].toString()
     };
-    await dbhelper.insertInfoTable(row);
+    final id = await dbhelper.insertInfoTable(row);
     // print("----------------------------");
     // print(id);
     // print(row);
@@ -233,12 +228,12 @@ class AuthProvider with ChangeNotifier {
 
   void insertDbData(Map<String, dynamic> dbData) async {
     Map<String, dynamic> row = {
-      DataBaseHelper.table1ColumnId: dbData['Id'].toString(),
-      DataBaseHelper.table1ColumnPlain1: dbData['Pline1'].toString(),
-      DataBaseHelper.table1ColumnCline3: dbData['Cline3'].toString(),
-      DataBaseHelper.table1ColumnSline4: dbData['Sline4'].toString(),
-      DataBaseHelper.table1ColumnVersion: dbData['Version'].toString(),
-      DataBaseHelper.table1ColumnIsModified: dbData['IsModified'].toString()
+      DataBaseHelper.table1ColumnId: dbData['Id'],
+      DataBaseHelper.table1ColumnPlain1: dbData['Pline1'],
+      DataBaseHelper.table1ColumnCline3: dbData['Cline3'],
+      DataBaseHelper.table1ColumnSline4: dbData['Sline4'],
+      DataBaseHelper.table1ColumnVersion: dbData['Version'],
+      DataBaseHelper.table1ColumnIsModified: dbData['IsModified']
     };
     final id = await dbhelper.insertTable1(row);
     // print("----------------------------");
@@ -251,7 +246,6 @@ class AuthProvider with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await dbhelper.deleteTable1();
     await dbhelper.deleteTable2();
-
     prefs.setBool('isLogin', false);
     prefs.setString('istoken', '');
     // prefs.setString('isexpire','');

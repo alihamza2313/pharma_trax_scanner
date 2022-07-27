@@ -1,5 +1,7 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -22,24 +24,30 @@ class UpdateDatabase extends StatefulWidget {
 
 class _UpdateDatabaseState extends State<UpdateDatabase> {
   final dbhelper = DataBaseHelper.instance;
-  List<Map<String, dynamic>> data = [];
-  String version = '';
+  List<Map<String, dynamic>>? data = [];
+  String? version;
   DateTime? updatedDate;
   String? formattedDate;
 
-  Future<void> fatchData() async {
-    data = await dbhelper.fatchInfoTable();
 
-    version = data[0]['version'];
-    updatedDate = DateTime.parse(data[0]['update_date']);
-    formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(updatedDate!);
-    setState(() {});
-  }
 
   @override
   void initState() {
     fatchData();
     super.initState();
+  }
+
+     fatchData() async {
+    data=[];
+    data = await dbhelper.fatchInfoTable();
+ 
+       version =  data![0]['version'];
+    updatedDate =  DateTime.parse(data![0]['update_date']);
+    formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(updatedDate!);
+  log(data.toString());
+    setState(() {
+      
+    });
   }
 
   @override
@@ -97,14 +105,27 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
         );
         hideLoading();
       } else {
-        try {
+         log(data.toString());
           await auth.getUpdateApiCall(geEmail!, gettoken!);
+          
           hideLoading();
-        } catch (e) {
-          hideLoading();
-          Fluttertoast.showToast(msg: 'Something went wrong');
-          print(e);
-        }
+         Timer(Duration(seconds: 1),
+          ()async{
+            fatchData();
+            //    //data =[];
+            // List<Map<String,dynamic>> data2 = await dbhelper.fatchInfoTable();
+            // log(data2.toString());
+
+          });
+            
+
+        // setState(() {
+        //   fatchData();
+        // });
+          
+ 
+          
+        
       }
     }
 
@@ -146,7 +167,7 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
                             fontWeight: FontWeight.w500,
                             color: Colors.black54),
                         children: <InlineSpan>[
-                          TextSpan(
+                        version == null ? TextSpan():  TextSpan(
                             text: version,
                             style: const TextStyle(
                                 fontSize: 16,

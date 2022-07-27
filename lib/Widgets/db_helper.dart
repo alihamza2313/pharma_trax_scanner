@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 
 class DataBaseHelper {
   static String databaseName = "pharam_trax_scanner.db";
-  static int databaseVersion = 1;
+  static int databaseVersion = 2;
 
   // Info Table name "dbinfo" has info of data base
   static String infoTable = "dbinfo";
@@ -65,7 +65,7 @@ class DataBaseHelper {
         $table1ColumnId TEXT PRIMARY KEY,
         $table1ColumnPlain1 TEXT NOT NULL,
         $table1ColumnCline3 TEXT NOT NULL,
-        $table1ColumnSline4 TEXT NOT NULL,
+        $table1ColumnSline4 TEXT,
         $table1ColumnVersion TEXT NOT NULL,
         $table1ColumnIsModified TEXT NOT NULL
       )''');

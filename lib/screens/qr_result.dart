@@ -583,7 +583,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
   String? productName;
   String? CompanyName;
-  String? suplychain;
+  String? suplychain=null ;
 
   bool isGTINExistValue = false;
 
@@ -1083,7 +1083,9 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
             productName =  getLocalstoreData[i]['plain1'];
             CompanyName = getLocalstoreData[i]['cline3'];
             suplychain = getLocalstoreData[i]['sline4'];
-            log("Supplu chain $suplychain");
+
+
+            log("Supplu chain ${suplychain.toString()}");
              });
           }
         }
@@ -1456,7 +1458,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                      const SizedBox(
                       height: 5,
                     ),
-                  suplychain!.isEmpty && suplychain =="null" && suplychain == null  ? Container(child: Text("lkj;l"),): Row(
+                  suplychain==null && suplychain.runtimeType == Null ? Container(): Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -1474,8 +1476,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                         ),
                         Expanded(
                           flex: 2,
-                          child:suplychain!.isEmpty && suplychain =="null" && suplychain == null ? Text('dd')  :Text(
-                            '${suplychain.toString()}',
+                          child:Text(
+                            '${suplychain}',
                              style: TextStyle(
                                       color:Colors.black54
                                     ),

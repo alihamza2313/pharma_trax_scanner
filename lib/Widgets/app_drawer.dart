@@ -203,6 +203,8 @@ class _AppDrawerState extends State<AppDrawer> {
             setState(() {
               indexClicked = 3;
             });
+
+            auth.logout();
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/signin_page');
           },
