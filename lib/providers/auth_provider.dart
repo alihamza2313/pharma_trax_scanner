@@ -13,6 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthProvider with ChangeNotifier {
   SharedPreferences? prefs;
 
+  bool? isLoginorNot =false;
+
   String? message;
 
   String? _token = '';
@@ -41,32 +43,42 @@ class AuthProvider with ChangeNotifier {
     return _userId!;
   }
 
-  Future<void> login(String userId) async {
+  Future<bool> login(String userId) async {
     var provinceBodyPayment = jsonEncode(<String, String>{
-      'Email': userId.toString(),
+      'Email': userId.trim(),
       'Password': 'P@ssw0rd',
       'ConfirmPassword':'P@ssw0rd',
     });
     print(provinceBodyPayment);
     try {
-      await apiResponse(provinceBodyPayment, userId);
+     bool result =  await apiResponse(provinceBodyPayment, userId);
+     if(result == true){
+            return true;
+          }
+          else{
+            return false;
+          }
     } catch (e) {
       Fluttertoast.showToast(msg:'Something went wrong');
       print(e.toString());
+      return false;
     }
   }
 
-  Future<void> apiResponse(String provinceBodyPayment, String getemail) async {
+  Future<bool> apiResponse(String provinceBodyPayment, String getemail) async {
     if (!await InternetConnectionChecker().hasConnection) {
       Fluttertoast.showToast(
         msg: 'Internet Error',
       );
+      return false;
     } else {
       try {
         http.Response response = await http.post(
             Uri.parse(
-              'http://api.pharmasync.pk/api/account/register',
+              'https://api.pharmasync.pk/api/account/register',
             ),
+
+            
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             },
@@ -76,38 +88,52 @@ class AuthProvider with ChangeNotifier {
           Map getResponseData = jsonDecode(response.body);
 
           log(getResponseData.toString());
-          _expiryDate = getResponseData["expires"];
+          //_expiryDate = getResponseData["expires"] as DateTime;
           _expirySecond = getResponseData['expires_in'];
           _token = getResponseData['access_token'];
 
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setBool('isLogin', true);
-          await prefs.setString('istoken', _token!);
+           prefs.setBool('isLogin', true);
+           prefs.setString('istoken', _token!);
           //  prefs.setString('isexpire',_expiryDate!.toIso8601String());
-          await prefs.setString('isexpireSecond', _expirySecond.toString());
-          await prefs.setString(
+           prefs.setString('isexpireSecond', _expirySecond.toString());
+           prefs.setString(
               'iscurentTime', DateTime.now().toIso8601String());
-          await prefs.setString('email', getemail);
+           prefs.setString('email', getemail);
 
-          log(_expiryDate.toString());
+         // log(_expiryDate.toString());
           log(DateTime.now().millisecondsSinceEpoch.toInt().toString());
 
-          getAllDataApiCall(getemail, _token!);
+         bool getresult = await getAllDataApiCall(getemail, _token!);
+          if(getresult == true){
+            return true;
+          }
+          else{
+            return false;
+          }
 
         } else {
           Fluttertoast.showToast(msg: 'Something went wrong');
           print("Response not 200");
+          return false;
         }
       } catch (e) {
         Fluttertoast.showToast(msg: 'Something went wrong');
+        return false;
       }
     }
   }
 
-  getAllDataApiCall(String email, String token) async {
+ Future<bool> getAllDataApiCall(String email, String token) async {
+   if (!await InternetConnectionChecker().hasConnection) {
+      Fluttertoast.showToast(
+        msg: 'Internet Error',
+      );
+      return false;
+    }else{
     try {
       http.Response response = await http.get(
-        Uri.parse('http://api.pharmasync.pk/api/gtin'),
+        Uri.parse('https://api.pharmasync.pk/api/gtin'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer ${token}',
@@ -128,14 +154,17 @@ class AuthProvider with ChangeNotifier {
 
         List<Map<String, dynamic>> data = await dbhelper.fatchTable1();
         log(data.toString());
-
+    return true;
         // Navigator.of(context).pushReplacementNamed(HomePage.routeName);
       } else {
         Fluttertoast.showToast(msg: 'Something went wrong');
+            return false;
       }
     } catch (e) {
       Fluttertoast.showToast(msg: 'Something went wrong');
       e.toString();
+      return false;
+    }
     }
   }
 
@@ -149,7 +178,7 @@ class AuthProvider with ChangeNotifier {
 
       try {
         http.Response response = await http.get(
-          Uri.parse('http://api.pharmasync.pk/api/gtin'),
+          Uri.parse('https://api.pharmasync.pk/api/gtin'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer ${token}',
@@ -253,4 +282,29 @@ class AuthProvider with ChangeNotifier {
     prefs.setString('email', '');
     prefs.setString('isexpireSecond', '');
   }
+
+
+
+
+
+// Future<bool?> CheckUserExist() async{
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   return  (prefs.getBool('isLogin') == null) ? false : prefs.getBool('isLogin');
+
+   
+
+// }
+
+
+
+
+  
+
+  
+  
+
+
+
+
+
 }

@@ -42,32 +42,39 @@ Pharma Trax Pro Line</a></p>
   """;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const AppDrawer(),
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text("Line Equipment"),
-        backgroundColor: const Color(0xFF4A90CC),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            HtmlWidget(htmldata1),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
-              child: HtmlWidget(
-                htmldata,
-                onTapUrl: (url) async {
-                  // print(url);
-                  var filePath = Uri.parse(url);
-                  //final Uri uri = Uri.file(filePath);
-
-                  await launchUrl(filePath);
-                  return true;
-                },
+   Future<bool> _onWillPop() async {
+       await Navigator.of(context).pushReplacementNamed('/home_screen');
+    return true;
+  }
+    return WillPopScope(
+      onWillPop:_onWillPop,
+      child: Scaffold(
+        drawer: const AppDrawer(),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: const Text("Line Equipment"),
+          backgroundColor: const Color(0xFF4A90CC),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              HtmlWidget(htmldata1),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+                child: HtmlWidget(
+                  htmldata,
+                  onTapUrl: (url) async {
+                    // print(url);
+                    var filePath = Uri.parse(url);
+                    //final Uri uri = Uri.file(filePath);
+    
+                    await launchUrl(filePath);
+                    return true;
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

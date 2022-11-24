@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:pharma_trax_scanner/utils/colors.dart';
@@ -19,7 +20,8 @@ class QRCodeResultScreen extends StatefulWidget {
   String? qrCode;
   String? typeText;
   bool? isScanFile;
-  QRCodeResultScreen(this.qrCode, this.typeText, this.isScanFile, {Key? key})
+  String? rawByteCode;
+  QRCodeResultScreen(this.qrCode, this.typeText, this.isScanFile, {Key? key,this.rawByteCode})
       : super(key: key);
 
   @override
@@ -578,6 +580,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
   List getLocalstoreData = [];
   List qrResultConvertList = [];
   String? getSpecialCharacter;
+    String? getSpecialCharacterLastIndex;
   String? afterAlldataNewstringg;
   String? getSpecialcharcatershape;
 
@@ -592,23 +595,34 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
   @override
   void initState() {
 
+
+    log(widget.qrCode!);
+
  CheckValueExitInDbb();
 
 // fatchData();
-    if (widget.isScanFile!) {
-      insertScanData(widget.qrCode.toString(), widget.typeText.toString());
-      widget.isScanFile = false;
-    }
+    
     String? getqrcoderesult = widget.qrCode.toString();
 
     replaceAllspecialcharacter =
-        getqrcoderesult.replaceAll(RegExp('[^A-Za-z0-9]'), 'NFC');
+        getqrcoderesult.replaceAll(RegExp('[^A-Za-z0-9]'), 'FNC');
     log(getqrcoderesult);
     getSpecialcharcatershape = getqrcoderesult[0];
 
     getSpecialCharacter = getqrcoderesult.codeUnitAt(0).toString();
 
+    log(getSpecialCharacter.toString());
+    getSpecialCharacterLastIndex = getqrcoderesult.codeUnitAt(widget.qrCode!.length-1).toString();
+
+    if (widget.isScanFile!) {
+      insertScanData(widget.qrCode.toString(), getSpecialCharacter =="29"? 'DATA MATRIX (GS1)':'DATA MATRIX');
+      widget.isScanFile = false;
+    }
+
     if (getSpecialCharacter == "29") {
+
+      
+
       for (int i = 0; i < widget.qrCode!.length; i++) {
         qrResultConvertList.add(widget.qrCode![i].toString());
       }
@@ -617,7 +631,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
       CheckValueForTest(widget.qrCode.toString());
     } else {
-      log("inValid Data Matrix");
+      log("invalid Data Matrix");
     }
 
 //    log(resultMap.toString());
@@ -635,7 +649,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
       DataBaseHelper.table2ColumnId: qrData,
       DataBaseHelper.table2ColumnBarcodeType: qrType,
       DataBaseHelper.table2ColumnDate:
-          DateFormat('dd:MM:yy').add_jm().format(DateTime.now()).toString()
+          DateFormat('yyyy-MM-dd hh:mm').format(DateTime.now()).toString()
     };
     final id = await dbhelper.insertTable2(row);
     print("----------------------------");
@@ -645,8 +659,28 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
   CheckValueForTest(String? newStringafterSpecialCharcter) async {
   
+if(newStringafterSpecialCharcter!.length==1){
 
-    if (newStringafterSpecialCharcter!.codeUnitAt(0).toString() == "29") {
+  if(newStringafterSpecialCharcter == widget.qrCode!.substring(widget.qrCode!.length-1)){
+   // print("The Value of Last Index ${widget.qrCode!.length-1}");
+     if(newStringafterSpecialCharcter.codeUnitAt(0).toString() =="29" ){
+     Future.delayed(Duration.zero, () {
+    Get.defaultDialog(
+      title: 'Alert',
+   titleStyle: TextStyle(fontWeight: FontWeight.bold),
+       
+      content: Text('FNC Not Required At Index ${widget.qrCode!.length-1}',style: TextStyle(fontWeight: FontWeight.w500),)
+      
+
+    );
+    });
+  
+// log("No Need this");
+  }
+  }
+ 
+}else{
+  if (newStringafterSpecialCharcter.codeUnitAt(0).toString() == "29") {
       String? newStringDeleteFirstIndex = newStringafterSpecialCharcter
           .substring(1, newStringafterSpecialCharcter.length);
 
@@ -671,6 +705,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
           // get Length of String and Save Other Map toi display
 
           if (getLength! > getLengthafterCode.length) {
+            log("the allow length greater than curretn sting length");
             log(getLengthafterCode);
 
             String? getFirstVIIStringg = getLengthafterCode;
@@ -697,7 +732,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 CheckValueForTest(afterAlldataNewstringg);
               });
             } else {
-              afterAlldataNewstringg = getLengthafterCode;
+             String afterAlldataNewstringgnoExistSpecial = getLengthafterCode;
 
               log(getFirstVIIStringg);
               log(afterAlldataNewstringg!);
@@ -705,11 +740,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               resultMap.add({
                 'identifer': key["identifer"],
                 'title': key["title"],
-                'value': getFirstVIIStringg
+                'value': afterAlldataNewstringgnoExistSpecial
               });
-              setState(() {
-                CheckValueForTest(afterAlldataNewstringg);
-              });
+              // setState(() {
+              //   CheckValueForTest(afterAlldataNewstringg);
+              // });
             }
           } else {
             String? getFirstVIIStringg =
@@ -752,10 +787,15 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               });
             }
           }
-        } else if (key['identifer'] == getFirstthreeIndex) {
+        } 
+        else if (key['identifer'] == getFirstthreeIndex) {
           String? getLengthafterCode = newStringDeleteFirstIndex.substring(
               3, newStringDeleteFirstIndex.length);
           log(getLengthafterCode);
+
+          //log(getLengthafterCode.length.toString());
+          int? SizeOfstring = getLengthafterCode.length;
+          log(SizeOfstring.toString());
 
 // get Length of Map key Value so that get number of string which define map
 
@@ -764,12 +804,14 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
 
           // get Length of String and Save Other Map toi display
 
-          if (getLength! > getLengthafterCode.length) {
+          if (getLength! > SizeOfstring) {
+            log("the max length greater than available string length");
             log(getLengthafterCode);
 
             String? getFirstVIIStringg = getLengthafterCode;
 
             if (getFirstVIIStringg.contains(getSpecialcharcatershape!)) {
+              log("The special charecher exist last value");
               int? getIndex =
                   getFirstVIIStringg.indexOf(getSpecialcharcatershape!);
 
@@ -791,19 +833,19 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 CheckValueForTest(afterAlldataNewstringg);
               });
             } else {
-              afterAlldataNewstringg = getLengthafterCode;
+            String  afterAlldataNewstringgnoSpecial = getLengthafterCode;
 
-              log(getFirstVIIStringg);
-              log(afterAlldataNewstringg!);
+              log(afterAlldataNewstringgnoSpecial);
+              //log(afterAlldataNewstringg!);
 
               resultMap.add({
                 'identifer': key["identifer"],
                 'title': key["title"],
-                'value': getFirstVIIStringg
+                'value': afterAlldataNewstringgnoSpecial
               });
-              setState(() {
-                CheckValueForTest(afterAlldataNewstringg);
-              });
+            // setState(() {
+               //CheckValueForTest(afterAlldataNewstringgnoSpecial);
+            //  });
             }
           } else {
             String? getFirstVIIStringg =
@@ -885,7 +927,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 CheckValueForTest(afterAlldataNewstringg);
               });
             } else {
-              afterAlldataNewstringg = getLengthafterCode;
+             String afterAlldataNewstringgnoExist = getLengthafterCode;
 
               log(getFirstVIIStringg);
               log(afterAlldataNewstringg!);
@@ -893,11 +935,11 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               resultMap.add({
                 'identifer': key["identifer"],
                 'title': key["title"],
-                'value': getFirstVIIStringg
+                'value': afterAlldataNewstringgnoExist
               });
-              setState(() {
-                CheckValueForTest(afterAlldataNewstringg);
-              });
+              // setState(() {
+              //   CheckValueForTest(afterAlldataNewstringg);
+              // });
             }
           } else {
             String? getFirstVIIStringg =
@@ -985,7 +1027,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 CheckValueForTest(afterAlldataNewstringg);
               });
             } else {
-              afterAlldataNewstringg = getLengthafterCode;
+            String?  afterAlldataNewstringgnotExist = getLengthafterCode;
 
               log(getFirstVIIStringg);
               log(afterAlldataNewstringg!);
@@ -993,12 +1035,12 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               resultMap.add({
                 'identifer': key["identifer"],
                 'title': key["title"],
-                'value': getFirstVIIStringg
+                'value': afterAlldataNewstringgnotExist
               });
 
-              setState(() {
-                CheckValueForTest(afterAlldataNewstringg);
-              });
+              // setState(() {
+              //   CheckValueForTest(afterAlldataNewstringg);
+              // });
             }
           } else {
             String? getFirstVIIStringg =
@@ -1045,6 +1087,8 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
         }
       }
     }
+}
+    
   }
 
 
@@ -1110,32 +1154,163 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
   }
 
   final _screenShotController = ScreenshotController();
-  Future shareScreenshot(Uint8List bytes) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final image = File("${directory.path}/flutter.png"); //for share ScreenShot
-    image.writeAsBytesSync(bytes);
-    await Share.shareFiles([image.path]);
+  // Future shareScreenshot(Uint8List bytes) async {
+  //   final directory = await getApplicationDocumentsDirectory();
+  //   final image = File("${directory.path}/flutter.png"); //for share ScreenShot
+  //   image.writeAsBytesSync(bytes);
+  //   await Share.shareFiles([image.path]);
+  // }
+
+Future<void> shareScreenshot(Uint8List bytes) async {
+    final box = context.findRenderObject() as RenderBox?;
+    if (bytes != null) {
+      final directory = await getApplicationDocumentsDirectory();
+      final imagePath = await File('${directory.path}/flutter.png').create();
+      await imagePath.writeAsBytes(bytes);
+
+      /// Share Plugin
+      await Share.shareFiles([imagePath.path],
+          sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
+    } else {
+      Fluttertoast.showToast(msg: "null image");
+      print("image null");
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
+
+  
+    // return Screenshot(
+    //   controller: _screenShotController,
+    //   child: Scaffold(
+    //     floatingActionButton: SpeedDial(
+          
+    //       childMargin:
+    //           const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+    //       // icon: Icons.add,
+    //       animatedIcon: AnimatedIcons.menu_close,
+    //       backgroundColor: colorPrimaryLightBlue,
+    //       childPadding: EdgeInsets.symmetric(vertical: 8),
+    //       animationDuration:const Duration(milliseconds: 350),
+          
+
+    //       children: [
+    //         SpeedDialChild(
+    //             child: const ImageIcon(AssetImage("assets/images/copy.png"),color:Colors.white),
+    //             label: "Copy Result",
+    //             labelStyle: const TextStyle(color: Colors.white),
+    //             backgroundColor: copybuttonColor,
+    //             labelBackgroundColor: Colors.black,
+    //             onTap: () async {
+    //               await FlutterClipboard.copy(replaceAllspecialcharacter!);
+    //               Fluttertoast.showToast(
+                    
+    //                   msg: "Result Copied!",
+    //                   toastLength: Toast.LENGTH_SHORT,
+    //                   timeInSecForIosWeb: 2,
+    //                   gravity: ToastGravity.CENTER,
+    //                   backgroundColor: Colors.black);
+    //             }),
+    //         SpeedDialChild(
+    //             child: const ImageIcon(AssetImage("assets/images/share.png"),color:Colors.white),
+    //             label: "Share Result",
+    //             labelStyle: const TextStyle(color: Colors.white),
+    //             labelBackgroundColor: Colors.black,
+    //             backgroundColor: sharebuttonColor,
+    //             onTap: () async {
+    //               await Share.share(replaceAllspecialcharacter!);
+    //             }),
+    //         SpeedDialChild(
+    //             child: const ImageIcon(
+                  
+    //                 AssetImage("assets/images/screenshot.png"),color:Colors.white),
+    //             label: "Share ScreenShot",
+                
+    //             labelStyle: const TextStyle(color: Colors.white),
+    //             labelBackgroundColor: Colors.black,
+    //             backgroundColor: screenshotbuttonColor,
+    //             onTap: () async {
+    //               final shareShotImage =
+    //                   await _screenShotController.capture();
+    //               shareScreenshot(shareShotImage!);
+    //             }),
+    //       ],
+    //     ),
+        
+    //     appBar: AppBar(
+        
+    //       backgroundColor: colorPrimaryLightBlue,
+    //       automaticallyImplyLeading: false,
+    //       elevation: 0,
+    //       centerTitle: false,
+    //       title: Text(
+    //         "Scan Result",
+    //         style: GoogleFonts.inter(
+    //             fontWeight: FontWeight.w500, fontSize: 16.0),
+    //       ),
+    //       actions: [
+    //         IconButton(
+    //             onPressed: () {
+    //               Navigator.pop(context);
+    //             },
+    //             icon: Image.asset("assets/images/back.png")),
+    //         // IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_sharp,color: Colors.white,))
+    //         PopupMenuButton<int>(
+    //           onSelected: (item) => handleClick(item),
+    //           itemBuilder: (context) => [
+    //             PopupMenuItem<int>(
+    //               value: 0,
+    //               child: const Text('Copy to Clipboard'),
+    //               onTap: () async {
+    //                 await FlutterClipboard.copy(replaceAllspecialcharacter!);
+    //                 Fluttertoast.showToast(
+    //                     msg: "Result Copied!",
+    //                     timeInSecForIosWeb: 2,
+    //                     toastLength: Toast.LENGTH_SHORT,
+    //                     gravity: ToastGravity.CENTER,
+    //                     backgroundColor: Colors.black);
+    //               },
+    //             ),
+    //             PopupMenuItem<int>(
+    //               value: 1,
+    //               child: const Text('Share Result'),
+    //               onTap: () async {
+    //                 await Share.share(replaceAllspecialcharacter!);
+    //               },
+    //             ),
+    //             PopupMenuItem<int>(
+    //               value: 2,
+    //               child: const Text('Share ScreenShot'),
+    //               onTap: () async {
+    //                 final shareShotImage =
+    //                     await _screenShotController.capture();
+    //                 shareScreenshot(shareShotImage!);
+    //               },
+    //             ),
+    //           ],
+    //         ),
+    //       ],
+    //     ),
+
+
+    double pixelRatio = MediaQuery.of(context).devicePixelRatio;
     return Screenshot(
       controller: _screenShotController,
       child: Scaffold(
         floatingActionButton: SpeedDial(
-          
-          childMargin:
-              const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+          childMargin: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
           // icon: Icons.add,
           animatedIcon: AnimatedIcons.menu_close,
           backgroundColor: colorPrimaryLightBlue,
           childPadding: EdgeInsets.symmetric(vertical: 8),
-          animationDuration:const Duration(milliseconds: 350),
-          
+          animationDuration: const Duration(milliseconds: 350),
 
           children: [
             SpeedDialChild(
-                child: const ImageIcon(AssetImage("assets/images/copy.png"),color:Colors.white),
+                child: const ImageIcon(AssetImage("assets/images/copy.png"),
+                    color: Colors.white),
                 label: "Copy Result",
                 labelStyle: const TextStyle(color: Colors.white),
                 backgroundColor: copybuttonColor,
@@ -1143,7 +1318,6 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 onTap: () async {
                   await FlutterClipboard.copy(replaceAllspecialcharacter!);
                   Fluttertoast.showToast(
-                    
                       msg: "Result Copied!",
                       toastLength: Toast.LENGTH_SHORT,
                       timeInSecForIosWeb: 2,
@@ -1151,34 +1325,35 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                       backgroundColor: Colors.black);
                 }),
             SpeedDialChild(
-                child: const ImageIcon(AssetImage("assets/images/share.png"),color:Colors.white),
+                child: const ImageIcon(AssetImage("assets/images/share.png"),
+                    color: Colors.white),
                 label: "Share Result",
                 labelStyle: const TextStyle(color: Colors.white),
                 labelBackgroundColor: Colors.black,
                 backgroundColor: sharebuttonColor,
                 onTap: () async {
-                  await Share.share(replaceAllspecialcharacter!);
+                  final box = context.findRenderObject() as RenderBox?;
+                  await Share.share(replaceAllspecialcharacter!,
+                      sharePositionOrigin:
+                          box!.localToGlobal(Offset.zero) & box.size);
                 }),
             SpeedDialChild(
                 child: const ImageIcon(
-                  
-                    AssetImage("assets/images/screenshot.png"),color:Colors.white),
+                    AssetImage("assets/images/screenshot.png"),
+                    color: Colors.white),
                 label: "Share ScreenShot",
-                
                 labelStyle: const TextStyle(color: Colors.white),
                 labelBackgroundColor: Colors.black,
                 backgroundColor: screenshotbuttonColor,
                 onTap: () async {
-                  final shareShotImage =
-                      await _screenShotController.capture();
-                  shareScreenshot(shareShotImage!);
+                  final shareShotImage = await _screenShotController.capture(
+                      pixelRatio: pixelRatio);
+                  await shareScreenshot(shareShotImage!);
                 }),
           ],
         ),
-        
         appBar: AppBar(
-        
-          backgroundColor: colorPrimaryLightBlue,
+         backgroundColor: colorPrimaryLightBlue,
           automaticallyImplyLeading: false,
           elevation: 0,
           centerTitle: false,
@@ -1214,22 +1389,28 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                   value: 1,
                   child: const Text('Share Result'),
                   onTap: () async {
-                    await Share.share(replaceAllspecialcharacter!);
+                    final box = context.findRenderObject() as RenderBox?;
+                    await Share.share(replaceAllspecialcharacter!,
+                        sharePositionOrigin:
+                            box!.localToGlobal(Offset.zero) & box.size);
                   },
                 ),
                 PopupMenuItem<int>(
                   value: 2,
-                  child: const Text('Share Screenshot'),
+                  child: const Text('Share ScreenShot'),
                   onTap: () async {
-                    final shareShotImage =
-                        await _screenShotController.capture();
-                    shareScreenshot(shareShotImage!);
+                    final shareShotImage = await _screenShotController.capture(
+                      pixelRatio: pixelRatio,
+                    );
+                    await shareScreenshot(shareShotImage!);
                   },
                 ),
               ],
             ),
           ],
         ),
+
+        
         body: SafeArea(
           child: Column(
             children: [
@@ -1240,8 +1421,14 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                 color: resultbackgroundColor,
                 child: Column(
                   children: [
-                    Text(
-                      '${widget.typeText}',
+                   getSpecialCharacter == '29' ?  Text(
+                   "DATA MATRIX (GS1)",
+                      style: GoogleFonts.roboto(
+                          color: Colors.black.withOpacity(0.5),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
+                    ):Text(
+                 'DATA MATRIX',
                       style: GoogleFonts.roboto(
                           color: Colors.black.withOpacity(0.5),
                           fontSize: 24,
@@ -1251,11 +1438,18 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                       height: 8,
                     ),
         
-                    Wrap(
+                  getSpecialCharacter != '29' ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                          Text('${widget.qrCode}'),
+
+                  ],):  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
                         children: qrResultConvertList.map((item) {
                       if (item == widget.qrCode![0]) {
                         return const Text(
-                          'NFC',
+                          'FNC',
                           style: TextStyle(
                             color: colorPrimaryLightBlue,
                             fontWeight: FontWeight.normal,
@@ -1306,12 +1500,27 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
               const SizedBox(
                 height: 20,
               ),
-              Container(
+        getSpecialCharacter != '29' ? Container(
+          alignment: Alignment.center,
+          child: Center(
+
+         child: Text('Not Found Valid AI',style: TextStyle(color: Colors.red,fontSize: 18,fontWeight: FontWeight.bold),),
+
+
+        ),):   Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                  resultMap.length == 0 ?   Text(
+                   'Invalid Data Matrix',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.red,
+                      ),
+                    ):
                     Text(
-                      "SCANNED INFORMATION",
+                    "SCANNED INFORMATION",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -1321,7 +1530,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Column(
+                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         for (int i = 0; i < resultMap.length; i++)
@@ -1333,6 +1542,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
+                                  flex: 2,
                                     child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -1354,7 +1564,7 @@ class _QRCodeResultScreenState extends State<QRCodeResultScreen> {
                                   width: 5,
                                 ),
                                 Expanded(
-                                    flex: 2,
+                                    flex: 3,
                                     child: Text(
                                       '${resultMap[i]['value']}',
                                       textAlign: TextAlign.start,

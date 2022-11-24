@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../main.dart';
 import '../providers/auth_provider.dart';
 import '../utils/colors.dart';
 
@@ -113,7 +114,6 @@ class _AppDrawerState extends State<AppDrawer> {
             setState(() {
               indexClicked = 0;
             });
-            Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/home_screen');
           },
         ),
@@ -143,7 +143,6 @@ class _AppDrawerState extends State<AppDrawer> {
             setState(() {
               indexClicked = 1;
             });
-            Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/scan_history');
           },
         ),
@@ -173,7 +172,6 @@ class _AppDrawerState extends State<AppDrawer> {
             setState(() {
               indexClicked = 2;
             });
-            Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/update_database');
           },
         ),
@@ -205,7 +203,6 @@ class _AppDrawerState extends State<AppDrawer> {
             });
 
             auth.logout();
-            Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/signin_page');
           },
         ),
@@ -243,7 +240,6 @@ class _AppDrawerState extends State<AppDrawer> {
             setState(() {
               indexClicked = 4;
             });
-            Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/line_level_hardware');
           },
         ),
@@ -273,7 +269,6 @@ class _AppDrawerState extends State<AppDrawer> {
             setState(() {
               indexClicked = 5;
             });
-            Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/line_equipment');
           },
         ),
@@ -303,7 +298,6 @@ class _AppDrawerState extends State<AppDrawer> {
             setState(() {
               indexClicked = 6;
             });
-            Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/how_it_works');
           },
         ),
@@ -321,7 +315,7 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
           ),
           title: Text(
-            "About Pharma Traxt",
+            "About Pharma Trax",
             style: TextStyle(
               fontWeight: FontWeight.w500,
               color: indexClicked == 7
@@ -333,8 +327,7 @@ class _AppDrawerState extends State<AppDrawer> {
             setState(() {
               indexClicked = 7;
             });
-            Navigator.of(context).pop();
-            Navigator.of(context).pushReplacementNamed('/About-pharma');
+            Navigator.of(context).pushReplacementNamed('/about_pharma');
           },
         ),
       ]),

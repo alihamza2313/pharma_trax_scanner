@@ -8,7 +8,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    throw new FileNotFoundException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -35,7 +35,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
    
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -61,6 +61,8 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+   
+ 
 
     signingConfigs {
        release {
@@ -73,6 +75,8 @@ android {
    buildTypes {
        release {
            signingConfig signingConfigs.release
+
+           
        }
    }
 }
@@ -81,11 +85,9 @@ flutter {
     source '../..'
 }
 
-configurations.all {
-    exclude group: "com.google.mlkit", module:"barcode-scanning"
-}
+
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-         implementation 'com.google.android.gms:play-services-mlkit-barcode-scanning:16.0.0'
+
 }

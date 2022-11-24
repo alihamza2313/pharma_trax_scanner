@@ -61,11 +61,9 @@ class _HomePageState extends State<HomePage> {
     log(getdiffernce.inSeconds.toString());
 
     if (getdiffernce.inSeconds >= double.parse(getExpireSecond!)) {
-      
       LogoutFunction();
     }
   }
-
 
   LogoutFunction() async {
     final prefs = await SharedPreferences.getInstance();
@@ -81,19 +79,28 @@ class _HomePageState extends State<HomePage> {
     // ignore: use_build_context_synchronously
     //Navigator.of(context).pop();
     // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Signinpage()));
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (_) => Signinpage()));
   }
 
   @override
   Widget build(BuildContext context) {
+   double? pixelRatio = MediaQuery.of(context).devicePixelRatio;
+
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _key,
       drawer: const AppDrawer(),
       drawerEnableOpenDragGesture: false,
       floatingActionButton: FloatingActionButton(
-        backgroundColor:colorPrimaryLightBlue ,
+        backgroundColor: colorPrimaryLightBlue,
         onPressed: () {
-          Share.share('https://play.google.com/store/apps/details?id=pk.pharmatrax.pharmatraxscanner');
+          final box = context.findRenderObject() as RenderBox?;
+          Share.share(
+              "https://play.google.com/store/apps/details?id=pk.pharmatrax.pharmatraxscanner",
+              sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+              );
         },
         child: const Icon(
           Icons.share,
@@ -116,134 +123,135 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.symmetric(horizontal: 15),
         decoration: const BoxDecoration(
             image: DecorationImage(image: AssetImage('assets/images/dna.png'))),
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        height: height,
+        width: width,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Center(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 35),
-                              child:
-                                  Image.asset('assets/images/pharmatrax.png'),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(
-                                "Pakistan's first Track and Trace Serialization Solution Complete End to End Turnkey Solution Market Leader in Track and Trace Solutions",
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.inter(
-                                  color: textColor,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 14,
-                                ),
+              Container(
+                margin: EdgeInsets.only(top: height * 0.06),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35),
+                      child: Image.asset('assets/images/pharmatrax.png'),
+                    ),
+                    Text(
+                      "Pakistan's first Track and Trace Serialization Solution",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        color: textColor,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        "Complete End to End Turnkey Solution",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                          color: textColor,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        "Market Leader in Track and Trace Solutions",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                          color: textColor,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => const BarCodeScanner()));
+                    },
+                    child: Container(
+                      color: colorPrimaryLightBlue,
+                      width: MediaQuery.of(context).size.width * 0.7 - 20,
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            height: 50,
+                            width: 50,
+                            color: colorPrimaryLightDark,
+                            child: Image.asset('assets/images/code_128.png'),
+                          ),
+                          Expanded(
+                            child: Text(
+                              "SCAN GS1 128 BARCODE",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                                fontSize: 14,
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 35,
-                        ),
-                        Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (_) =>
-                                            const BarCodeScanner()));
-                              },
-                              child: Container(
-                                color: colorPrimaryLightBlue,
-                                width: MediaQuery.of(context).size.width * 0.7 -
-                                    20,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      height: 50,
-                                      width: 50,
-                                      color: colorPrimaryLightDark,
-                                      child: Image.asset(
-                                          'assets/images/code_128.png'),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        "SCAN GS1 128 BARCODE",
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.inter(
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => const DataMatrixSacnner()));
-                              },
-                              child: Container(
-                                color: colorPrimaryLightBlue,
-                                width: MediaQuery.of(context).size.width * 0.7 -
-                                    20,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      height: 50,
-                                      width: 50,
-                                      color: colorPrimaryLightDark,
-                                      child: Image.asset(
-                                          'assets/images/data_matrix.png'),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        "SCAN GS1 DATA MATRIX",
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.inter(
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) =>  DataMatrixSacnner()));
+                    },
+                    child: Container(
+                      color: colorPrimaryLightBlue,
+                      width: MediaQuery.of(context).size.width * 0.7 - 20,
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            height: 50,
+                            width: 50,
+                            color: colorPrimaryLightDark,
+                            child: Image.asset('assets/images/data_matrix.png'),
+                          ),
+                          Expanded(
+                            child: Text(
+                              "SCAN GS1 DATA MATRIX",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: height * 0.03,
               ),
               Container(
                 // height: 140.h,
                 padding: const EdgeInsets.symmetric(vertical: 10),
 
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
@@ -254,44 +262,28 @@ class _HomePageState extends State<HomePage> {
                         fontSize: 15,
                       ),
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Contact us:",
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w500,
-                              color: textColor,
-                              fontSize: 14,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Expanded(
-                            child: RichText(
-                              text: TextSpan(
-                                  text: "CONTACT@PHARMATRAX.PK",
-                                  style: GoogleFonts.inter(
-                                    fontWeight: FontWeight.w500,
-                                    color: blueColor1,
-                                    fontSize: 14,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () async {
-                                      // ignore: deprecated_member_use
-                                      await launch(
-                                          "mailto:CONTACT@PHARMATRAX.PK?");
-                                    }),
-                            ),
-                          ),
+                    RichText(
+                      text: TextSpan(
+                        text: "Contact us: ",
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: textColor,
+                          fontSize: 14,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "CONTACT@PHARMATRAX.PK",
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                color: blueColor1,
+                                fontSize: 14,
+                                decoration: TextDecoration.underline,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () async {
+                                  // ignore: deprecated_member_use
+                                  await launch("mailto:CONTACT@PHARMATRAX.PK?");
+                                }),
                         ],
                       ),
                     ),
@@ -339,12 +331,11 @@ class _HomePageState extends State<HomePage> {
                           },
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    
                     Container(
+                      height: MediaQuery.of(context).size.height*0.2-60,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 130, vertical: 5),
+                          horizontal: 110, vertical: 5),
                       // height: 120,
                       // width: 120,
                       child: Image.asset('assets/images/zauq.png'),
@@ -354,6 +345,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ]),
       ),
-    );
+         );
   }
 }

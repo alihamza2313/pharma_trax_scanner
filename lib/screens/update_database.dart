@@ -129,94 +129,101 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
       }
     }
 
-    return Scaffold(
-      drawer: const AppDrawer(),
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: colorPrimaryLightBlue,
-        title: const Text(
-          "Update Database",
+    Future<bool> _onWillPop() async {
+       await Navigator.of(context).pushReplacementNamed('/home_screen');
+    return true;
+  }
+    return WillPopScope(
+      onWillPop:_onWillPop,
+      child: Scaffold(
+        drawer: const AppDrawer(),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: colorPrimaryLightBlue,
+          title: const Text(
+            "Update Database",
+          ),
         ),
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(image: AssetImage('assets/images/dna.png'))),
-        width: _width,
-        height: _height,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Database Information',
-                      style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black54),
-                    ),
-                    const SizedBox(height: 20),
-                    Text.rich(
-                      TextSpan(
-                        text: 'Database Version: ',
-                        style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
+        body: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(image: AssetImage('assets/images/dna.png'))),
+          width: _width,
+          height: _height,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Database Information',
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
                             color: Colors.black54),
-                        children: <InlineSpan>[
-                        version == null ? TextSpan():  TextSpan(
-                            text: version,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: colorPrimaryLightBlue),
-                          )
-                        ],
                       ),
-                    ),
-                    Text.rich(
-                      TextSpan(
-                        text: 'Updated At: ',
-                        style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black54),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: formattedDate.toString(),
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: colorPrimaryLightBlue),
-                          )
-                        ],
+                      const SizedBox(height: 20),
+                      Text.rich(
+                        TextSpan(
+                          text: 'Database Version: ',
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black54),
+                          children: <InlineSpan>[
+                          version == null ? TextSpan():  TextSpan(
+                              text: version,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: colorPrimaryLightBlue),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                width: _width * 0.8,
-                height: 60,
-                child: MaterialButton(
-                  color: colorPrimaryLightBlue,
-                  onPressed: updateDatabase,
-                  // style: ButtonStyle(
-                  //   backgroundColor: Co
-                  // ),
-                  child: const Text(
-                    'UPDATE DATABASE',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w500),
+                      Text.rich(
+                        TextSpan(
+                          text: 'Updated At: ',
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black54),
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: formattedDate.toString(),
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: colorPrimaryLightBlue),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 5),
-            ],
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  width: _width * 0.8,
+                  height: 60,
+                  child: MaterialButton(
+                    color: colorPrimaryLightBlue,
+                    onPressed: updateDatabase,
+                    // style: ButtonStyle(
+                    //   backgroundColor: Co
+                    // ),
+                    child: const Text(
+                      'UPDATE DATABASE',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+              ],
+            ),
           ),
         ),
       ),

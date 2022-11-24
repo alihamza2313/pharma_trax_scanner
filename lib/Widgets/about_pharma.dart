@@ -43,50 +43,67 @@ Pharma Trax Pro Line</a></p>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const AppDrawer(),
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text("About Pharma Trax"),
-        backgroundColor: const Color(0xFF4A90CC),
-      ),
-      body: Stack(children: <Widget>[
-        // Container(
-        //   decoration: const BoxDecoration(
-        //       image: DecorationImage(
-        //           image: AssetImage('assets/images/about_pharma_trax.png'))),
-        // ),
-        SingleChildScrollView(
-          child: Column(
-            // ignore: prefer_const_literals_to_create_immutables
-
-            children: [
-              // Image(image: AssetImage("assets/images/about_pharma_trax.png")),
-
-              Image.asset(
-                "assets/images/about_pharma_trax.png",
-                color: const Color(0xFF4A90CC).withOpacity(0.9),
-                colorBlendMode: BlendMode.colorBurn,
-              ),
-              HtmlWidget(htmldata1),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
-                child: HtmlWidget(
-                  htmldata,
-                  onTapUrl: (url) async {
-                    // print(url);
-                    var filePath = Uri.parse(url);
-                    //final Uri uri = Uri.file(filePath);
-
-                    await launchUrl(filePath);
-                    return true;
-                  },
-                ),
-              ),
-            ],
-          ),
+Future<bool> _onWillPop() async {
+       await Navigator.of(context).pushReplacementNamed('/home_screen');
+    return true;
+  }
+    return WillPopScope(
+      onWillPop:_onWillPop,
+      child: Scaffold(
+        drawer: const AppDrawer(),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: const Text("About Pharma Trax"),
+          backgroundColor: const Color(0xFF4A90CC),
         ),
-      ]),
+        body: Stack(children: <Widget>[
+          // Container(
+          //   decoration: const BoxDecoration(
+          //       image: DecorationImage(
+          //           image: AssetImage('assets/images/about_pharma_trax.png'))),
+          // ),
+          SingleChildScrollView(
+            child: Column(
+              // ignore: prefer_const_literals_to_create_immutables
+    
+              children: [
+                // Image(image: AssetImage("assets/images/about_pharma_trax.png")),
+    
+                Container(
+                  height: 200,
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF4A90CC).withOpacity(0.5),
+                    image: DecorationImage(
+                      scale: 4.4,
+                      image: AssetImage("assets/images/about_pharma_trax.png",)),        
+                  ),
+                  // child: Image.asset(
+                  //   "assets/images/about_pharma_trax.png",
+                  //   // color: const Color(0xFF4A90CC).withOpacity(0.9),
+                  //   // colorBlendMode: BlendMode.colorBurn,
+                  // ),
+                ),
+                HtmlWidget(htmldata1),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+                  child: HtmlWidget(
+                    htmldata,
+                    onTapUrl: (url) async {
+                      // print(url);
+                      var filePath = Uri.parse(url);
+                      //final Uri uri = Uri.file(filePath);
+                      await launchUrl(filePath);
+                      return true;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ]),
+      ),
     );
   }
 }

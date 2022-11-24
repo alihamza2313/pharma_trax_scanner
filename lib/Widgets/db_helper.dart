@@ -1,5 +1,6 @@
 import 'dart:io';
 
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -31,6 +32,7 @@ class DataBaseHelper {
 
   static String table2ColumnId = "id";
   static String table2ColumnBarcodeType = "barcode_type";
+
   static String table2ColumnDate = "date";
 
   static Database? _database;
@@ -72,6 +74,7 @@ class DataBaseHelper {
     await db.execute('''
       CREATE TABLE $table2 (
         $table2ColumnId TEXT NOT NULL,
+       
         $table2ColumnBarcodeType TEXT NOT NULL,
         $table2ColumnDate TEXT NOT NULL
       )''');

@@ -31,7 +31,7 @@ class _SigninpageState extends State<Signinpage> {
 
     showLoading(
         {String title =
-            "Please wait while we are initializing \nsettings for you..."}) {
+            "Please wait while we are initializing settings for you..."}) {
       Get.dialog(
         Dialog(
           shape: RoundedRectangleBorder(
@@ -39,8 +39,11 @@ class _SigninpageState extends State<Signinpage> {
           ),
           child: Padding(
 
-            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 25),
+            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 25),
             child: Row(
+            mainAxisAlignment:MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            
               children: [
                 
                 CircularProgressIndicator(
@@ -49,8 +52,10 @@ class _SigninpageState extends State<Signinpage> {
                 const SizedBox(
                   width: 20,
                 ),
-                Text(
-                  title,
+                Expanded(
+                  child: Text(
+                    title,
+                  ),
                 ),
               ],
 
@@ -66,12 +71,27 @@ class _SigninpageState extends State<Signinpage> {
       Get.back();
     }
 
-    Future<void> loginProcess() async {
+    Future<bool> loginProcess() async {
       showLoading();
-    await auth.login(emailcontroller.text);
-     
-        
-      
+       if (!await InternetConnectionChecker().hasConnection) {
+        Fluttertoast.showToast(
+          msg: 'No Internet',
+        );
+        hideLoading();
+        return false;
+      }else{
+    bool result = await auth.login(emailcontroller.text);
+    if(result== true){
+
+       hideLoading();
+      return true;
+    }
+    else{
+       hideLoading();
+      return false;
+    }
+    }
+         
     }
 
     void loginUserWithEmail() async {
@@ -82,9 +102,20 @@ class _SigninpageState extends State<Signinpage> {
      Fluttertoast.showToast(msg: 'Email address invalid. Please enter a valid email address.');
       }
       else{
- await loginProcess();
-      hideLoading();
-       Navigator.of(context).pushReplacementNamed('/home_screen');
+bool finalreault= await loginProcess();
+    if(finalreault == true){
+        hideLoading();
+       //Navigator.of(context).pushReplacementNamed((MaterialPageRoute(builder: (context) => HomePage())));
+
+       Navigator
+        .of(context)
+        .pushReplacement(new MaterialPageRoute(builder: (BuildContext context) {
+      return new HomePage();
+    }));
+
+      
+    }
+
        
       }
 
@@ -106,7 +137,7 @@ class _SigninpageState extends State<Signinpage> {
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width - 40,
-              height: MediaQuery.of(context).size.width - 80,
+             // height: MediaQuery.of(context).size.height/2-80,
               decoration: BoxDecoration(
                 color: Colors.white,
                 border:
@@ -125,7 +156,7 @@ class _SigninpageState extends State<Signinpage> {
               ),
               child: Stack(
                 children: [
-                  Column(
+                  Wrap(
                     children: <Widget>[
                       Container(
                         decoration: const BoxDecoration(
@@ -155,7 +186,8 @@ class _SigninpageState extends State<Signinpage> {
                       ),
                       const SizedBox(height: 15),
                       Container(
-                        width: 320,
+                        width: MediaQuery.of(context).size.width,
+                        
                         padding: const EdgeInsets.only(
                             top: 5, left: 10.0, right: 10.0),
                         child: Column(
@@ -192,10 +224,10 @@ class _SigninpageState extends State<Signinpage> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 10),
                             MaterialButton(
                               minWidth: MediaQuery.of(context).size.width,
-                              height: 50,
+                              height: MediaQuery.of(context).size.height*0.1-30,
                               color: colorPrimaryLightBlue,
                               // style: ButtonStyle(
                               //     foregroundColor: MaterialStateProperty.all(
@@ -205,6 +237,7 @@ class _SigninpageState extends State<Signinpage> {
                               },
                               child: const Text('START',style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w400),),
                             ),
+                            SizedBox(height: 10,),
                           ],
                         ),
                       ),
