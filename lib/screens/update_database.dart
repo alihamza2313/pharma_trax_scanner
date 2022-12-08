@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -29,25 +30,22 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
   DateTime? updatedDate;
   String? formattedDate;
 
-
-
   @override
   void initState() {
     fatchData();
     super.initState();
   }
 
-     fatchData() async {
-    data=[];
-    data = await dbhelper.fatchInfoTable();
- 
-       version =  data![0]['version'];
-    updatedDate =  DateTime.parse(data![0]['update_date']);
-    formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(updatedDate!);
-  log(data.toString());
-    setState(() {
-      
-    });
+  Future<void> fatchData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    version = prefs.getString("version");
+    String? date = prefs.getString("updateTime");
+
+    if (date != "") {
+      updatedDate = DateTime.parse(date.toString());
+      formattedDate = DateFormat('yyyy-MM-dd hh:mm').format(updatedDate!);
+    }
+    setState(() {});
   }
 
   @override
@@ -63,14 +61,10 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
-
-            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 25),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
             child: Row(
               children: [
-                
-                CircularProgressIndicator(
-                
-                ),
+                CircularProgressIndicator(),
                 const SizedBox(
                   width: 20,
                 ),
@@ -78,7 +72,6 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
                   title,
                 ),
               ],
-
             ),
           ),
         ),
@@ -86,17 +79,11 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
       );
     }
 
-
     hideLoading() {
       Get.back();
     }
 
-    updateDatabase() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      String? geEmail = prefs.getString('email');
-      String? gettoken = prefs.getString('istoken');
-
+    Future updateDatabase() async {
       showLoading();
 
       if (!await InternetConnectionChecker().hasConnection) {
@@ -105,36 +92,42 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
         );
         hideLoading();
       } else {
-         log(data.toString());
-          await auth.getUpdateApiCall(geEmail!, gettoken!);
-          
-          hideLoading();
-         Timer(Duration(seconds: 1),
-          ()async{
-            fatchData();
-            //    //data =[];
-            // List<Map<String,dynamic>> data2 = await dbhelper.fatchInfoTable();
-            // log(data2.toString());
+     
+      dynamic response =  await auth.getUpdateApiCall();
+      Map getApiData = jsonDecode(response);
+   
 
-          });
-            
 
-        // setState(() {
-        //   fatchData();
-        // });
-          
- 
-          
+
+
+        hideLoading();
+        Timer(Duration(milliseconds: 100), () async {
+          fatchData();
+        });
         
+        if (getApiData['Info']['Status'] == -1) {
+          Fluttertoast.showToast(msg: 'Something went wrong');
+        } else if (getApiData['Info']['Status'] == 0) {
+          Fluttertoast.showToast(msg: 'Already updated to latest version');
+        }
+         else if (getApiData['Info']['Status'] == 1 && version != "0") {
+          Fluttertoast.showToast(msg: 'Updated to latest version');
+        } else if (getApiData['Info']['Status'] == 6 || version == "0") {
+          Fluttertoast.showToast(msg: 'Updated to latest version');
+         
+      } else {
+        Fluttertoast.showToast(msg: 'Something went wrong');
+      }
       }
     }
 
     Future<bool> _onWillPop() async {
-       await Navigator.of(context).pushReplacementNamed('/home_screen');
-    return true;
-  }
+      await Navigator.of(context).pushReplacementNamed('/home_screen');
+      return true;
+    }
+
     return WillPopScope(
-      onWillPop:_onWillPop,
+      onWillPop: _onWillPop,
       child: Scaffold(
         drawer: const AppDrawer(),
         backgroundColor: Colors.white,
@@ -146,7 +139,8 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
         ),
         body: Container(
           decoration: const BoxDecoration(
-              image: DecorationImage(image: AssetImage('assets/images/dna.png'))),
+              image:
+                  DecorationImage(image: AssetImage('assets/images/dna.png'))),
           width: _width,
           height: _height,
           child: Center(
@@ -173,13 +167,15 @@ class _UpdateDatabaseState extends State<UpdateDatabase> {
                               fontWeight: FontWeight.w500,
                               color: Colors.black54),
                           children: <InlineSpan>[
-                          version == null ? TextSpan():  TextSpan(
-                              text: version,
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: colorPrimaryLightBlue),
-                            )
+                            version == null
+                                ? TextSpan()
+                                : TextSpan(
+                                    text: version,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: colorPrimaryLightBlue),
+                                  )
                           ],
                         ),
                       ),

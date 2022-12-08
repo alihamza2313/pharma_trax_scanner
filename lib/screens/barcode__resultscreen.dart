@@ -13,6 +13,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:pharma_trax_scanner/Widgets/db_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class BarCodeResultScreen extends StatefulWidget {
@@ -667,16 +668,17 @@ String? getqrcoderesult;
 
 
   void insertScanData(String qrData, String qrType) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userEmailId = prefs.getString("email");
+
     Map<String, dynamic> row = {
+      DataBaseHelper.table2ColumnUserId: userEmailId,
       DataBaseHelper.table2ColumnId: qrData,
       DataBaseHelper.table2ColumnBarcodeType: qrType,
       DataBaseHelper.table2ColumnDate:
           DateFormat('yyyy-MM-dd hh:mm').format(DateTime.now()).toString()
     };
     final id = await dbhelper.insertTable2(row);
-    print("----------------------------");
-    print(id);
-    print("----------------------------");
   }
 
   CheckValueForTest(String? newStringafterSpecialCharcter) async {
@@ -1311,7 +1313,8 @@ if(newStringafterSpecialCharcter!.length==1){
         floatingActionButton: SpeedDial(
           childMargin: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
           // icon: Icons.add,
-          animatedIcon: AnimatedIcons.menu_close,
+           icon: Icons.share,
+          activeIcon: Icons.close,
           backgroundColor: colorPrimaryLightBlue,
           childPadding: EdgeInsets.symmetric(vertical: 8),
           animationDuration: const Duration(milliseconds: 350),

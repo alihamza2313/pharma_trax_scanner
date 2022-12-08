@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pharma_trax_scanner/Widgets/db_helper.dart';
@@ -15,6 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../Widgets/app_drawer.dart';
 import 'dart:developer';
 
+import '../providers/auth_provider.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -26,27 +28,34 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-
+  final dbhelper = DataBaseHelper.instance;
   SharedPreferences? prefs;
 
-//List list = [];
-
-//List list = [];
+  AuthProvider provider = AuthProvider();
 
   @override
   void initState() {
     getSharePrefenceValue();
-
+    checkDBUpdate();
     // SaveValueInPrefecnce();
     super.initState();
   }
 
-  SaveValueInPrefecnce() async {
+  checkDBUpdate() async {
     prefs = await SharedPreferences.getInstance();
-    prefs!.setBool('isLogin', true);
-  }
+    String? date = prefs!.getString("updateTime");
+    DateTime currentTime = DateTime.now();
 
-  final dbhelper = DataBaseHelper.instance;
+    if (date != "") {
+      DateTime updatedDate =
+          DateTime.parse(date.toString()).add(Duration(days: 1));
+      // String? formattedDate =
+      //     DateFormat('yyyy-MM-dd hh:mm').format(updatedDate);
+      if (updatedDate.compareTo(currentTime) <= 0) {
+        await provider.getUpdateApiCall();
+      }
+    }
+  }
 
   getSharePrefenceValue() async {
     prefs = await SharedPreferences.getInstance();
@@ -67,11 +76,8 @@ class _HomePageState extends State<HomePage> {
 
   LogoutFunction() async {
     final prefs = await SharedPreferences.getInstance();
-    await dbhelper.deleteTable1();
-    await dbhelper.deleteTable2();
     prefs.setBool('isLogin', false);
     prefs.setString('istoken', '');
-    // prefs.setString('isexpire','');
     prefs.setString('iscurentTime', '');
     prefs.setString('email', '');
     prefs.setString('isexpireSecond', '');
@@ -85,28 +91,86 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-   double? pixelRatio = MediaQuery.of(context).devicePixelRatio;
-
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    final auth = Provider.of<AuthProvider>(context);
+
+    SaveValueInPrefecnce() async {
+      prefs = await SharedPreferences.getInstance();
+      prefs!.setBool('isLogin', true);
+    }
+
+
+       var width2 = MediaQuery.of(context).size.width;
+var height2 = MediaQuery.of(context).size.height;
+
+var padding = MediaQuery.of(context).padding;
+var safeHeight = height2 - padding.top - padding.bottom;
+
+//log(safeHeight.toString());
+
     return Scaffold(
       key: _key,
       drawer: const AppDrawer(),
       drawerEnableOpenDragGesture: false,
-      floatingActionButton: FloatingActionButton(
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: colorPrimaryLightBlue,
+      //   onPressed: () {
+      //     final box = context.findRenderObject() as RenderBox?;
+      //     Share.share(
+      //       "https://play.google.com/store/apps/details?id=pk.pharmatrax.pharmatraxscanner",
+      //       sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+      //     );
+      //   },
+      //   child: const Icon(
+      //     Icons.share,
+      //     color: Colors.white,
+      //   ),
+      // ),
+
+      floatingActionButton: SpeedDial(
+        childMargin: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+        // icon: Icons.add,
+        // animatedIcon: AnimatedIcons.close_menu,
         backgroundColor: colorPrimaryLightBlue,
-        onPressed: () {
-          final box = context.findRenderObject() as RenderBox?;
-          Share.share(
-              "https://play.google.com/store/apps/details?id=pk.pharmatrax.pharmatraxscanner",
-              sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-              );
-        },
-        child: const Icon(
-          Icons.share,
-          color: Colors.white,
-        ),
+        icon: Icons.share,
+        activeIcon: Icons.close,
+        childPadding: EdgeInsets.symmetric(vertical: 8),
+        animationDuration: const Duration(milliseconds: 350),
+
+        children: [
+          SpeedDialChild(
+              // child: const ImageIcon(AssetImage("assets/images/share.png"),
+              child: Icon(Icons.apple, color: Colors.white),
+              label: "Share IOS",
+              labelStyle: const TextStyle(color: Colors.white),
+              labelBackgroundColor: Colors.black,
+              backgroundColor: sharebuttonColor,
+              onTap: () async {
+                final box = context.findRenderObject() as RenderBox?;
+                await Share.share(
+                    "https://play.google.com/store/apps/details?id=pk.pharmatrax.pharmatraxscanner",
+                    sharePositionOrigin:
+                        box!.localToGlobal(Offset.zero) & box.size);
+              }),
+          SpeedDialChild(
+              child: Icon(Icons.android,
+                  // child: const ImageIcon(AssetImage("assets/images/share.png"),
+                  color: Colors.white),
+              label: "Share Android",
+              labelStyle: const TextStyle(color: Colors.white),
+              labelBackgroundColor: Colors.black,
+              backgroundColor: screenshotbuttonColor,
+              onTap: () async {
+                final box = context.findRenderObject() as RenderBox?;
+                await Share.share(
+                    "https://play.google.com/store/apps/details?id=pk.pharmatrax.pharmatraxscanner",
+                    sharePositionOrigin:
+                        box!.localToGlobal(Offset.zero) & box.size);
+              }),
+        ],
       ),
+
       appBar: AppBar(
         backgroundColor: colorPrimaryLightBlue,
         leading: Builder(
@@ -128,223 +192,226 @@ class _HomePageState extends State<HomePage> {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                margin: EdgeInsets.only(top: height * 0.06),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35),
-                      child: Image.asset('assets/images/pharmatrax.png'),
-                    ),
-                    Text(
-                      "Pakistan's first Track and Trace Serialization Solution",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.inter(
-                        color: textColor,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 14,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        "Complete End to End Turnkey Solution",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(
-                          color: textColor,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
+              Expanded(
+                child: Container(
+                  // color: Colors.red,
+                  
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+
+                      Text(
+                          "Pakistan's first Track and Trace Serialization \nSolution Complete End to End Turnkey Solution\nMarket Leader in Track and Trace Solutions",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                            color: textColor,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 13,
+                          ),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        "Market Leader in Track and Trace Solutions",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(
-                          color: textColor,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ],
+                      // Image.asset(
+                      //   'assets/images/pharmatrax.png',
+                      //   height:
+                      //       safeHeight >700 ? MediaQuery.of(context).size.height * 0.2 - 65:  MediaQuery.of(context).size.height * 0.2 - 40,
+                      // ),
+                      Positioned(
+                      top: safeHeight > 700 ?   70 : 25,
+                        bottom:0,
+                        left: 0,
+                        right: 0,
+                        child:Image.asset(
+                        'assets/images/pharmatrax.png',
+                        height:
+                            safeHeight >700 ? MediaQuery.of(context).size.height * 0.2 - 65:  MediaQuery.of(context).size.height * 0.2 - 40,
+                      ), 
+                      )
+                    ],
+                  ),
                 ),
               ),
-              Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => const BarCodeScanner()));
-                    },
-                    child: Container(
-                      color: colorPrimaryLightBlue,
-                      width: MediaQuery.of(context).size.width * 0.7 - 20,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            height: 50,
-                            width: 50,
-                            color: colorPrimaryLightDark,
-                            child: Image.asset('assets/images/code_128.png'),
-                          ),
-                          Expanded(
-                            child: Text(
-                              "SCAN GS1 128 BARCODE",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                                fontSize: 14,
+              Expanded(
+                child: Container(
+                   
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => const BarCodeScanner()));
+                        },
+                        child: Container(
+                          color: colorPrimaryLightBlue,
+                          width: MediaQuery.of(context).size.width * 0.7 - 10,
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                height: 50,
+                                width: 50,
+                                color: colorPrimaryLightDark,
+                                child: Image.asset('assets/images/code_128.png'),
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) =>  DataMatrixSacnner()));
-                    },
-                    child: Container(
-                      color: colorPrimaryLightBlue,
-                      width: MediaQuery.of(context).size.width * 0.7 - 20,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            height: 50,
-                            width: 50,
-                            color: colorPrimaryLightDark,
-                            child: Image.asset('assets/images/data_matrix.png'),
-                          ),
-                          Expanded(
-                            child: Text(
-                              "SCAN GS1 DATA MATRIX",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                                fontSize: 15,
+                              Expanded(
+                                child: Text(
+                                  "SCAN GS1 128 BARCODE",
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                ),
                               ),
-                            ),
-                          )
-                        ],
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => DataMatrixSacnner()));
+                        },
+                        child: Container(
+                          color: colorPrimaryLightBlue,
+                          width: MediaQuery.of(context).size.width * 0.7 - 10,
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                height: 50,
+                                width: 50,
+                                color: colorPrimaryLightDark,
+                                child: Image.asset('assets/images/data_matrix.png'),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  "SCAN GS1 DATA MATRIX",
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-              SizedBox(
-                height: height * 0.03,
-              ),
-              Container(
-                // height: 140.h,
-                padding: const EdgeInsets.symmetric(vertical: 10),
-
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "PHARMA TRAX",
-                      style: GoogleFonts.inter(
-                        fontWeight: FontWeight.w500,
-                        color: textColor,
-                        fontSize: 15,
-                      ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        text: "Contact us: ",
+            
+              Expanded(
+                child: Container(
+                     
+         
+                  padding: const EdgeInsets.symmetric(vertical: 0),
+              
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "PHARMA TRAX",
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
                           color: textColor,
-                          fontSize: 14,
+                          fontSize: 15,
                         ),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: "CONTACT@PHARMATRAX.PK",
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w500,
-                                color: blueColor1,
-                                fontSize: 14,
-                                decoration: TextDecoration.underline,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () async {
-                                  // ignore: deprecated_member_use
-                                  await launch("mailto:CONTACT@PHARMATRAX.PK?");
-                                }),
-                        ],
                       ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        text: "WWW.PHARMATRAX.PK",
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w500,
-                          color: blueColor1,
-                          fontSize: 14,
-                          decoration: TextDecoration.underline,
+                      RichText(
+                        text: TextSpan(
+                          text: "Contact us: ",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            color: textColor,
+                            fontSize: 14,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "CONTACT@PHARMATRAX.PK",
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w500,
+                                  color: blueColor1,
+                                  fontSize: 14,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () async {
+                                    // ignore: deprecated_member_use
+                                    await launch("mailto:CONTACT@PHARMATRAX.PK?");
+                                  }),
+                          ],
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () async {
-                            const url = "https://WWW.PHARMATRAX.PK";
-                            // ignore: deprecated_member_use
-                            if (!await canLaunch(url)) {
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: "WWW.PHARMATRAX.PK",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            color: blueColor1,
+                            fontSize: 14,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () async {
+                              const url = "https://WWW.PHARMATRAX.PK";
                               // ignore: deprecated_member_use
-                              await launch(url);
-                            } else {
-                              throw "Connot Load Url ";
-                            }
-                          },
-                      ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        text: "WWW.ZAUQ.COM",
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w500,
-                          color: blueColor1,
-                          fontSize: 14,
-                          decoration: TextDecoration.underline,
+                              if (!await canLaunch(url)) {
+                                // ignore: deprecated_member_use
+                                await launch(url);
+                              } else {
+                                throw "Connot Load Url ";
+                              }
+                            },
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () async {
-                            const url = "https://WWW.ZAUQ.COM";
-                            // ignore: deprecated_member_use
-                            if (!await canLaunch(url)) {
-                              // ignore: deprecated_member_use
-                              await launch(url);
-                            } else {
-                              throw "Connot Load Url ";
-                            }
-                          },
                       ),
-                    ),
-                    
-                    Container(
-                      height: MediaQuery.of(context).size.height*0.2-60,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 110, vertical: 5),
-                      // height: 120,
-                      // width: 120,
-                      child: Image.asset('assets/images/zauq.png'),
-                    ),
-                  ],
+                      RichText(
+                        text: TextSpan(
+                          text: "WWW.ZAUQ.COM",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            color: blueColor1,
+                            fontSize: 14,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () async {
+                              const url = "https://WWW.ZAUQ.COM";
+                              // ignore: deprecated_member_use
+                              if (!await canLaunch(url)) {
+                                // ignore: deprecated_member_use
+                                await launch(url);
+                              } else {
+                                throw "Connot Load Url ";
+                              }
+                            },
+                        ),
+                      ),
+                      Container(
+                        height: safeHeight > 700 ?  MediaQuery.of(context).size.height * 0.2 - 60 :MediaQuery.of(context).size.height * 0.2 - 40,
+                        padding:  EdgeInsets.symmetric(
+                            horizontal:safeHeight > 700 ? 110 :80, vertical: 5),
+                        // height: 120,
+                        // width: 120,
+                        child: Image.asset('assets/images/zauq.png',
+                        fit: BoxFit.fill,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ]),
       ),
-         );
+    );
   }
 }

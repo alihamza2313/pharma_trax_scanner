@@ -58,7 +58,24 @@ Pharma Trax Pro Line</a></p>
         body: SingleChildScrollView(
           child: Column(
             children: [
-              HtmlWidget(htmldata1),
+            Container(
+                height: 200,
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: Color(0xFF4A90CC).withOpacity(0.5),
+                  image: DecorationImage(
+                      image: AssetImage(
+                        "assets/images/line_equipment.png",
+                      ),
+                      fit: BoxFit.cover),
+                ),
+                // child: Image.asset(
+                //   "assets/images/about_pharma_trax.png",
+                //   // color: const Color(0xFF4A90CC).withOpacity(0.9),
+                //   // colorBlendMode: BlendMode.colorBurn,
+                // ),
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
                 child: HtmlWidget(

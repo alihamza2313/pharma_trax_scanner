@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthProvider with ChangeNotifier {
   SharedPreferences? prefs;
 
-  bool? isLoginorNot =false;
+  bool? isLoginorNot = false;
 
   String? message;
 
@@ -47,19 +47,18 @@ class AuthProvider with ChangeNotifier {
     var provinceBodyPayment = jsonEncode(<String, String>{
       'Email': userId.trim(),
       'Password': 'P@ssw0rd',
-      'ConfirmPassword':'P@ssw0rd',
+      'ConfirmPassword': 'P@ssw0rd',
     });
     print(provinceBodyPayment);
     try {
-     bool result =  await apiResponse(provinceBodyPayment, userId);
-     if(result == true){
-            return true;
-          }
-          else{
-            return false;
-          }
+      bool result = await apiResponse(provinceBodyPayment, userId);
+      if (result == true) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
-      Fluttertoast.showToast(msg:'Something went wrong');
+      Fluttertoast.showToast(msg: 'Something went wrong');
       print(e.toString());
       return false;
     }
@@ -76,9 +75,8 @@ class AuthProvider with ChangeNotifier {
         http.Response response = await http.post(
             Uri.parse(
               'https://api.pharmasync.pk/api/account/register',
+             // 'http://192.168.100.87:3003/api/account/register',
             ),
-
-            
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             },
@@ -88,30 +86,25 @@ class AuthProvider with ChangeNotifier {
           Map getResponseData = jsonDecode(response.body);
 
           log(getResponseData.toString());
-          //_expiryDate = getResponseData["expires"] as DateTime;
           _expirySecond = getResponseData['expires_in'];
           _token = getResponseData['access_token'];
 
           SharedPreferences prefs = await SharedPreferences.getInstance();
-           prefs.setBool('isLogin', true);
-           prefs.setString('istoken', _token!);
-          //  prefs.setString('isexpire',_expiryDate!.toIso8601String());
-           prefs.setString('isexpireSecond', _expirySecond.toString());
-           prefs.setString(
-              'iscurentTime', DateTime.now().toIso8601String());
-           prefs.setString('email', getemail);
 
-         // log(_expiryDate.toString());
-          log(DateTime.now().millisecondsSinceEpoch.toInt().toString());
-
-         bool getresult = await getAllDataApiCall(getemail, _token!);
-          if(getresult == true){
-            return true;
-          }
-          else{
-            return false;
+          String? getVersionValue = prefs.getString("version");
+          if (getVersionValue == null) {
+            prefs.setString('version', "0");
+            prefs.setString('updateTime',
+                DateTime.now().subtract(Duration(days: 7)).toIso8601String());
           }
 
+          prefs.setBool('isLogin', true);
+          prefs.setString('istoken', _token!);
+          prefs.setString('isexpireSecond', _expirySecond.toString());
+          prefs.setString('iscurentTime', DateTime.now().toIso8601String());
+          prefs.setString('email', getemail);
+
+          return true;
         } else {
           Fluttertoast.showToast(msg: 'Something went wrong');
           print("Response not 200");
@@ -124,136 +117,61 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
- Future<bool> getAllDataApiCall(String email, String token) async {
-   if (!await InternetConnectionChecker().hasConnection) {
-      Fluttertoast.showToast(
-        msg: 'Internet Error',
-      );
-      return false;
-    }else{
+ Future<dynamic>? getUpdateApiCall() async {
     try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? version = prefs.getString("version");
+      String? gettoken = prefs.getString('istoken');
+
       http.Response response = await http.get(
-        Uri.parse('https://api.pharmasync.pk/api/gtin'),
+        Uri.parse(
+           'https://api.pharmasync.pk/api/gtin',
+         // 'http://192.168.100.87:3003/api/gtin',
+        ),
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer ${token}',
+          'Authorization': 'Bearer ${gettoken}',
+          'Version': version.toString(),
         },
       );
 
       if (response.statusCode == 200) {
         Map getApiData = jsonDecode(response.body);
-
         log(getApiData.toString());
 
-        await dbhelper.deleteTable1();
+        final dbhelper = DataBaseHelper.instance;
+        List<Map<String, dynamic>> data = [];
 
-        insertDbInfo(getApiData['Info']);
-        for (int i = 0; i < getApiData['Companies'].length; i++) {
-          insertDbData(getApiData['Companies'][i]);
-        }
-
-        List<Map<String, dynamic>> data = await dbhelper.fatchTable1();
-        log(data.toString());
-    return true;
-        // Navigator.of(context).pushReplacementNamed(HomePage.routeName);
-      } else {
-        Fluttertoast.showToast(msg: 'Something went wrong');
-            return false;
-      }
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'Something went wrong');
-      e.toString();
-      return false;
-    }
-    }
-  }
-
-  getUpdateApiCall(String email, String token) async {
-    if (!await InternetConnectionChecker().hasConnection) {
-      Fluttertoast.showToast(
-        msg: 'No Internet',
-      );
-    } else {
-      // log(email.toString());
-
-      try {
-        http.Response response = await http.get(
-          Uri.parse('https://api.pharmasync.pk/api/gtin'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer ${token}',
-          },
-        );
-
-        if (response.statusCode == 200) {
-          Map getApiData = jsonDecode(response.body);
-
-          //   log(getApiData.toString());
-
-          final dbhelper = DataBaseHelper.instance;
-          List<Map<String, dynamic>> data = [];
-          String version = '';
-          String updatedDate = '';
-
-          data = await dbhelper.fatchInfoTable();
-          version = data[0]['version'];
-          updatedDate = data[0]['update_date'];
-
-          if (data != null) {
-            insertDbInfo(getApiData['Info']);
-
-            if (double.parse(version) < getApiData['Info']['Version']) {
-              await dbhelper.deleteTable1();
-
-              // insertDbInfo(getApiData['Info']);
-              for (int i = 0; i < getApiData['Companies'].length; i++) {
-                insertDbData(getApiData['Companies'][i]);
-              }
-              List<Map<String, dynamic>> data = await dbhelper.fatchTable1();
-              log(data.toString());
-
-              Fluttertoast.showToast(msg: '${getApiData['Info']['Message']}');
-            } else {
-              Fluttertoast.showToast(
-                  msg: 'Database Already Updated to Latest Version');
-            }
-          } else {
-            await dbhelper.deleteTable1();
-            insertDbInfo(getApiData['Info']);
-            for (int i = 0; i < getApiData['Companies'].length; i++) {
-              insertDbData(getApiData['Companies'][i]);
-            }
-            // List<Map<String, dynamic>> data = await dbhelper.fatchTable1();
-            // log(data.toString());
+        if (getApiData['Info']['Status'] == -1) {
+         // Fluttertoast.showToast(msg: 'Something went wrong');
+        } else if (getApiData['Info']['Status'] == 0) {
+        //  Fluttertoast.showToast(msg: 'Already updated to latest version');
+        } else if (getApiData['Info']['Status'] == 1 && version != "0") {
+          Fluttertoast.showToast(msg: 'Updated to latest version');
+          for (int i = 0; i < getApiData['Companies'].length; i++) {
+            updateDbData(getApiData['Companies'][i]);
           }
-
-          // Navigator.of(context).pushReplacementNamed(HomePage.routeName);
-        } else {
-          Fluttertoast.showToast(msg: 'Something went wrong');
+          updateDBVersion(getApiData['Info']['Version'].toString());
+        } else if (getApiData['Info']['Status'] == 6 || version == "0") {
+          //Fluttertoast.showToast(msg: 'Updated to latest version');
+          await dbhelper.deleteTable1();
+          for (int i = 0; i < getApiData['Companies'].length; i++) {
+            insertDbData(getApiData['Companies'][i]);
+          }
+          updateDBVersion(getApiData['Info']['Version'].toString());
         }
-      } catch (e) {
-        Fluttertoast.showToast(msg: 'Something went wrong');
-        e.toString();
+      } else {
+       // Fluttertoast.showToast(msg: 'Something went wrong');
       }
+
+      return response.body;
+    } catch (e) {
+    //  Fluttertoast.showToast(msg: 'Something went wrong');
+      e.toString();
     }
   }
 
   // Insert Data in Database
   final dbhelper = DataBaseHelper.instance;
-  void insertDbInfo(Map<String, dynamic> dbInfo) async {
-    Map<String, dynamic> row = {
-      DataBaseHelper.infoTableColumnVersion: dbInfo['Version'].toString(),
-      DataBaseHelper.infoTableColumnUpdateDate:
-          DateTime.now().toIso8601String(),
-      DataBaseHelper.infoTableColumnMessage: dbInfo['Message'].toString(),
-      DataBaseHelper.infoTableColumnStatus: dbInfo['Status'].toString()
-    };
-    final id = await dbhelper.insertInfoTable(row);
-    // print("----------------------------");
-    // print(id);
-    // print(row);
-    // print("----------------------------");
-  }
 
   void insertDbData(Map<String, dynamic> dbData) async {
     Map<String, dynamic> row = {
@@ -265,46 +183,39 @@ class AuthProvider with ChangeNotifier {
       DataBaseHelper.table1ColumnIsModified: dbData['IsModified']
     };
     final id = await dbhelper.insertTable1(row);
-    // print("----------------------------");
-    // // print(id);
-    // // print(row);
-    // print("----------------------------");
+  }
+
+  void updateDbData(Map<String, dynamic> dbData) async {
+    Map<String, dynamic> row = {
+      DataBaseHelper.table1ColumnId: dbData['Id'],
+      DataBaseHelper.table1ColumnPlain1: dbData['Pline1'],
+      DataBaseHelper.table1ColumnCline3: dbData['Cline3'],
+      DataBaseHelper.table1ColumnSline4: dbData['Sline4'],
+      DataBaseHelper.table1ColumnVersion: dbData['Version'],
+      DataBaseHelper.table1ColumnIsModified: dbData['IsModified']
+    };
+    final id = await dbhelper.updateTable1(row);
   }
 
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await dbhelper.deleteTable1();
-    await dbhelper.deleteTable2();
     prefs.setBool('isLogin', false);
     prefs.setString('istoken', '');
-    // prefs.setString('isexpire','');
     prefs.setString('iscurentTime', '');
     prefs.setString('email', '');
     prefs.setString('isexpireSecond', '');
   }
 
-
-
-
+  Future<void> updateDBVersion(String version) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('version', version);
+    prefs.setString('updateTime', DateTime.now().toIso8601String());
+  }
 
 // Future<bool?> CheckUserExist() async{
 //   SharedPreferences prefs = await SharedPreferences.getInstance();
 //   return  (prefs.getBool('isLogin') == null) ? false : prefs.getBool('isLogin');
 
-   
-
 // }
-
-
-
-
-  
-
-  
-  
-
-
-
-
 
 }

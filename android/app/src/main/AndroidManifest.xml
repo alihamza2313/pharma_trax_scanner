@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pk.pharmatrax.pharmatraxscanner">
+    package="pk.pharmatrax.pharmatraxscanner"
+    
+    >
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     
@@ -11,6 +13,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:allowBackup="false"
+            android:fullBackupContent="false"
+            android:fullBackupOnly="false"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -30,7 +35,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name="ng.com.piccmaq.flutter.flutter_mobile_vision_2.barcode.BarcodeCaptureActivity" />
+      
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

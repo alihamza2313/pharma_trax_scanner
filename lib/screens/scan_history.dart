@@ -174,7 +174,7 @@ Future<bool> _onWillPop() async {
                           child: Row(children: [
                       
                             CircleAvatar(
-                              radius: 25,
+                              radius: 28,
                                       backgroundColor: blueColor1,
                                       child: data[index]['barcode_type'].toString() == 'DATA MATRIX (GS1)' || data[index]['barcode_type'].toString() == 'DATA MATRIX' 
                                   ?  ImageIcon(
@@ -183,11 +183,11 @@ Future<bool> _onWillPop() async {
                                         
                                       
                                         ),
-                                        size: 30,
+                                        size: 35,
                                         color: Colors.white,
                                       ):ImageIcon(
                                         AssetImage("assets/images/code_128.png"),
-                                          size: 30,
+                                          size: 35,
                                         color: Colors.white,
                                       ),
                                     ),
@@ -197,6 +197,7 @@ Future<bool> _onWillPop() async {
                       
                                     Expanded(
                                       child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                                                       "${data[index]['id'].substring(1, data[index]['id'].length)}",

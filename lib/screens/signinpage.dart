@@ -203,6 +203,7 @@ bool finalreault= await loginProcess();
                             const SizedBox(height: 10),
                             TextField(
                               autocorrect: true,
+                              keyboardType: TextInputType.emailAddress,
                               controller: emailcontroller,
                               decoration: const InputDecoration(
                                 hintText: 'Enter Your Email Here...',
