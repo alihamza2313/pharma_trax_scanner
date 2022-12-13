@@ -149,7 +149,7 @@ var safeHeight = height2 - padding.top - padding.bottom;
               onTap: () async {
                 final box = context.findRenderObject() as RenderBox?;
                 await Share.share(
-                    "https://play.google.com/store/apps/details?id=pk.pharmatrax.pharmatraxscanner",
+                    "https://apps.apple.com/pk/app/pharma-trax-scanner/id1444756129",
                     sharePositionOrigin:
                         box!.localToGlobal(Offset.zero) & box.size);
               }),
@@ -198,11 +198,25 @@ var safeHeight = height2 - padding.top - padding.bottom;
                   
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                 
+                  
 
-                      Text(
+                    children: [
+                      Container(
+                        //color: Color,
+                        child: Image.asset(
+                          'assets/images/pharmatrax2.png',
+                          height:
+                              safeHeight >700 ? MediaQuery.of(context).size.height * 0.2 - 65:  MediaQuery.of(context).size.height * 0.2 - 40,
+                        ),
+                      ),
+
+                     
+                     
+                       Text(
                           "Pakistan's first Track and Trace Serialization \nSolution Complete End to End Turnkey Solution\nMarket Leader in Track and Trace Solutions",
                           textAlign: TextAlign.center,
                           style: GoogleFonts.inter(
@@ -211,22 +225,7 @@ var safeHeight = height2 - padding.top - padding.bottom;
                             fontSize: 13,
                           ),
                         ),
-                      // Image.asset(
-                      //   'assets/images/pharmatrax.png',
-                      //   height:
-                      //       safeHeight >700 ? MediaQuery.of(context).size.height * 0.2 - 65:  MediaQuery.of(context).size.height * 0.2 - 40,
-                      // ),
-                      Positioned(
-                      top: safeHeight > 700 ?   70 : 25,
-                        bottom:0,
-                        left: 0,
-                        right: 0,
-                        child:Image.asset(
-                        'assets/images/pharmatrax.png',
-                        height:
-                            safeHeight >700 ? MediaQuery.of(context).size.height * 0.2 - 65:  MediaQuery.of(context).size.height * 0.2 - 40,
-                      ), 
-                      )
+                      
                     ],
                   ),
                 ),
